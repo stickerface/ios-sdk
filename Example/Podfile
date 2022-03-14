@@ -1,0 +1,13 @@
+use_frameworks!
+
+platform :ios, '9.0'
+
+target 'StikerFace_Example' do
+  pod 'StikerFace', :path => '../'
+
+  target 'StikerFace_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
