@@ -1,0 +1,16 @@
+PODS:
+  - StikerFace (0.1.0)
+
+DEPENDENCIES:
+  - StikerFace (from `../`)
+
+EXTERNAL SOURCES:
+  StikerFace:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  StikerFace: cfa740ea57d6ea966b75fb017d691d338c979d5c
+
+PODFILE CHECKSUM: 610918665c70915182b927ab82d5549618909399
+
+COCOAPODS: 1.11.2

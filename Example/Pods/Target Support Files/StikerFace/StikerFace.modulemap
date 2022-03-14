@@ -1,0 +1,6 @@
+framework module StikerFace {
+  umbrella header "StikerFace-umbrella.h"
+
+  export *
+  module * { export * }
+}
