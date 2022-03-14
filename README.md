@@ -1,6 +1,6 @@
 # StikerFace
 
-[![CI Status](https://img.shields.io/travis/Xaker69/StikerFace.svg?style=flat)](https://travis-ci.org/Xaker69/StikerFace)
+<!-- [![CI Status](https://img.shields.io/travis/Xaker69/StikerFace.svg?style=flat)](https://travis-ci.org/Xaker69/StikerFace) -->
 [![Version](https://img.shields.io/cocoapods/v/StikerFace.svg?style=flat)](https://cocoapods.org/pods/StikerFace)
 [![License](https://img.shields.io/cocoapods/l/StikerFace.svg?style=flat)](https://cocoapods.org/pods/StikerFace)
 [![Platform](https://img.shields.io/cocoapods/p/StikerFace.svg?style=flat)](https://cocoapods.org/pods/StikerFace)
