@@ -11,6 +11,17 @@
 		17BE0F4E51B0FB968125F1A520607FD8 /* ConstraintMultiplierTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7AB9BB47A2175181386A432C07253AE /* ConstraintMultiplierTarget.swift */; };
 		17EBBDB56914F21DA1F2EEA1F0628F2F /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C20377AB147B4F60783EA0398E575DF /* RootViewController.swift */; };
 		1E9EEA756F2774D73347F1660EEFE3E9 /* ConstraintView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE9055CEA7890517265589BD23D73A49 /* ConstraintView+Extensions.swift */; };
+		21DDCE2427E0D2AB004E60A0 /* UIImage+Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DDCE1A27E0D2AB004E60A0 /* UIImage+Bundle.swift */; };
+		21DDCE2527E0D2AB004E60A0 /* UIColor+Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DDCE1B27E0D2AB004E60A0 /* UIColor+Bundle.swift */; };
+		21DDCE2627E0D2AB004E60A0 /* String+Localized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DDCE1D27E0D2AB004E60A0 /* String+Localized.swift */; };
+		21DDCE2727E0D2AB004E60A0 /* Bundle+Resource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DDCE1E27E0D2AB004E60A0 /* Bundle+Resource.swift */; };
+		21DDCE2D27E0D4D6004E60A0 /* StikerFaceFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DDCE2C27E0D4D6004E60A0 /* StikerFaceFonts.swift */; };
+		21DDCE3327E0D55A004E60A0 /* MontserratBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 21DDCE2F27E0D55A004E60A0 /* MontserratBold.ttf */; };
+		21DDCE3427E0D55A004E60A0 /* MontserratMedium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 21DDCE3027E0D55A004E60A0 /* MontserratMedium.ttf */; };
+		21DDCE3527E0D55A004E60A0 /* MontserratRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 21DDCE3127E0D55A004E60A0 /* MontserratRegular.ttf */; };
+		21DDCE3627E0D55A004E60A0 /* MontserratSemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 21DDCE3227E0D55A004E60A0 /* MontserratSemiBold.ttf */; };
+		21DDCE3827E0D988004E60A0 /* Palette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DDCE3727E0D988004E60A0 /* Palette.swift */; };
+		21DDCE3A27E0D9E8004E60A0 /* UIColor+hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DDCE3927E0D9E8004E60A0 /* UIColor+hex.swift */; };
 		274DF0E2BF04F6F4F9F1E70CF513A4F2 /* ConstraintLayoutSupportDSL.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A46A8054577838D49C60142EB88B13 /* ConstraintLayoutSupportDSL.swift */; };
 		3B60C02F6E42FD06B128473E00A94224 /* ConstraintLayoutSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D705690D879064ED84970813189D8D4 /* ConstraintLayoutSupport.swift */; };
 		3CD5FAFC746A76D73C3F501734199DFF /* Typealiases.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E066869A95E00B949CBA4D2284C35F /* Typealiases.swift */; };
@@ -104,13 +115,24 @@
 		141BC33167429B9926FB24A17F01568C /* ConstraintMaker.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintMaker.swift; path = Source/ConstraintMaker.swift; sourceTree = "<group>"; };
 		1551B29EC03366DDF06BCC6B397EC5EE /* StikerFace-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "StikerFace-umbrella.h"; sourceTree = "<group>"; };
 		1C9281F3A81F0AC904DF2661C0D63033 /* StikerFace-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "StikerFace-prefix.pch"; sourceTree = "<group>"; };
+		21DDCE1A27E0D2AB004E60A0 /* UIImage+Bundle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Bundle.swift"; sourceTree = "<group>"; };
+		21DDCE1B27E0D2AB004E60A0 /* UIColor+Bundle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Bundle.swift"; sourceTree = "<group>"; };
+		21DDCE1D27E0D2AB004E60A0 /* String+Localized.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Localized.swift"; sourceTree = "<group>"; };
+		21DDCE1E27E0D2AB004E60A0 /* Bundle+Resource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Bundle+Resource.swift"; sourceTree = "<group>"; };
+		21DDCE2C27E0D4D6004E60A0 /* StikerFaceFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StikerFaceFonts.swift; sourceTree = "<group>"; };
+		21DDCE2F27E0D55A004E60A0 /* MontserratBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MontserratBold.ttf; sourceTree = "<group>"; };
+		21DDCE3027E0D55A004E60A0 /* MontserratMedium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MontserratMedium.ttf; sourceTree = "<group>"; };
+		21DDCE3127E0D55A004E60A0 /* MontserratRegular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MontserratRegular.ttf; sourceTree = "<group>"; };
+		21DDCE3227E0D55A004E60A0 /* MontserratSemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MontserratSemiBold.ttf; sourceTree = "<group>"; };
+		21DDCE3727E0D988004E60A0 /* Palette.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Palette.swift; sourceTree = "<group>"; };
+		21DDCE3927E0D9E8004E60A0 /* UIColor+hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+hex.swift"; sourceTree = "<group>"; };
 		250E41DBB680A3A2ECDDD2210311B230 /* ConstraintConfig.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintConfig.swift; path = Source/ConstraintConfig.swift; sourceTree = "<group>"; };
 		25479F58B67AA43E092C7B156C1B5C1B /* ConstraintRelation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintRelation.swift; path = Source/ConstraintRelation.swift; sourceTree = "<group>"; };
 		2975CA5A0D26BC84F3EE9912FEBDA795 /* ConstraintRelatableTarget.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintRelatableTarget.swift; path = Source/ConstraintRelatableTarget.swift; sourceTree = "<group>"; };
 		2D19FA1EF9CCAA2A5C806B6729D2E114 /* StikerFace-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "StikerFace-dummy.m"; sourceTree = "<group>"; };
 		2E3FE3A4F5D8D0CC9D341D5E9AD9E99C /* StikerFace-StikerFace */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "StikerFace-StikerFace"; path = StikerFace.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F7E83FEE8B3F1DADD9A1ABB8A8AA163 /* StikerFace.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = StikerFace.release.xcconfig; sourceTree = "<group>"; };
-		309EE8FDFB8818BDA3F1B88605B935BA /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		309EE8FDFB8818BDA3F1B88605B935BA /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		391A6F8B42D2CD885F8F3C4CE6859439 /* SnapKit-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "SnapKit-Info.plist"; sourceTree = "<group>"; };
 		3AB0B9C3A4EF27A9C5B5C56E5F354A28 /* ResourceBundle-StikerFace-StikerFace-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "ResourceBundle-StikerFace-StikerFace-Info.plist"; sourceTree = "<group>"; };
 		3B82EE05D9AEEEEED88B9722A064EFCE /* Pods-StikerFace_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-StikerFace_Example.release.xcconfig"; sourceTree = "<group>"; };
@@ -121,13 +143,13 @@
 		464C01543F3BCEDEE51ABAA696513D0B /* LayoutConstraintItem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LayoutConstraintItem.swift; path = Source/LayoutConstraintItem.swift; sourceTree = "<group>"; };
 		474AFC560A8B414B467174737DBC891A /* ConstraintItem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintItem.swift; path = Source/ConstraintItem.swift; sourceTree = "<group>"; };
 		47B200BD964F52F6693D4168248B8645 /* ConstraintOffsetTarget.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintOffsetTarget.swift; path = Source/ConstraintOffsetTarget.swift; sourceTree = "<group>"; };
-		4B378E19E9FC3323DE18976F53BE4E5A /* StikerFace.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = StikerFace.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		4B378E19E9FC3323DE18976F53BE4E5A /* StikerFace.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = StikerFace.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		50380F281EC3EE769C85035CCEA77226 /* Constraint.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Constraint.swift; path = Source/Constraint.swift; sourceTree = "<group>"; };
 		549471CD1FE3A1E1865DD172864918D3 /* ConstraintInsets.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintInsets.swift; path = Source/ConstraintInsets.swift; sourceTree = "<group>"; };
 		56006AA49A060CA2830F32CD6F394823 /* ConstraintViewDSL.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintViewDSL.swift; path = Source/ConstraintViewDSL.swift; sourceTree = "<group>"; };
 		5672F866FA01E769347E282C769DBCB1 /* RootView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		5C20377AB147B4F60783EA0398E575DF /* RootViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
-		5C41F39EA4113AE5543B68D119B40484 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
+		5C41F39EA4113AE5543B68D119B40484 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		612EA808DD53C8F1B3F17E42530D5CA8 /* StikerFace.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StikerFace.swift; sourceTree = "<group>"; };
 		66C5188AE61F0E667CD9E7ED28CDD61C /* ConstraintLayoutGuide.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintLayoutGuide.swift; path = Source/ConstraintLayoutGuide.swift; sourceTree = "<group>"; };
 		6A9341666EAC154422A032092A7DC2D7 /* UILayoutSupport+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UILayoutSupport+Extensions.swift"; path = "Source/UILayoutSupport+Extensions.swift"; sourceTree = "<group>"; };
@@ -143,7 +165,7 @@
 		91A53CAF547D71AEFABE49D91B4E6816 /* ConstraintMakerPriortizable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintMakerPriortizable.swift; path = Source/ConstraintMakerPriortizable.swift; sourceTree = "<group>"; };
 		9716AD15FADF38A93170E034F2BCE457 /* ConstraintPriorityTarget.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintPriorityTarget.swift; path = Source/ConstraintPriorityTarget.swift; sourceTree = "<group>"; };
 		979486118B3E90C08386079D57962701 /* SnapKit */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SnapKit; path = SnapKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		A1CD432F32277BB93DEAADA626ECEC5B /* SnapKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SnapKit.release.xcconfig; sourceTree = "<group>"; };
 		A51E99894F75F00A281BE6A32FBDE495 /* ConstraintView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintView.swift; path = Source/ConstraintView.swift; sourceTree = "<group>"; };
 		A7D358AA1606C7B2CDC8555485807E9E /* ConstraintDirectionalInsetTarget.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintDirectionalInsetTarget.swift; path = Source/ConstraintDirectionalInsetTarget.swift; sourceTree = "<group>"; };
@@ -226,9 +248,57 @@
 			isa = PBXGroup;
 			children = (
 				612EA808DD53C8F1B3F17E42530D5CA8 /* StikerFace.swift */,
+				21DDCE3727E0D988004E60A0 /* Palette.swift */,
 			);
-			name = Helpers;
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		21DDCE1827E0D2AB004E60A0 /* Extentions */ = {
+			isa = PBXGroup;
+			children = (
+				21DDCE1927E0D2AB004E60A0 /* UIKit */,
+				21DDCE1C27E0D2AB004E60A0 /* Foundation */,
+			);
+			path = Extentions;
+			sourceTree = "<group>";
+		};
+		21DDCE1927E0D2AB004E60A0 /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				21DDCE1A27E0D2AB004E60A0 /* UIImage+Bundle.swift */,
+				21DDCE1B27E0D2AB004E60A0 /* UIColor+Bundle.swift */,
+				21DDCE3927E0D9E8004E60A0 /* UIColor+hex.swift */,
+			);
+			path = UIKit;
+			sourceTree = "<group>";
+		};
+		21DDCE1C27E0D2AB004E60A0 /* Foundation */ = {
+			isa = PBXGroup;
+			children = (
+				21DDCE1D27E0D2AB004E60A0 /* String+Localized.swift */,
+				21DDCE1E27E0D2AB004E60A0 /* Bundle+Resource.swift */,
+			);
+			path = Foundation;
+			sourceTree = "<group>";
+		};
+		21DDCE2B27E0D4B0004E60A0 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				21DDCE2C27E0D4D6004E60A0 /* StikerFaceFonts.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		21DDCE2E27E0D55A004E60A0 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				21DDCE2F27E0D55A004E60A0 /* MontserratBold.ttf */,
+				21DDCE3027E0D55A004E60A0 /* MontserratMedium.ttf */,
+				21DDCE3127E0D55A004E60A0 /* MontserratRegular.ttf */,
+				21DDCE3227E0D55A004E60A0 /* MontserratSemiBold.ttf */,
+			);
+			name = Fonts;
+			path = Sources/Resource/Fonts;
 			sourceTree = "<group>";
 		};
 		346B1C34F593D82F245A8AA162205E15 /* Development Pods */ = {
@@ -245,7 +315,6 @@
 				5672F866FA01E769347E282C769DBCB1 /* RootView.swift */,
 				5C20377AB147B4F60783EA0398E575DF /* RootViewController.swift */,
 			);
-			name = RootViewController;
 			path = RootViewController;
 			sourceTree = "<group>";
 		};
@@ -273,6 +342,7 @@
 			children = (
 				DDF23433C248A92AD6152DF7EADA28E9 /* Assets.xcassets */,
 				779A0FD643C904D29A04A42DACDCD902 /* Common */,
+				21DDCE2E27E0D55A004E60A0 /* Fonts */,
 				AD691AC7747D335B7234555A862E14A4 /* Module */,
 				DDE0026F275B8760EE362DA1944B815B /* Pod */,
 				E9CBF7D0A7DEBB3D5CFB3DCF79D00748 /* Support Files */,
@@ -286,13 +356,13 @@
 			children = (
 				0B6153D262074F82BDD9DBA8D63BDA7B /* OnboardingView.swift */,
 			);
-			name = View;
 			path = View;
 			sourceTree = "<group>";
 		};
 		779A0FD643C904D29A04A42DACDCD902 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				21DDCE1827E0D2AB004E60A0 /* Extentions */,
 				2100B7785EA2906693E62EFEDAC1708E /* Helpers */,
 				B9B47AD1E7EA84E00CB31A57696D3D7D /* UI */,
 			);
@@ -341,7 +411,6 @@
 				6A9341666EAC154422A032092A7DC2D7 /* UILayoutSupport+Extensions.swift */,
 				843EFF0C650682C304D518A9092EE9FD /* Support Files */,
 			);
-			name = SnapKit;
 			path = SnapKit;
 			sourceTree = "<group>";
 		};
@@ -381,8 +450,8 @@
 			isa = PBXGroup;
 			children = (
 				34F2BA92A51663CC7D1DEFAD52856D55 /* RootViewController */,
+				21DDCE2B27E0D4B0004E60A0 /* Views */,
 			);
-			name = UI;
 			path = UI;
 			sourceTree = "<group>";
 		};
@@ -400,7 +469,6 @@
 				4222A6F0A7D241D98B02CFB35B003CEB /* OnboardingViewController.swift */,
 				64513489B984C865AF206A0B12927435 /* View */,
 			);
-			name = Onboarding;
 			path = Onboarding;
 			sourceTree = "<group>";
 		};
@@ -598,6 +666,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21DDCE3627E0D55A004E60A0 /* MontserratSemiBold.ttf in Resources */,
+				21DDCE3527E0D55A004E60A0 /* MontserratRegular.ttf in Resources */,
+				21DDCE3427E0D55A004E60A0 /* MontserratMedium.ttf in Resources */,
+				21DDCE3327E0D55A004E60A0 /* MontserratBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -668,6 +740,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				5591F25F4D8778A968A43700ACECBFBC /* Pods-StikerFace_Example-dummy.m in Sources */,
+				21DDCE3A27E0D9E8004E60A0 /* UIColor+hex.swift in Sources */,
+				21DDCE2427E0D2AB004E60A0 /* UIImage+Bundle.swift in Sources */,
+				21DDCE2727E0D2AB004E60A0 /* Bundle+Resource.swift in Sources */,
+				21DDCE2D27E0D4D6004E60A0 /* StikerFaceFonts.swift in Sources */,
+				21DDCE2627E0D2AB004E60A0 /* String+Localized.swift in Sources */,
+				21DDCE2527E0D2AB004E60A0 /* UIColor+Bundle.swift in Sources */,
+				21DDCE3827E0D988004E60A0 /* Palette.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -971,8 +1050,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 5.0;
 				SYMROOT = "${SRCROOT}/../build";
 			};
