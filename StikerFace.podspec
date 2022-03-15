@@ -7,46 +7,46 @@
 #
 
 Pod::Spec.new do |s|
-  s.name             = 'StikerFace'
-  s.version          = '0.1.0'
-  s.summary          = 'TODO: A short description of StikerFace.'
-
-# This description is used to generate tags and improve search results.
-#   * Think: What does it do? Why did you write it? What is the focus?
-#   * Try to keep it short, snappy and to the point.
-#   * Write the description between the DESC delimiters below.
-#   * Finally, don't worry about the indent, CocoaPods strips it!
-
-  s.description      = 'TODO: Add long description of the pod here.'
-
-  s.homepage         = 'https://github.com/Xaker69/StikerFace'
-  # s.homepage         = 'https://github.com/sflabsorg'
-  # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
-  s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'Xaker69' => 'max.xaker41@mail.ru' }
-  # s.source       = { :path => '.' }
-  s.source           = { :git => 'https://github.com/Xaker69/StikerFace.git', :tag => s.version.to_s }
+  s.name = 'StikerFace'
+  s.version = '0.1.0'
+  s.summary = 'StickerFace for your app'
+  
+  # This description is used to generate tags and improve search results.
+  #   * Think: What does it do? Why did you write it? What is the focus?
+  #   * Try to keep it short, snappy and to the point.
+  #   * Write the description between the DESC delimiters below.
+  #   * Finally, don't worry about the indent, CocoaPods strips it!
+  
+  s.description = 'TODO: Add long description of the pod here.'
+  
+  s.homepage = 'https://github.com/startfellows/StikerFace'
+  # s.screenshots = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
+  s.license = { :type => 'MIT', :file => 'LICENSE' }
+  s.author = { 'Xaker69' => 'max.xaker41@mail.ru' }
+  # s.source = { :path => '.' }
+  s.source = { :git => 'https://github.com/startfellows/StikerFace.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
-
+  
   s.ios.deployment_target = '13.0'
   s.swift_version = '4.0'
   
-  s.source_files  = ["Sources/*.swift", "Sources/**/*.swift", "Sources/**/*.[mh]"]
+  s.source_files = ["Sources/*.swift", "Sources/**/*.swift", "Sources/**/*.[mh]"]
   # s.source_files = 'StikerFace/Classes/**/*'
   
-  s.public_header_files = [
-    'Sources/**/*.h'
-  ]
+  # s.public_header_files = [
+  #   'Sources/**/*.h'
+  # ]
   
-  s.resource_bundles = {
-    'StikerFace' => ['Sources/Resource/**/*.*'],
-  }
-
+  #  s.resource_bundles = {
+  #    'StikerFace' => ['Sources/Resource/**/*.*'],
+  #  }
+  
   # s.resource_bundles = {
   #   'StikerFace' => ['StikerFace/Assets/*.png']
   # }
-
+  
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
   # s.dependency 'AFNetworking', '~> 2.3'
+  s.dependency 'SnapKit'
 end
