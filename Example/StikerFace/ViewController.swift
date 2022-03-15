@@ -4,6 +4,8 @@ import SnapKit
 
 class ViewController: UIViewController {
 
+    let sdk = StikerFace.shared
+    
     let openButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitleColor(.white, for: .normal)
@@ -27,7 +29,7 @@ class ViewController: UIViewController {
     }
     
     @objc private func openButtonTapped() {
-        
+        sdk.openStikerFace()
     }
     
     private func setupConstraints() {

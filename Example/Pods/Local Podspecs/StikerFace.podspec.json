@@ -29,9 +29,13 @@
       "Sources/Resource/**/*.*"
     ]
   },
+  "frameworks": "UIKit",
   "dependencies": {
     "SnapKit": [
 
+    ],
+    "Atributika": [
+      "~> 4.9.0"
     ]
   },
   "swift_version": "4.0"

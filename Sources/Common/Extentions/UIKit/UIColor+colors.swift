@@ -10,4 +10,12 @@ extension UIColor {
         return UIColor(hex: 0xFFFFFF)
     }
     
+    open class var textPrimary: UIColor {
+        return UIColor(hex: 0x151C29)
+    }
+    
+    open class var textSecondary: UIColor {
+        return UIColor(hex: 0x9FA5AE)
+    }
+    
 }
