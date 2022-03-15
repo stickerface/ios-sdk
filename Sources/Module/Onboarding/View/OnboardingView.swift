@@ -1,20 +1,35 @@
-//
-//  OnboardingView.swift
-//  StikerFace
-//
-//  Created by Maxim Khrabryi on 15.03.2022.
-//
-
 import UIKit
+import SnapKit
 
-class OnboardingView: UIView {
+class OnboardingView: RootView {
 
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
+    // TODO: add localize
+    let continueButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Continue", for: .normal)
+        button.titleLabel?.font = Palette.fontBold.withSize(16.0)
+        button.setTitleColor(.defaultWhite, for: .normal)
+        button.backgroundColor = .accentBrand
+        button.layer.cornerRadius = 14.0
+        
+        return button
+    }()
+    
+    override func setup() {
+        backgroundColor = .white
+        
+        addSubview(continueButton)
+        
+        setupConstraints()
     }
-    */
-
+    
+    private func setupConstraints() {
+        continueButton.snp.makeConstraints { make in
+            make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-16)
+            make.left.equalToSuperview().offset(32)
+            make.right.equalToSuperview().offset(-32)
+            make.height.equalTo(48)
+        }
+    }
+    
 }
