@@ -37,13 +37,9 @@ Pod::Spec.new do |s|
   #   'Sources/**/*.h'
   # ]
   
-  #  s.resource_bundles = {
-  #    'StikerFace' => ['Sources/Resource/**/*.*'],
-  #  }
-  
-  # s.resource_bundles = {
-  #   'StikerFace' => ['StikerFace/Assets/*.png']
-  # }
+    s.resource_bundles = {
+      'StikerFace' => ['Sources/Resource/**/*.*'],
+    }
   
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'

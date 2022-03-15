@@ -24,6 +24,11 @@
     "Sources/**/*.swift",
     "Sources/**/*.[mh]"
   ],
+  "resource_bundles": {
+    "StikerFace": [
+      "Sources/Resource/**/*.*"
+    ]
+  },
   "dependencies": {
     "SnapKit": [
 
