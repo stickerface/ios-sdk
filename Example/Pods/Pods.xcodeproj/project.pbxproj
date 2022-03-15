@@ -14,6 +14,7 @@
 		1CF0B85DBFF201E8C3A431874671630D /* StikerFace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30988CE628243069BD81B0AA6556A230 /* StikerFace.swift */; };
 		1E9EEA756F2774D73347F1660EEFE3E9 /* ConstraintView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE9055CEA7890517265589BD23D73A49 /* ConstraintView+Extensions.swift */; };
 		1F3BAD7E9BEDA2818E0EC372777CD60B /* MontserratMedium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 78561E29DE1A8F271D2D0E5BDE523946 /* MontserratMedium.ttf */; };
+		21DDCE3E27E0DFB5004E60A0 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DDCE3D27E0DFB5004E60A0 /* Utils.swift */; };
 		274DF0E2BF04F6F4F9F1E70CF513A4F2 /* ConstraintLayoutSupportDSL.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A46A8054577838D49C60142EB88B13 /* ConstraintLayoutSupportDSL.swift */; };
 		2936AE454B9683C40D634FA1BB594411 /* UIColor+hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66B90A6B06172862E82C0CCCEF21DCCA /* UIColor+hex.swift */; };
 		3687EBF00B2E01D72B7BA68186A1146B /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F13E939BCEA0AA9BF0F275A2A5CBE82 /* RootView.swift */; };
@@ -118,6 +119,7 @@
 		141BC33167429B9926FB24A17F01568C /* ConstraintMaker.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintMaker.swift; path = Source/ConstraintMaker.swift; sourceTree = "<group>"; };
 		151C2D41BFE5E6E3F8CBC3D037E20BCF /* StikerFace.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = StikerFace.modulemap; sourceTree = "<group>"; };
 		1AAC8CCC478B49999B81470686079BBF /* StikerFace.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = StikerFace.release.xcconfig; sourceTree = "<group>"; };
+		21DDCE3D27E0DFB5004E60A0 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		23769BB0D832CD36CE5529EF56328E29 /* StikerFace-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "StikerFace-umbrella.h"; sourceTree = "<group>"; };
 		250E41DBB680A3A2ECDDD2210311B230 /* ConstraintConfig.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintConfig.swift; path = Source/ConstraintConfig.swift; sourceTree = "<group>"; };
 		25479F58B67AA43E092C7B156C1B5C1B /* ConstraintRelation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintRelation.swift; path = Source/ConstraintRelation.swift; sourceTree = "<group>"; };
@@ -126,12 +128,12 @@
 		30988CE628243069BD81B0AA6556A230 /* StikerFace.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StikerFace.swift; sourceTree = "<group>"; };
 		391A6F8B42D2CD885F8F3C4CE6859439 /* SnapKit-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "SnapKit-Info.plist"; sourceTree = "<group>"; };
 		3B82EE05D9AEEEEED88B9722A064EFCE /* Pods-StikerFace_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-StikerFace_Example.release.xcconfig"; sourceTree = "<group>"; };
-		3D2E6475BB3E78C32131AC03A52D1BB4 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		3D2E6475BB3E78C32131AC03A52D1BB4 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		3D705690D879064ED84970813189D8D4 /* ConstraintLayoutSupport.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintLayoutSupport.swift; path = Source/ConstraintLayoutSupport.swift; sourceTree = "<group>"; };
-		3E54F04E39F24A94CE427227682EF2FA /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
+		3E54F04E39F24A94CE427227682EF2FA /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		3EAECB6CFDFC0333F5C2112659FAB15F /* Pods-StikerFace_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-StikerFace_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		447605CD70759A38347B806BC7651FDA /* Pods-StikerFace_Example-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-StikerFace_Example-Info.plist"; sourceTree = "<group>"; };
-		45BD41D6AFD4267EC1EB86DAF977FDFC /* StikerFace.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = StikerFace.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		45BD41D6AFD4267EC1EB86DAF977FDFC /* StikerFace.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = StikerFace.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		464C01543F3BCEDEE51ABAA696513D0B /* LayoutConstraintItem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LayoutConstraintItem.swift; path = Source/LayoutConstraintItem.swift; sourceTree = "<group>"; };
 		474AFC560A8B414B467174737DBC891A /* ConstraintItem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintItem.swift; path = Source/ConstraintItem.swift; sourceTree = "<group>"; };
 		47B200BD964F52F6693D4168248B8645 /* ConstraintOffsetTarget.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintOffsetTarget.swift; path = Source/ConstraintOffsetTarget.swift; sourceTree = "<group>"; };
@@ -147,21 +149,21 @@
 		6F13E939BCEA0AA9BF0F275A2A5CBE82 /* RootView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		724FB64349F5678CE1709979CF0DD952 /* ConstraintMakerRelatable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintMakerRelatable.swift; path = Source/ConstraintMakerRelatable.swift; sourceTree = "<group>"; };
 		73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		772B6B296123D4B27A33A1C10EC2C52A /* MontserratSemiBold.ttf */ = {isa = PBXFileReference; includeInIndex = 1; path = MontserratSemiBold.ttf; sourceTree = "<group>"; };
-		78561E29DE1A8F271D2D0E5BDE523946 /* MontserratMedium.ttf */ = {isa = PBXFileReference; includeInIndex = 1; path = MontserratMedium.ttf; sourceTree = "<group>"; };
+		772B6B296123D4B27A33A1C10EC2C52A /* MontserratSemiBold.ttf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; path = MontserratSemiBold.ttf; sourceTree = "<group>"; };
+		78561E29DE1A8F271D2D0E5BDE523946 /* MontserratMedium.ttf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; path = MontserratMedium.ttf; sourceTree = "<group>"; };
 		7889131C1139F96BBDA94CEE2E694763 /* SnapKit.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = SnapKit.modulemap; sourceTree = "<group>"; };
 		7AE00ECC24C5CC6DC938204FF42AD0E5 /* ConstraintDSL.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintDSL.swift; path = Source/ConstraintDSL.swift; sourceTree = "<group>"; };
 		7C21E0C93A1141A1E2EB51575500E27D /* SnapKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SnapKit.debug.xcconfig; sourceTree = "<group>"; };
 		7C2EC377264B25FB0E67D150E37E87CD /* ConstraintInsetTarget.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintInsetTarget.swift; path = Source/ConstraintInsetTarget.swift; sourceTree = "<group>"; };
-		8B5A636ABCAA68610DB1321D471C2903 /* MontserratBold.ttf */ = {isa = PBXFileReference; includeInIndex = 1; path = MontserratBold.ttf; sourceTree = "<group>"; };
+		8B5A636ABCAA68610DB1321D471C2903 /* MontserratBold.ttf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; path = MontserratBold.ttf; sourceTree = "<group>"; };
 		8E58A0230D96E31B1D9FAB790E9FB7C8 /* Assets.xcassets */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Sources/Resource/Assets.xcassets; sourceTree = "<group>"; };
 		8FA7B3B7172382FA7D8F2F9942273CDD /* StikerFace */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = StikerFace; path = StikerFace.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		91164BE769DA144776663FBF46785561 /* ConstraintDirectionalInsets.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintDirectionalInsets.swift; path = Source/ConstraintDirectionalInsets.swift; sourceTree = "<group>"; };
 		91A53CAF547D71AEFABE49D91B4E6816 /* ConstraintMakerPriortizable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintMakerPriortizable.swift; path = Source/ConstraintMakerPriortizable.swift; sourceTree = "<group>"; };
-		96D018E3C75CE88801182754CD15CC28 /* MontserratRegular.ttf */ = {isa = PBXFileReference; includeInIndex = 1; path = MontserratRegular.ttf; sourceTree = "<group>"; };
+		96D018E3C75CE88801182754CD15CC28 /* MontserratRegular.ttf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; path = MontserratRegular.ttf; sourceTree = "<group>"; };
 		9716AD15FADF38A93170E034F2BCE457 /* ConstraintPriorityTarget.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintPriorityTarget.swift; path = Source/ConstraintPriorityTarget.swift; sourceTree = "<group>"; };
 		979486118B3E90C08386079D57962701 /* SnapKit */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SnapKit; path = SnapKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		A1CD432F32277BB93DEAADA626ECEC5B /* SnapKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SnapKit.release.xcconfig; sourceTree = "<group>"; };
 		A51E99894F75F00A281BE6A32FBDE495 /* ConstraintView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintView.swift; path = Source/ConstraintView.swift; sourceTree = "<group>"; };
 		A5EC53EF47D54C93302E817311FDBF4C /* StikerFaceFonts.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StikerFaceFonts.swift; sourceTree = "<group>"; };
@@ -234,7 +236,6 @@
 			children = (
 				4FF486C98774497EF3ADBCD4BCF7BA1F /* OnboardingView.swift */,
 			);
-			name = View;
 			path = View;
 			sourceTree = "<group>";
 		};
@@ -260,7 +261,6 @@
 			children = (
 				A5EC53EF47D54C93302E817311FDBF4C /* StikerFaceFonts.swift */,
 			);
-			name = Views;
 			path = Views;
 			sourceTree = "<group>";
 		};
@@ -270,7 +270,6 @@
 				6F13E939BCEA0AA9BF0F275A2A5CBE82 /* RootView.swift */,
 				DB5F9EBA28DC08F5C66D8A89A601FB8A /* RootViewController.swift */,
 			);
-			name = RootViewController;
 			path = RootViewController;
 			sourceTree = "<group>";
 		};
@@ -291,7 +290,6 @@
 				01003DB34A45625A8AD80DF2132878D9 /* OnboardingViewController.swift */,
 				008BFB52CF39E2976EA727C5B5784836 /* View */,
 			);
-			name = Onboarding;
 			path = Onboarding;
 			sourceTree = "<group>";
 		};
@@ -321,7 +319,6 @@
 				0694C82C292C349C3470C1879C57E148 /* Bundle+Resource.swift */,
 				69CBC184A090DB5B8F808F0B77B4D2DF /* String+Localized.swift */,
 			);
-			name = Foundation;
 			path = Foundation;
 			sourceTree = "<group>";
 		};
@@ -339,7 +336,6 @@
 				564EFB17CCB34D6D31F07A042CDCB148 /* Foundation */,
 				B352068D31D337DC65EE28279201484C /* UIKit */,
 			);
-			name = Extentions;
 			path = Extentions;
 			sourceTree = "<group>";
 		};
@@ -394,7 +390,6 @@
 				6A9341666EAC154422A032092A7DC2D7 /* UILayoutSupport+Extensions.swift */,
 				843EFF0C650682C304D518A9092EE9FD /* Support Files */,
 			);
-			name = SnapKit;
 			path = SnapKit;
 			sourceTree = "<group>";
 		};
@@ -424,10 +419,10 @@
 		9EA817EAF0CD66F02DBA7C19A8FA7906 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				21DDCE3D27E0DFB5004E60A0 /* Utils.swift */,
 				D895F136FBD9A770B37AE30020656CF5 /* Palette.swift */,
 				30988CE628243069BD81B0AA6556A230 /* StikerFace.swift */,
 			);
-			name = Helpers;
 			path = Helpers;
 			sourceTree = "<group>";
 		};
@@ -439,7 +434,6 @@
 				66B90A6B06172862E82C0CCCEF21DCCA /* UIColor+hex.swift */,
 				F7E73EE70DB2A1FD4254370F2DF99536 /* UIImage+Bundle.swift */,
 			);
-			name = UIKit;
 			path = UIKit;
 			sourceTree = "<group>";
 		};
@@ -515,7 +509,6 @@
 				275C0A8F8E531FEFC05DB747A8781815 /* RootViewController */,
 				265CF3B9CFA1E1687A0DB32AAA34C52E /* Views */,
 			);
-			name = UI;
 			path = UI;
 			sourceTree = "<group>";
 		};
@@ -764,6 +757,7 @@
 				CDFB92C3B39C6D50CC9DE2B56DB6D150 /* OnboardingViewController.swift in Sources */,
 				79BBCBB5FA33B31026564460F983728B /* Palette.swift in Sources */,
 				3687EBF00B2E01D72B7BA68186A1146B /* RootView.swift in Sources */,
+				21DDCE3E27E0DFB5004E60A0 /* Utils.swift in Sources */,
 				CA8A55B91AAE108FCD50792D0E091DE1 /* RootViewController.swift in Sources */,
 				1CF0B85DBFF201E8C3A431874671630D /* StikerFace.swift in Sources */,
 				D0ED5545E9FA49C49448F2B1C3C7A8CA /* StikerFace-dummy.m in Sources */,
@@ -1064,8 +1058,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 5.0;
 				SYMROOT = "${SRCROOT}/../build";
 			};
