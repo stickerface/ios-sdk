@@ -1,9 +1,9 @@
 {
   "name": "StikerFace",
   "version": "0.1.0",
-  "summary": "TODO: A short description of StikerFace.",
+  "summary": "StickerFace for your app",
   "description": "TODO: Add long description of the pod here.",
-  "homepage": "https://github.com/Xaker69/StikerFace",
+  "homepage": "https://github.com/startfellows/StikerFace",
   "license": {
     "type": "MIT",
     "file": "LICENSE"
@@ -12,7 +12,7 @@
     "Xaker69": "max.xaker41@mail.ru"
   },
   "source": {
-    "git": "https://github.com/Xaker69/StikerFace.git",
+    "git": "https://github.com/startfellows/StikerFace.git",
     "tag": "0.1.0"
   },
   "platforms": {
@@ -24,12 +24,9 @@
     "Sources/**/*.swift",
     "Sources/**/*.[mh]"
   ],
-  "public_header_files": [
-    "Sources/**/*.h"
-  ],
-  "resource_bundles": {
-    "StikerFace": [
-      "Sources/Resource/**/*.*"
+  "dependencies": {
+    "SnapKit": [
+
     ]
   },
   "swift_version": "4.0"

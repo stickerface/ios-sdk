@@ -1,15 +1,22 @@
 PODS:
-  - StikerFace (0.1.0)
+  - SnapKit (5.0.1)
+  - StikerFace (0.1.0):
+    - SnapKit
 
 DEPENDENCIES:
   - StikerFace (from `../`)
+
+SPEC REPOS:
+  trunk:
+    - SnapKit
 
 EXTERNAL SOURCES:
   StikerFace:
     :path: "../"
 
 SPEC CHECKSUMS:
-  StikerFace: cfa740ea57d6ea966b75fb017d691d338c979d5c
+  SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
+  StikerFace: 69bd12b15839016e2b2a106637db0a64b5ef7bed
 
 PODFILE CHECKSUM: 610918665c70915182b927ab82d5549618909399
 
