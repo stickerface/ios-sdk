@@ -22,24 +22,22 @@ class OnboardingView: RootView {
         return label
     }()
     
-    let subtitleLabel: UILabel = {
-        let label = UILabel()
+    let subtitleLabel: AttributedLabel = {
+        let label = AttributedLabel()
         label.numberOfLines = 0
-        
+
         var paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineHeightMultiple = 1.4
         paragraphStyle.alignment = .center
         paragraphStyle.lineBreakMode = .byWordWrapping
         
-        label.attributedText = NSMutableAttributedString(
-            string: "onboardingSubtitle".libraryLocalized,
-            attributes: [
-                .paragraphStyle: paragraphStyle,
-                .foregroundColor: UIColor.textPrimary,
-                .font: Palette.fontMedium.withSize(16)
-            ]
-        )
+        let style = Style()
+            .paragraphStyle(paragraphStyle)
+            .foregroundColor(UIColor.textPrimary)
+            .font(Palette.fontMedium.withSize(16))
         
+        label.attributedText = "onboardingSubtitle".libraryLocalized.styleAll(style)
+    
         return label
     }()
     
@@ -61,7 +59,7 @@ class OnboardingView: RootView {
     
     let continueButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Continue", for: .normal)
+        button.setTitle("commonContinue".libraryLocalized, for: .normal)
         button.titleLabel?.font = Palette.fontBold.withSize(16.0)
         button.setTitleColor(.defaultWhite, for: .normal)
         button.backgroundColor = .accentBrand

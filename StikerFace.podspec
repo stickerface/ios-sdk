@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name = 'StikerFace'
-  s.version = '0.1.1'
+  s.version = '0.1.2'
   s.summary = 'StickerFace for your app'
   
   # This description is used to generate tags and improve search results.
@@ -31,7 +31,6 @@ Pod::Spec.new do |s|
   s.swift_version = '4.0'
   
   s.source_files = ["Sources/*.swift", "Sources/**/*.swift", "Sources/**/*.[mh]"]
-  # s.source_files = 'StikerFace/Classes/**/*'
   
   # s.public_header_files = [
   #   'Sources/**/*.h'
@@ -41,8 +40,8 @@ Pod::Spec.new do |s|
       'StikerFace' => ['Sources/Resource/**/*.*'],
     }
   
-  # s.public_header_files = 'Pod/Classes/**/*.h'
   s.frameworks = 'UIKit'
   s.dependency 'SnapKit'
-  s.dependency 'Atributika', '~> 4.9.0'
+  s.dependency 'Atributika'
+  
 end
