@@ -12,7 +12,7 @@ public class StikerFaceFonts {
         registerFont(bundle: resourceBundle, fontName: "MontserratSemiBold", fontExtension: "ttf")
     }
     
-    private static func registerFont(bundle: Bundle, fontName: String, fontExtension: String) -> Bool {
+    private static func registerFont(bundle: Bundle, fontName: String, fontExtension: String) {
         guard let fontURL = bundle.url(forResource: fontName, withExtension: fontExtension) else {
             fatalError("Couldn't find font \(fontName)")
         }
@@ -27,12 +27,9 @@ public class StikerFaceFonts {
 
         var error: Unmanaged<CFError>?
         let success = CTFontManagerRegisterGraphicsFont(font, &error)
-        guard success else {
+        if !success {
             print("Error registering font: maybe it was already registered.")
-            return false
         }
-
-        return true
     }
     
 }
