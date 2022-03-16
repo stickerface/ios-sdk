@@ -1,7 +1,7 @@
 PODS:
   - Atributika (4.9.10)
   - SnapKit (5.0.1)
-  - StikerFace (0.1.0):
+  - StikerFace (0.1.1):
     - Atributika (~> 4.9.0)
     - SnapKit
 
@@ -20,7 +20,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Atributika: cf87f95f1d31d9cdb9af611a2b4e00672e9ae195
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
-  StikerFace: 948da8160ff1ba61587dc8070c096bea403475aa
+  StikerFace: e77902b8a733cd88d9973d037afd2a25a86f8bdd
 
 PODFILE CHECKSUM: 610918665c70915182b927ab82d5549618909399
 
