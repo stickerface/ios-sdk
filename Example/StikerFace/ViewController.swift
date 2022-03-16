@@ -1,24 +1,45 @@
-//
-//  ViewController.swift
-//  StikerFace
-//
-//  Created by Xaker69 on 03/14/2022.
-//  Copyright (c) 2022 Xaker69. All rights reserved.
-//
-
 import UIKit
+import StikerFace
+import SnapKit
 
 class ViewController: UIViewController {
 
+    let sdk = StikerFace.shared
+    
+    let openButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitleColor(.white, for: .normal)
+        button.setTitle("StikerFace", for: .normal)
+        button.backgroundColor = UIColor(red: 0.271, green: 0.682, blue: 0.961, alpha: 1)
+        button.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
+        button.layer.cornerRadius = 14
+        
+        return button
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        view.backgroundColor = .white
+        view.addSubview(openButton)
+        
+        openButton.addTarget(self, action: #selector(openButtonTapped), for: .touchUpInside)
+        
+        setupConstraints()
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    @objc private func openButtonTapped() {
+        sdk.openStikerFace()
     }
-
+    
+    private func setupConstraints() {
+        openButton.snp.makeConstraints { make in
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-16)
+            make.left.equalToSuperview().offset(32)
+            make.right.equalToSuperview().offset(-32)
+            make.height.equalTo(48)
+        }
+    }
+    
 }
 
