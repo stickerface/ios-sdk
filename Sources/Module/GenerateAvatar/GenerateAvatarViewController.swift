@@ -80,8 +80,7 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
             layers = ImageLoader.defaultLayers
             close()
             isAvatarGenerated = true
-            updateAvatar()
-            updateButtonTitles()
+            nextStep()
         }
     }
     
@@ -151,12 +150,7 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
     }
     
     private func nextStep() {
-        //        Analytics.shared.register(event: OnboardingAnalyticsEvent.profileCameraOpen(count: cameraOpenCount))
-    
-        //        navigationController?.pushViewController(ProfileEditViewController(editType: .create), animated: true)
-        guard let layers = layers else {
-            return
-        }
+        guard let layers = layers else { return }
         
         let vc = StickerFaceEditorViewController(layers: layers)
         vc.modalPresentationStyle = .fullScreen
