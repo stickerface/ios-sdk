@@ -1,27 +1,43 @@
 PODS:
   - Atributika (4.10.1)
+  - Kingfisher (7.2.0)
   - SnapKit (5.0.1)
-  - StikerFace (0.1.1):
+  - StickerFaceEditor (0.0.2)
+  - StikerFace (0.1.2):
     - Atributika
+    - Kingfisher
     - SnapKit
+    - StickerFaceEditor
 
 DEPENDENCIES:
+  - "StickerFaceEditor (from `git@github.com:sflabsorg/stickerfaceeditor-ios.git`, commit `abe6792`)"
   - StikerFace (from `../`)
 
 SPEC REPOS:
   trunk:
     - Atributika
+    - Kingfisher
     - SnapKit
 
 EXTERNAL SOURCES:
+  StickerFaceEditor:
+    :commit: abe6792
+    :git: "git@github.com:sflabsorg/stickerfaceeditor-ios.git"
   StikerFace:
     :path: "../"
 
+CHECKOUT OPTIONS:
+  StickerFaceEditor:
+    :commit: abe6792
+    :git: "git@github.com:sflabsorg/stickerfaceeditor-ios.git"
+
 SPEC CHECKSUMS:
   Atributika: 47e778507cfb3cd2c996278b0285221a62e97d71
+  Kingfisher: 3ac0b75b155cabc0e544877d1a4deea29feece92
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
-  StikerFace: c48068ce8865508e5cb34ed5809962d016ee71b8
+  StickerFaceEditor: 19c6b42e58a049b07a788149c41a60a68472ec6f
+  StikerFace: b89634f49a64e338c0ed4db8985f822842162a7e
 
-PODFILE CHECKSUM: 610918665c70915182b927ab82d5549618909399
+PODFILE CHECKSUM: 58962e9cd5fd79c9b7406b8b52d5d98b3ed0588b
 
 COCOAPODS: 1.11.3

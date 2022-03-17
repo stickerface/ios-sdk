@@ -43,5 +43,7 @@ Pod::Spec.new do |s|
   s.frameworks = 'UIKit'
   s.dependency 'SnapKit'
   s.dependency 'Atributika'
+  s.dependency 'StickerFaceEditor'
+  s.dependency 'Kingfisher'
   
 end
