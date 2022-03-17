@@ -19,4 +19,17 @@ class Utils {
     static func appDelegate() -> UIApplicationDelegate? {
         return UIApplication.shared.delegate
     }
+    
+    static func safeArea() -> UIEdgeInsets {
+        if let safeArea = appDelegate()?.window??.safeAreaInsets {
+            return safeArea
+        } else {
+            return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        }
+    }
+    
+    static func safeAreaVertical() -> CGFloat {
+        let safeArea = safeArea()
+        return safeArea.top + safeArea.bottom
+    }
 }
