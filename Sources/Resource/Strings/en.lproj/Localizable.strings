@@ -3,3 +3,11 @@
 "onboardingTitle" = "Welcome to StickerFace";
 "onboardingSubtitle" = "Design your awesome character and get the NFT to own your unique set";
 "onboardingPrivacyPolicyAndRules" = "By continuing you agree to our <a href='TermsOFServiceURL'>Terms of Service</a> and <a href='PrivacyPolicyURL'>Privacy Policy</a>";
+
+"setupAvatarTitle" = "Avatar";
+"setupAvatarSubtitle" = "Let’s start creating your avatar";
+"setupAvatarDescription" = "Pics are not stored and used one time for the AI avatar generation";
+"setupAvatarContinueTitle" = "Continue without camera";
+"setupAvatarAllowTitle" = "Allow camera access";
+"setupAvatarGenerateTitle" = "Generate avatar";
+"setupAvatarGenerateNewTitle" = "Generate new avatar";
