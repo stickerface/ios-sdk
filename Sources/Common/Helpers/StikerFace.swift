@@ -10,10 +10,14 @@ public class StikerFace {
     
     public func openStikerFace() {
         let viewController = Utils.getRootViewController()
-        let onboardingVC = OnboardingViewController()
-        onboardingVC.modalPresentationStyle = .fullScreen
+        let navigationController = UINavigationController()
+        navigationController.interactivePopGestureRecognizer?.isEnabled = true
+        navigationController.navigationBar.isHidden = true
+        navigationController.setNavigationBarHidden(true, animated: false)
+        navigationController.setViewControllers([OnboardingViewController()], animated: false)
+        navigationController.modalPresentationStyle = .fullScreen
         
-        viewController?.present(onboardingVC, animated: true)
+        viewController?.present(navigationController, animated: true)
     }
     
     public func open(controller: UIViewController) {
