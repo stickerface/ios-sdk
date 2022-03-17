@@ -111,38 +111,39 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     }
     
     private func loadEditor() {
-//        provider.loadEditor { [weak self] result in
-//            switch result {
-//            case .success(let editor):
-//                self?.headers = editor.sections.flatMap({ $0.subsections }).map({ EditorHeaderSectionModel(title: $0.name) })
-//                self?.headers.first?.isSelected = true
-//                self?.headerAdapter.performUpdates(animated: true)
-//
-//                self?.prices = editor.prices
-//                self?.objects = editor.sections.flatMap({ $0.subsections }).map({ EditorSubsectionSectionModel(editorSubsection: $0, prices: editor.prices) })
-//                self?.viewControllers = self?.objects.enumerated().map { index, object in
-//                    let controller = StickerFaceEditorPageController(sectionModel: object)
-//                    controller.delegate = self
-//                    controller.index = index
-//
-//                    return controller
-//                }
-//                self?.updateSelectedLayers()
-//                self?.loadingState = .loaded
-//
-//                if let viewController = self?.viewControllers?[0] {
-//                    self?.mainView.pageViewController.setViewControllers([viewController], direction: .reverse, animated: true)
-//                }
-//
-//                self?.updateUserProducts()
-//
-//            case .failure(let error):
+        provider.loadEditor { [weak self] result in
+            switch result {
+            case .success(let editor):
+                self?.headers = editor.sections.flatMap({ $0.subsections }).map({ EditorHeaderSectionModel(title: $0.name) })
+                self?.headers.first?.isSelected = true
+                self?.headerAdapter.performUpdates(animated: true)
+
+                self?.prices = editor.prices
+                self?.objects = editor.sections.flatMap({ $0.subsections }).map({ EditorSubsectionSectionModel(editorSubsection: $0, prices: editor.prices) })
+                self?.viewControllers = self?.objects.enumerated().map { index, object in
+                    let controller = StickerFaceEditorPageController(sectionModel: object)
+                    controller.delegate = self
+                    controller.index = index
+
+                    return controller
+                }
+                self?.updateSelectedLayers()
+                self?.loadingState = .loaded
+
+                if let viewController = self?.viewControllers?[0] {
+                    self?.mainView.pageViewController.setViewControllers([viewController], direction: .reverse, animated: true)
+                }
+
+                self?.updateUserProducts()
+
+            case .failure(let error):
 //                if let error = error as? ImModelError {
 //                    self?.mainView.loaderView.showError(error.message())
 //                }
-//                self?.loadingState = .failed
-//            }
-//        }
+                self?.mainView.loaderView.showError(error.localizedDescription)
+                self?.loadingState = .failed
+            }
+        }
     }
     
     @objc func buyLayers() {
