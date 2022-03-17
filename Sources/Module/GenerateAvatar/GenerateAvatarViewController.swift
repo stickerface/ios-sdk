@@ -77,7 +77,7 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
             showCameraController()
         } else {
             shouldAutoOpenCamera = false
-            layers = nil
+            layers = ImageLoader.defaultLayers
             close()
             isAvatarGenerated = true
             updateAvatar()
@@ -145,21 +145,24 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
         mainView.linesRoundRotateAnimationView.alpha = 0
         mainView.descriptionLabel.alpha = 0
         isAvatarGenerated = true
+        
         let side = mainView.avatarImageView.bounds.size.height
-        
-        if let layers = layers {
-            ImageLoader.setAvatar(with: layers, for: mainView.avatarImageView, side: side, cornerRadius: side/2)
-        } else {
-            let side = mainView.avatarImageView.bounds.size.height
-            ImageLoader.setAvatar(for: mainView.avatarImageView, side: side, cornerRadius: side/2)
-        }
-        
+        ImageLoader.setAvatar(with: layers, for: mainView.avatarImageView, side: side, cornerRadius: side/2)
     }
     
     private func nextStep() {
         //        Analytics.shared.register(event: OnboardingAnalyticsEvent.profileCameraOpen(count: cameraOpenCount))
     
         //        navigationController?.pushViewController(ProfileEditViewController(editType: .create), animated: true)
+        guard let layers = layers else {
+            return
+        }
+        
+        let vc = StickerFaceEditorViewController(layers: layers)
+        vc.modalPresentationStyle = .fullScreen
+        vc.view.backgroundColor = .white
+        
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     private func updateButtonTitles() {

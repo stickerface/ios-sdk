@@ -7,7 +7,7 @@ class ImageLoader: NSObject {
        return ImageLoader()
     }()
     
-    private static let defaultLayers = "6;16;253;265;28;3000;12;224;160;159;1;69;22;250;90;81;13;100;3040;271;3220;70;317;"
+    static let defaultLayers = "6;16;253;265;28;3000;12;224;160;159;1;69;22;250;90;81;13;100;3040;271;3220;70;317;"
 
     var cache = NSCache<NSString, UIImage>()
     
