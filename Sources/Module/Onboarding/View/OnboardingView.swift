@@ -17,7 +17,7 @@ class OnboardingView: RootView {
         let label = UILabel()
         label.numberOfLines = 0
         label.font = Palette.fontBold.withSize(35)
-        label.textColor = .textPrimary
+        label.textColor = .sfTextPrimary
         label.text = "onboardingTitle".libraryLocalized
         label.textAlignment = .center
         
@@ -35,7 +35,7 @@ class OnboardingView: RootView {
         
         let style = Style()
             .paragraphStyle(paragraphStyle)
-            .foregroundColor(UIColor.textPrimary)
+            .foregroundColor(UIColor.sfTextPrimary)
             .font(Palette.fontMedium.withSize(16))
         
         label.attributedText = "onboardingSubtitle".libraryLocalized.styleAll(style)
@@ -46,7 +46,7 @@ class OnboardingView: RootView {
     let policyLabel: AttributedLabel = {
         let label = AttributedLabel()
         label.textAlignment = .center
-        label.textColor = .textSecondary
+        label.textColor = .sfTextSecondary
         label.numberOfLines = 0
         label.font = Palette.fontMedium.withSize(12)
         
@@ -63,8 +63,8 @@ class OnboardingView: RootView {
         let button = UIButton(type: .system)
         button.setTitle("commonContinue".libraryLocalized, for: .normal)
         button.titleLabel?.font = Palette.fontBold.withSize(16.0)
-        button.setTitleColor(.defaultWhite, for: .normal)
-        button.backgroundColor = .accentBrand
+        button.setTitleColor(.sfDefaultWhite, for: .normal)
+        button.backgroundColor = .sfAccentBrand
         button.layer.cornerRadius = 14.0
         
         return button
