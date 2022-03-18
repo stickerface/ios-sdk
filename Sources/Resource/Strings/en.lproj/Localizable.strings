@@ -3,3 +3,8 @@
 "onboardingTitle" = "Welcome to StickerFace";
 "onboardingSubtitle" = "Design your awesome character and get the NFT to own your unique set";
 "onboardingPrivacyPolicyAndRules" = "By continuing you agree to our <a href='TermsOFServiceURL'>Terms of Service</a> and <a href='PrivacyPolicyURL'>Privacy Policy</a>";
+
+"connectWalletTitle" = "Connect your crypto wallet";
+"connectWalletSubtitle" = "To continue you need to have a cryptocurrency wallet Tonkeeper";
+"connectWalletWithoutWallet" = "Continue without wallet";
+"connectWalletConnectTitle" = "Connect with Tonkeeper";

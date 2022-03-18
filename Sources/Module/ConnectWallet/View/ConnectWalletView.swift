@@ -1,4 +1,5 @@
 import UIKit
+import Atributika
 
 class ConnectWalletView: RootView {
     
@@ -15,7 +16,7 @@ class ConnectWalletView: RootView {
         label.numberOfLines = 0
         label.font = Palette.fontBold.withSize(35)
         label.textColor = .textPrimary
-        label.text = "Connect your crypto wallet"
+        label.text = "connectWalletTitle".libraryLocalized
         label.textAlignment = .center
         
         return label
@@ -31,7 +32,7 @@ class ConnectWalletView: RootView {
         paragraphStyle.lineBreakMode = .byWordWrapping
         
         label.attributedText = NSMutableAttributedString(
-            string: "To continue you need to have a cryptocurrency wallet Tonkeeper",
+            string: "connectWalletSubtitle".libraryLocalized,
             attributes: [
                 .paragraphStyle: paragraphStyle,
                 .foregroundColor: UIColor.textPrimary,
@@ -44,7 +45,7 @@ class ConnectWalletView: RootView {
     
     let continueButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Continue without wallet", for: .normal)
+        button.setTitle("connectWalletWithoutWallet".libraryLocalized, for: .normal)
         button.titleLabel?.font = Palette.fontSemiBold.withSize(16.0)
         button.setTitleColor(.accentBrand, for: .normal)
         button.backgroundColor = .clear
@@ -55,14 +56,13 @@ class ConnectWalletView: RootView {
     
     let connectButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Connect with Tonkeeper", for: .normal)
+        button.setTitle("connectWalletConnectTitle".libraryLocalized, for: .normal)
         button.titleLabel?.font = Palette.fontBold.withSize(16.0)
         button.setTitleColor(.defaultWhite, for: .normal)
         button.backgroundColor = .accentBrand
         button.layer.cornerRadius = 14.0
         button.setImage(UIImage(libraryNamed: "tonkeeper_1"), for: .normal)
         button.tintColor = .white
-//        button.imageEdgeInsets = UIEdgeInsets(top: 12, left: 38, bottom: 12, right: -4)
         
         return button
     }()
