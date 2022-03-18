@@ -86,9 +86,17 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     }
         
     private func renderAvatar() {
+        let tuple = layersWithoutBackground()
         let id = getNextRequestId()
-        let renderFunc = createRenderFunc(requestId: id, layers: layers, size: Int(AvatarView.Layout.avatarImageViewHeight) * 4)
+        let renderFunc = createRenderFunc(requestId: id, layers: tuple.layers, size: Int(AvatarView.Layout.avatarImageViewHeight) * 4)
+        
         mainView.renderWebView.evaluateJavaScript(renderFunc)
+        
+        ImageLoader.setAvatar(with: tuple.background,
+                              for: mainView.backgroundImageView,
+                              placeholderImage: mainView.backgroundImageView.image,
+                              side: mainView.bounds.width,
+                              cornerRadius: 0)
     }
     
     private func createRenderFunc(requestId: Int, layers: String, size: Int) -> String {
@@ -202,6 +210,32 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     
     @objc private func save() {
         delegate?.stickerFaceEditorViewController(self, didSave: layers)
+    }
+    
+    private func layersWithoutBackground() -> (background: String, layers: String) {
+        var layers = layers
+        var backgroundLayer = "0"
+        
+        if let range = layers.range(of: "/") {
+            layers.removeSubrange(range.lowerBound..<layers.endIndex)
+        }
+        
+        var layersArray = layers.components(separatedBy: ";")
+        let backgroundLayers = objects.first(where: { model in
+            model.editorSubsection.name == "background"
+        })
+        
+        if let backLayers = backgroundLayers {
+            backLayers.editorSubsection.layers?.forEach({ layer in
+                if let index = layersArray.firstIndex(where: { $0 == layer }) {
+                    backgroundLayer = layer
+                    layersArray.remove(at: index)
+                }
+            })
+        }
+        
+        let resultLayers = layersArray.joined(separator: ";")
+        return (background: backgroundLayer, layers: resultLayers)
     }
     
     private func replaceCurrentLayer(with replacementLayer: String, section: Int) -> String {

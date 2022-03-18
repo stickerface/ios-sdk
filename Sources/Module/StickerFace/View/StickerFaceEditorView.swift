@@ -21,9 +21,28 @@ class StickerFaceEditorView: RootView {
         return view
     }()
     
+    let rightTopButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.backgroundColor = .white
+        button.layer.cornerRadius = 24.0
+        button.setImage(UIImage(libraryNamed: "male"), for: .normal)
+        button.tintColor = .sfAccentSecondary
+        
+        return button
+    }()
+    
+    let rightBottomButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.backgroundColor = .white
+        button.layer.cornerRadius = 24.0
+        button.setImage(UIImage(libraryNamed: "hanger"), for: .normal)
+        button.tintColor = .sfAccentSecondary
+        
+        return button
+    }()
+    
     let avatarView: AvatarView = {
         let avatarView = AvatarView()
-        avatarView.layer.cornerRadius = AvatarView.Layout.avatarImageViewHeight / 2
         avatarView.layer.masksToBounds = true
         avatarView.isSkeletonable = true
         
@@ -38,14 +57,18 @@ class StickerFaceEditorView: RootView {
         view.contentInset = UIEdgeInsets(top: 16.0, left: 0.0, bottom: 16.0, right: 0.0)
         view.alwaysBounceHorizontal = true
         view.showsHorizontalScrollIndicator = false
-        view.backgroundColor = .clear
+        view.backgroundColor = .white
+        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        view.clipsToBounds = true
+        view.layer.cornerRadius = 23
+        view.layer.cornerCurve = .continuous
         
         return view
     }()
     
     private let separator: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(libraryNamed: "stickerFaceSeparator")
+        view.backgroundColor = UIColor(hex: 0xE5E5EA)
         
         return view
     }()
@@ -61,13 +84,23 @@ class StickerFaceEditorView: RootView {
         return button
     }()
     
+    let backgroundImageView: UIImageView = {
+        let view = UIImageView()
+        view.contentMode = .scaleAspectFill
+        
+        return view
+    }()
+    
     let loaderView = LoaderView()
 
     override func setup() {
         
-        backgroundColor = .gray
+        backgroundColor = .white
         
+        addSubview(backgroundImageView)
         addSubview(tonBalanceView)
+        addSubview(rightTopButton)
+        addSubview(rightBottomButton)
         addSubview(renderWebView)
         addSubview(avatarView)
         addSubview(headerCollectionView)
@@ -86,6 +119,23 @@ class StickerFaceEditorView: RootView {
     }
     
     private func setupConstraints() {
+        tonBalanceView.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(16.0)
+            make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(8.0)
+        }
+        
+        rightTopButton.snp.makeConstraints { make in
+            make.right.equalToSuperview().offset(-16.0)
+            make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(8)
+            make.size.equalTo(48.0)
+        }
+        
+        rightBottomButton.snp.makeConstraints { make in
+            make.right.equalToSuperview().offset(-16.0)
+            make.bottom.equalTo(headerCollectionView.snp.top).offset(-16.0)
+            make.size.equalTo(48.0)
+        }
+        
         avatarView.snp.makeConstraints { make in
             make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(64.0)
             make.centerX.equalToSuperview()
@@ -96,10 +146,15 @@ class StickerFaceEditorView: RootView {
             make.edges.equalTo(avatarView.snp.edges)
         }
         
+        backgroundImageView.snp.makeConstraints { make in
+            make.left.right.top.equalToSuperview()
+            make.bottom.equalTo(headerCollectionView.snp.bottom)
+        }
+        
         headerCollectionView.snp.makeConstraints { make in
             make.top.equalTo(avatarView.snp.bottom)
             make.left.right.equalToSuperview()
-            make.height.equalTo(57.0)
+            make.height.equalTo(50.0)
         }
         
         separator.snp.makeConstraints { make in
@@ -113,11 +168,6 @@ class StickerFaceEditorView: RootView {
             make.right.equalToSuperview().offset(-20.0)
             make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-20.0)
             make.height.equalTo(48.0)
-        }
-        
-        tonBalanceView.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(16.0)
-            make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(8.0)
         }
         
     }
