@@ -5,7 +5,7 @@ class EditorHeaderCollectionCell: UICollectionViewCell {
     
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = Palette.fontSemiBold
+        label.font = Palette.fontSemiBold.withSize(16)
         label.textColor = .sfTextPrimary
         label.textAlignment = .center
         
@@ -40,9 +40,17 @@ class EditorHeaderCollectionCell: UICollectionViewCell {
     
     private func layout() {
         
-        titleLabel.pin.left(16.0).top(16.0).bottom(16.0).sizeToFit(.widthFlexible)
+        titleLabel.pin
+            .left(16.0)
+            .top(16.0)
+            .bottom(16.0)
+            .sizeToFit(.widthFlexible)
 
-        selectedIndicatorView.pin.height(2.0).left().right().bottom()
+        selectedIndicatorView.pin
+            .height(2.0)
+            .left(to: titleLabel.edge.left)
+            .right(to: titleLabel.edge.right)
+            .bottom()
         
         contentView.pin.width(titleLabel.frame.maxX + 16.0)
     }
