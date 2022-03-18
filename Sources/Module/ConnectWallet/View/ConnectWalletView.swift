@@ -110,7 +110,6 @@ class ConnectWalletView: RootView {
             make.right.equalToSuperview().offset(-32.0)
             make.height.equalTo(48.0)
         }
-        
     }
     
 }

@@ -53,8 +53,6 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         
         mainView.saveButton.addTarget(self, action: #selector(save), for: .touchUpInside)
         
-        mainView.avatarView.showAnimatedGradientSkeleton()
-        
         let leftSwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(changeSelectedTab))
         leftSwipeGestureRecognizer.direction = .left
         
@@ -94,7 +92,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         
         ImageLoader.setAvatar(with: tuple.background,
                               for: mainView.backgroundImageView,
-                              placeholderImage: mainView.backgroundImageView.image,
+                              placeholderImage: mainView.backgroundImageView.image ?? UIImage(),
                               side: mainView.bounds.width,
                               cornerRadius: 0)
     }

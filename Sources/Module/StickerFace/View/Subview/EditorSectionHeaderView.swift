@@ -4,8 +4,8 @@ class EditorSectionHeaderView: UICollectionReusableView {
     
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.textColor = UIColor(libraryNamed: "stickerFaceTextSecondary")
-        label.font = Palette.fontBold.withSize(14.0)
+        label.textColor = .sfTextSecondary
+        label.font = Palette.fontMedium.withSize(14.0)
         
         return label
     }()

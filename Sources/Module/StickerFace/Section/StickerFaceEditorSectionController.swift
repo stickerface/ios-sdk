@@ -164,7 +164,7 @@ extension StickerFaceEditorSectionController: ListAdapterDataSource {
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
         let layerColorEmbeddedSectionController = LayerColorEmbeddedSectionController()
         layerColorEmbeddedSectionController.delegate = self
-        layerColorEmbeddedSectionController.scrollDelegate
+        
         return layerColorEmbeddedSectionController
     }
     

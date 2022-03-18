@@ -3,8 +3,9 @@ import UIKit
 class LayerColorSelectorEmbeddedCell: UICollectionViewCell {
     
     let colorSelectionIndicatorView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(libraryNamed: "colorSelectionIndicator"))
-        
+        let imageView = UIImageView()
+        imageView.image = UIImage(libraryNamed: "colorSelectionIndicator")?.withRenderingMode(.alwaysTemplate)
+
         return imageView
     }()
     

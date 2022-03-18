@@ -44,7 +44,6 @@ class StickerFaceEditorView: RootView {
     let avatarView: AvatarView = {
         let avatarView = AvatarView()
         avatarView.layer.masksToBounds = true
-        avatarView.isSkeletonable = true
         
         return avatarView
     }()
@@ -74,12 +73,12 @@ class StickerFaceEditorView: RootView {
     }()
         
     let saveButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("commonSaveButtonTitle".libraryLocalized, for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = Palette.fontBold.withSize(18.0)
-        button.backgroundColor = UIColor(libraryNamed: "stickerFaceAccent")
-        button.layer.cornerRadius = 24.0
+        let button = UIButton(type: .system)
+        button.setTitle("Save and continue", for: .normal)
+        button.setTitleColor(.sfDefaultWhite, for: .normal)
+        button.titleLabel?.font = Palette.fontBold.withSize(16.0)
+        button.backgroundColor = .sfAccentBrand
+        button.layer.cornerRadius = 12.0
         
         return button
     }()
@@ -137,7 +136,7 @@ class StickerFaceEditorView: RootView {
         }
         
         avatarView.snp.makeConstraints { make in
-            make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(64.0)
+            make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(84.0)
             make.centerX.equalToSuperview()
             make.size.equalTo(AvatarView.Layout.avatarImageViewHeight)
         }
@@ -164,9 +163,9 @@ class StickerFaceEditorView: RootView {
         }
         
         saveButton.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(20.0)
-            make.right.equalToSuperview().offset(-20.0)
-            make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-20.0)
+            make.left.equalToSuperview().offset(32.0)
+            make.right.equalToSuperview().offset(-32.0)
+            make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom)
             make.height.equalTo(48.0)
         }
         
