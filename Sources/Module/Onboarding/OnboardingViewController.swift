@@ -9,7 +9,9 @@ class OnboardingViewController: ViewController<OnboardingView> {
     }
     
     @objc private func continueButtonTapped() {
-        navigationController?.pushViewController(ConnectWalletViewController(), animated: false)
+        let conncectVC = ConnectWalletViewController()
+        
+        navigationController?.pushViewController(conncectVC, animated: true)
     }
     
 }

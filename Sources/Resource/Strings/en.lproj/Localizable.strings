@@ -11,3 +11,8 @@
 "setupAvatarAllowTitle" = "Allow camera access";
 "setupAvatarGenerateTitle" = "Generate avatar";
 "setupAvatarGenerateNewTitle" = "Generate new avatar";
+
+"connectWalletTitle" = "Connect your crypto wallet";
+"connectWalletSubtitle" = "To continue you need to have a cryptocurrency wallet Tonkeeper";
+"connectWalletWithoutWallet" = "Continue without wallet";
+"connectWalletConnectTitle" = "Connect with Tonkeeper";

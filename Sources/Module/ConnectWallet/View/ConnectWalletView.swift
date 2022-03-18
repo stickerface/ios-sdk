@@ -1,4 +1,5 @@
 import UIKit
+import Atributika
 
 class ConnectWalletView: RootView {
     
@@ -15,14 +16,14 @@ class ConnectWalletView: RootView {
         label.numberOfLines = 0
         label.font = Palette.fontBold.withSize(35)
         label.textColor = .sfTextPrimary
-        label.text = "Connect your crypto wallet"
+        label.text = "connectWalletTitle".libraryLocalized
         label.textAlignment = .center
         
         return label
     }()
     
-    let subtitleLabel: UILabel = {
-        let label = UILabel()
+    let subtitleLabel: AttributedLabel = {
+        let label = AttributedLabel()
         label.numberOfLines = 0
         
         var paragraphStyle = NSMutableParagraphStyle()
@@ -30,21 +31,19 @@ class ConnectWalletView: RootView {
         paragraphStyle.alignment = .center
         paragraphStyle.lineBreakMode = .byWordWrapping
         
-        label.attributedText = NSMutableAttributedString(
-            string: "To continue you need to have a cryptocurrency wallet Tonkeeper",
-            attributes: [
-                .paragraphStyle: paragraphStyle,
-                .foregroundColor: UIColor.sfTextPrimary,
-                .font: Palette.fontMedium.withSize(16)
-            ]
-        )
+        let style = Style()
+            .paragraphStyle(paragraphStyle)
+            .foregroundColor(UIColor.sfTextPrimary)
+            .font(Palette.fontMedium.withSize(16))
+
+        label.attributedText = "connectWalletSubtitle".libraryLocalized.styleAll(style)
         
         return label
     }()
     
     let continueButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Continue without wallet", for: .normal)
+        button.setTitle("connectWalletWithoutWallet".libraryLocalized, for: .normal)
         button.titleLabel?.font = Palette.fontSemiBold.withSize(16.0)
         button.setTitleColor(.sfAccentBrand, for: .normal)
         button.backgroundColor = .clear
@@ -55,15 +54,13 @@ class ConnectWalletView: RootView {
     
     let connectButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Connect with Tonkeeper", for: .normal)
+        button.setTitle("connectWalletConnectTitle".libraryLocalized, for: .normal)
         button.titleLabel?.font = Palette.fontBold.withSize(16.0)
         button.setTitleColor(.sfDefaultWhite, for: .normal)
         button.backgroundColor = .sfAccentBrand
         button.layer.cornerRadius = 14.0
         button.setImage(UIImage(libraryNamed: "tonkeeper_1"), for: .normal)
         button.tintColor = .white
-        button.imageEdgeInsets = UIEdgeInsets(top: -1.0, left: -7.0, bottom: 0.0, right: 7.0)
-        button.titleEdgeInsets = UIEdgeInsets(top: 0.0, left: -2.0, bottom: 0.0, right: 0.0)
         
         return button
     }()

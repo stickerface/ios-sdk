@@ -1,8 +1,6 @@
 import UIKit
-import SnapKit
 import Atributika
 
-// TODO: add localize
 class OnboardingView: RootView {
 
     let imageView: UIImageView = {
