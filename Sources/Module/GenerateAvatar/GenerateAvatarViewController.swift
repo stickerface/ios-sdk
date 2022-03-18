@@ -154,7 +154,6 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
         
         let vc = StickerFaceEditorViewController(layers: layers)
         vc.modalPresentationStyle = .fullScreen
-        vc.view.backgroundColor = .white
         
         navigationController?.pushViewController(vc, animated: true)
     }

@@ -7,13 +7,6 @@ class StickerFaceEditorView: RootView {
     
     let pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
     
-    let headerView: PresentHeaderView = {
-        let headerView = PresentHeaderView(title: "")
-        headerView.closeButton.tintColor = UIColor(libraryNamed: "stickerFaceAccent")
-        
-        return headerView
-    }()
-    
     let renderWebView: WKWebView = {
         let webView = WKWebView()
         webView.alpha = 0
@@ -29,20 +22,7 @@ class StickerFaceEditorView: RootView {
         
         return avatarView
     }()
-    
-    let coinsButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(libraryNamed: "coin_12"), for: .normal)
-        button.titleLabel?.font = Palette.fontBold.withSize(14.0)
-        button.setTitleColor(UIColor(libraryNamed: "stickerFaceTextPrimary"), for: .normal)
-        button.contentEdgeInsets = UIEdgeInsets(top: 0.0, left: 12.0, bottom: 0.0, right: 6.0)
-        button.imageEdgeInsets = UIEdgeInsets(top: 0.0, left: -8.0, bottom: 0.0, right: 0.0)
-        button.backgroundColor = UIColor(libraryNamed: "stickerFaceForegroundIconButton")
-        button.layer.cornerRadius = 12.0
         
-        return button
-    }()
-    
     let headerCollectionView: UICollectionView = {
         let collectionViewLayout = UICollectionViewFlowLayout()
         collectionViewLayout.scrollDirection = .horizontal
@@ -81,8 +61,6 @@ class StickerFaceEditorView: RootView {
         backgroundColor = UIColor(libraryNamed: "stickerFaceBackgroundSystem")
         
         addSubview(renderWebView)
-        addSubview(headerView)
-        addSubview(coinsButton)
         addSubview(avatarView)
         addSubview(headerCollectionView)
         addSubview(separator)
@@ -100,20 +78,8 @@ class StickerFaceEditorView: RootView {
     }
     
     private func setupConstraints() {
-        
-        headerView.snp.makeConstraints { make in
-            make.top.equalTo(safeAreaLayoutGuide.snp.top)
-            make.left.right.equalToSuperview()
-        }
-        
-        coinsButton.snp.makeConstraints { make in
-            make.right.equalToSuperview().offset(-12.0)
-            make.centerY.equalTo(headerView.snp.centerY)
-            make.height.equalTo(24.0)
-        }
-        
         avatarView.snp.makeConstraints { make in
-            make.top.equalTo(headerView.snp.bottom)
+            make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(64.0)
             make.centerX.equalToSuperview()
             make.size.equalTo(AvatarView.Layout.avatarImageViewHeight)
         }

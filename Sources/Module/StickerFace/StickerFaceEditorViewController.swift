@@ -51,9 +51,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        mainView.headerView.closeButton.addTarget(self, action: #selector(close), for: .touchUpInside)
         mainView.saveButton.addTarget(self, action: #selector(save), for: .touchUpInside)
-        mainView.coinsButton.addTarget(self, action: #selector(openCoinsShop), for: .touchUpInside)
         
         mainView.avatarView.showAnimatedGradientSkeleton()
         
@@ -86,13 +84,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         
         loadEditor()
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         
-        mainView.coinsButton.setTitle(String(0), for: .normal)
-    }
-    
     private func renderAvatar() {
         let id = getNextRequestId()
         let renderFunc = createRenderFunc(requestId: id, layers: layers, size: Int(AvatarView.Layout.avatarImageViewHeight) * 4)
@@ -210,7 +202,6 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     
     @objc private func save() {
         delegate?.stickerFaceEditorViewController(self, didSave: layers)
-        close()
     }
     
     private func replaceCurrentLayer(with replacementLayer: String, section: Int) -> String {
@@ -317,26 +308,11 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
 //        
 //        present(modal, animated: true)
     }
-    
-    @objc private func openCoinsShop() {
-//        let vc = CoinsViewController()
-//        vc.modalPresentationStyle = .fullScreen
-//        if let presentedViewController = presentedViewController as? ModalConfirmationController {
-//            dismiss(animated: true)
-//        }
-//        present(vc, animated: true)
-    }
-    
+        
     @objc private func closeConfirmBuyingLayers() {
 //        Analytics.shared.register(event: SettingsAnalyticsEvent.stickerFaceBuy(value: false))
+    }
         
-        close()
-    }
-    
-    @objc private func close() {
-        dismiss(animated: true)
-    }
-    
     @objc private func changeSelectedTab(_ gestureRecognizer: UISwipeGestureRecognizer) {
         guard let selectedIndex = headers.firstIndex(where: { $0.isSelected }) else {
             return
