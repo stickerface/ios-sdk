@@ -22,8 +22,8 @@ class ConnectWalletView: RootView {
         return label
     }()
     
-    let subtitleLabel: UILabel = {
-        let label = UILabel()
+    let subtitleLabel: AttributedLabel = {
+        let label = AttributedLabel()
         label.numberOfLines = 0
         
         var paragraphStyle = NSMutableParagraphStyle()
@@ -31,14 +31,12 @@ class ConnectWalletView: RootView {
         paragraphStyle.alignment = .center
         paragraphStyle.lineBreakMode = .byWordWrapping
         
-        label.attributedText = NSMutableAttributedString(
-            string: "connectWalletSubtitle".libraryLocalized,
-            attributes: [
-                .paragraphStyle: paragraphStyle,
-                .foregroundColor: UIColor.textPrimary,
-                .font: Palette.fontMedium.withSize(16)
-            ]
-        )
+        let style = Style()
+            .paragraphStyle(paragraphStyle)
+            .foregroundColor(UIColor.textPrimary)
+            .font(Palette.fontMedium.withSize(16))
+
+        label.attributedText = "connectWalletSubtitle".libraryLocalized.styleAll(style)
         
         return label
     }()
