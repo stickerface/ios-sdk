@@ -8,8 +8,6 @@ class OnboardingViewController: ViewController<OnboardingView> {
         mainView.continueButton.addTarget(self, action: #selector(continueButtonTapped), for: .touchUpInside)
     }
     
-    
-    
     @objc private func continueButtonTapped() {
         let conncectVC = ConnectWalletViewController()
         

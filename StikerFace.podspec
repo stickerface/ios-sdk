@@ -32,16 +32,24 @@ Pod::Spec.new do |s|
   
   s.source_files = ["Sources/*.swift", "Sources/**/*.swift", "Sources/**/*.[mh]"]
   
-  # s.public_header_files = [
-  #   'Sources/**/*.h'
-  # ]
+   s.public_header_files = [
+     'Sources/**/*.h'
+   ]
   
     s.resource_bundles = {
       'StikerFace' => ['Sources/Resource/**/*.*'],
     }
   
-  s.frameworks = 'UIKit'
+  s.frameworks = 'UIKit', 'WebKit'
   s.dependency 'SnapKit'
   s.dependency 'Atributika'
+  s.dependency 'Kingfisher'
+  s.dependency 'IGListKit'
+  s.dependency 'PinLayout'
+  s.dependency 'Alamofire'
+  
+#  нужны ли эти зависимости
+  s.dependency 'StickerFaceEditor'
+  s.dependency 'SkeletonView', '~> 1.25.1'
   
 end

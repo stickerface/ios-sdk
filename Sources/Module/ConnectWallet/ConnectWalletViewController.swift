@@ -5,12 +5,11 @@ class ConnectWalletViewController: ViewController<ConnectWalletView> {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        mainView.continueButton.addTarget(self, action: #selector(continueButtonTapped), for: .touchUpInside)
     }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        navigationController?.navigationBar.isHidden = true
+    
+    @objc private func continueButtonTapped() {
+        navigationController?.pushViewController(GenerateAvatarViewController(), animated: false)
     }
     
 }

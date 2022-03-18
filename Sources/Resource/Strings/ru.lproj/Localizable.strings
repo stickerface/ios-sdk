@@ -4,7 +4,16 @@
 "onboardingSubtitle" = "Создайте своего потрясающего персонажа и получите NFT, чтобы владеть вашим уникальным набором";
 "onboardingPrivacyPolicyAndRules" = "Продолжая, вы соглашаетесь с нашими <a href='TermsOFServiceURL'>Правилами</a> and <a href='PrivacyPolicyURL'>Политикой конфиденциальности</a>";
 
+
+"setupAvatarTitle" = "Аватар";
+"setupAvatarSubtitle" = "Создай своего аватара с помощью селфи";
+"setupAvatarDescription" = "Фотографии не хранятся и используются один раз для генерации AI-аватара";
+"setupAvatarAllowTitle" = "Разрешить доступ к камере";
+"setupAvatarGenerateTitle" = "Создать аватар";
+"setupAvatarGenerateNewTitle" = "Создать новый аватар";
+
 "connectWalletTitle" = "Подключить свой криптокошелек";
 "connectWalletSubtitle" = "Для продолжения вам необходимо иметь криптовалютный кошелек Tonkeeper.";
 "connectWalletWithoutWallet" = "Продолжить без кошелька";
 "connectWalletConnectTitle" = "Подключить Tonkeeper";
+
