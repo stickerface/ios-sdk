@@ -28,8 +28,8 @@ class EditorHeaderSectionController: ListSectionController {
     
     private func configure(cell: EditorHeaderCollectionCell) -> EditorHeaderCollectionCell {
         cell.titleLabel.text = sectionModel.title.capitalized
-        cell.titleLabel.textColor = sectionModel.isSelected ? UIColor(libraryNamed: "stickerFaceTextPrimary") : UIColor(libraryNamed: "stickerFaceTextSecondary")
         cell.selectedIndicatorView.isHidden = !sectionModel.isSelected
+        cell.titleLabel.textColor = sectionModel.isSelected ? .sfTextPrimary : .sfTextSecondary
         
         return cell
     }

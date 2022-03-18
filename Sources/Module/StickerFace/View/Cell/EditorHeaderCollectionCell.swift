@@ -6,7 +6,7 @@ class EditorHeaderCollectionCell: UICollectionViewCell {
     let titleLabel: UILabel = {
         let label = UILabel()
         label.font = Palette.fontSemiBold
-        label.textColor = UIColor(libraryNamed: "stickerFaceTextPrimary")
+        label.textColor = .sfTextPrimary
         label.textAlignment = .center
         
         return label
@@ -14,7 +14,7 @@ class EditorHeaderCollectionCell: UICollectionViewCell {
     
     let selectedIndicatorView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(libraryNamed: "stickerFaceAccent")
+        view.backgroundColor = .sfAccentSecondary
         view.layer.cornerRadius = 1.0
         view.isHidden = true
         
@@ -41,7 +41,7 @@ class EditorHeaderCollectionCell: UICollectionViewCell {
     private func layout() {
         
         titleLabel.pin.left(16.0).top(16.0).bottom(16.0).sizeToFit(.widthFlexible)
-        
+
         selectedIndicatorView.pin.height(2.0).left().right().bottom()
         
         contentView.pin.width(titleLabel.frame.maxX + 16.0)
