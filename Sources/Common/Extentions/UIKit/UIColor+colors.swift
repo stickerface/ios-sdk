@@ -6,6 +6,10 @@ extension UIColor {
         return UIColor(hex: 0x45AEF5)
     }
     
+    open class var sfAccentSecondary: UIColor {
+        return UIColor(hex: 0x151C29)
+    }
+    
     open class var sfDefaultWhite: UIColor {
         return UIColor(hex: 0xFFFFFF)
     }
