@@ -16,6 +16,7 @@ public class StikerFace {
         navigationController.setNavigationBarHidden(true, animated: false)
         navigationController.setViewControllers([OnboardingViewController()], animated: false)
         navigationController.modalPresentationStyle = .fullScreen
+        
         viewController?.present(navigationController, animated: true)
     }
     
