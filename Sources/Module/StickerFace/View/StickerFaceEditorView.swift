@@ -14,6 +14,13 @@ class StickerFaceEditorView: RootView {
         return webView
     }()
     
+    let tonBalanceView: TonBalanceView = {
+        let view = TonBalanceView()
+        view.layer.cornerRadius = 16
+         
+        return view
+    }()
+    
     let avatarView: AvatarView = {
         let avatarView = AvatarView()
         avatarView.layer.cornerRadius = AvatarView.Layout.avatarImageViewHeight / 2
@@ -58,8 +65,9 @@ class StickerFaceEditorView: RootView {
 
     override func setup() {
         
-        backgroundColor = UIColor(libraryNamed: "stickerFaceBackgroundSystem")
+        backgroundColor = .gray
         
+        addSubview(tonBalanceView)
         addSubview(renderWebView)
         addSubview(avatarView)
         addSubview(headerCollectionView)
@@ -105,6 +113,11 @@ class StickerFaceEditorView: RootView {
             make.right.equalToSuperview().offset(-20.0)
             make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-20.0)
             make.height.equalTo(48.0)
+        }
+        
+        tonBalanceView.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(16.0)
+            make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(8.0)
         }
         
     }
