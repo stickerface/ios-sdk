@@ -10,7 +10,7 @@ public class StikerFace {
     
     public func openStikerFace() {
         let viewController = Utils.getRootViewController()
-        let onboardingVC = OnboardingViewController()
+        let onboardingVC = UINavigationController(rootViewController: OnboardingViewController())
         onboardingVC.modalPresentationStyle = .fullScreen
         
         viewController?.present(onboardingVC, animated: true)
