@@ -1,11 +1,11 @@
 import UIKit
 
-class EditorSectionHeaderView: UICollectionReusableView {
+class EditorSectionHeaderCell: UICollectionViewCell {
     
     let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .sfTextSecondary
-        label.font = Palette.fontMedium.withSize(14.0)
+        label.font = Palette.fontMedium.withSize(15.0)
         
         return label
     }()
@@ -28,7 +28,7 @@ class EditorSectionHeaderView: UICollectionReusableView {
     }
     
     private func layout() {
-        titleLabel.pin.top().bottom().left(20.0).right(20.0)
+        titleLabel.pin.top(16).bottom(12).left(16.0).right(20.0)
     }
     
 }

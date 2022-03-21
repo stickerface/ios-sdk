@@ -23,18 +23,32 @@ class StickerFaceEditorSectionController: ListSectionController {
         super.init()
         
         displayDelegate = self
-        supplementaryViewSource = self
+//        supplementaryViewSource = self
+    }
+    
+    override func didUpdate(to object: Any) {
+        precondition(object is EditorSubsectionSectionModel)
+        sectionModel = object as? EditorSubsectionSectionModel
+    }
+    
+    override func didSelectItem(at index: Int) {
+        super.didSelectItem(at: index)
+        
+        let index = layerColors.count > 0 ? index - 3 : index - 1
+        if let layer = sectionModel.editorSubsection.layers?[index] {
+            delegate?.stickerFaceEditorSectionController(self, didSelect: layer, section: section)
+        }
     }
     
     override func numberOfItems() -> Int {
-        var numberOfItems = 0
+        var numberOfItems = 1
         
         if let colors = sectionModel.editorSubsection.colors, colors.count > 0 {
             layerColors = colors.map({ LayerColorEmbeddedSectionModel(color: $0) })
             layerColors.forEach { layerColor in
                 layerColor.isSelected = String(layerColor.color.id) == sectionModel.selectedColor
             }
-            numberOfItems += 1
+            numberOfItems += 2
         }
         
         if let layersCount = sectionModel.editorSubsection.layers?.count {
@@ -45,20 +59,32 @@ class StickerFaceEditorSectionController: ListSectionController {
     }
     
     override func sizeForItem(at index: Int) -> CGSize {
-        if layerColors.count > 0 && index == 0 {
-            return CGSize(width: collectionContext!.containerSize.width, height: 72.0)
+        if index == 0 || (layerColors.count > 0 && index == 2) {
+            return CGSize(width: collectionContext!.containerSize.width, height: 51.0)
+        } else if layerColors.count > 0 && index == 1 {
+            return CGSize(width: collectionContext!.containerSize.width, height: 52.0)
         } else {
-            return CGSize(side: collectionContext!.containerSize.width / 3.0)
+            return CGSize(side: collectionContext!.containerSize.width / 2.0)
         }
     }
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
-        if layerColors.count > 0 && index == 0 {
+        if index == 0 {
+            let cell = collectionContext!.dequeue(of: EditorSectionHeaderCell.self, for: self, at: index)
+            cell.titleLabel.text = layerColors.count > 0 ? "COLOR" : sectionModel.editorSubsection.name.uppercased()
+            
+            return cell
+        } else if layerColors.count > 0 && index == 1 {
             let cell = collectionContext!.dequeue(of: LayerColorSelectorEmbeddedCell.self, for: self, at: index)
             
             return configure(cell: cell)
+        } else if layerColors.count > 0 && index == 2 {
+            let cell = collectionContext!.dequeue(of: EditorSectionHeaderCell.self, for: self, at: index)
+            cell.titleLabel.text = sectionModel.editorSubsection.name.uppercased()
+            
+            return cell
         } else {
-            let index = layerColors.count > 0 ? index - 1 : index
+            let index = layerColors.count > 0 ? index - 3 : index - 1
             let cell = collectionContext!.dequeue(of: EditorLayerCollectionCell.self, for: self, at: index)
         
             return configure(cell: cell, layer: sectionModel.editorSubsection.layers?[index])
@@ -102,23 +128,9 @@ class StickerFaceEditorSectionController: ListSectionController {
             cell.coinsButton.setTitle("\(price)", for: .normal)
         }
         
-        cell.layerImageView.backgroundColor = sectionModel.selectedLayer == layer ? UIColor(libraryNamed: "stickerFaceInput") : .clear
+        cell.setSelected(sectionModel.selectedLayer == layer)
         
         return cell
-    }
-    
-    override func didUpdate(to object: Any) {
-        precondition(object is EditorSubsectionSectionModel)
-        sectionModel = object as? EditorSubsectionSectionModel
-    }
-    
-    override func didSelectItem(at index: Int) {
-        super.didSelectItem(at: index)
-        
-        let index = layerColors.count > 0 ? index - 1 : index
-        if let layer = sectionModel.editorSubsection.layers?[index] {
-            delegate?.stickerFaceEditorSectionController(self, didSelect: layer, section: section)
-        }
     }
     
     private func centeredIndexPath() -> IndexPath? {
@@ -135,24 +147,24 @@ class StickerFaceEditorSectionController: ListSectionController {
 }
 
 // MARK: - ListSupplementaryViewSource
-extension StickerFaceEditorSectionController: ListSupplementaryViewSource {
-    
-    func supportedElementKinds() -> [String] {
-        return [UICollectionElementKindSectionHeader]
-    }
-    
-    func viewForSupplementaryElement(ofKind elementKind: String, at index: Int) -> UICollectionReusableView {
-        let view = collectionContext!.dequeue(ofKind: UICollectionElementKindSectionHeader, for: self, of: EditorSectionHeaderView.self, at: index)
-        view.titleLabel.text = sectionModel.editorSubsection.name.uppercased()
-        
-        return view
-    }
-    
-    func sizeForSupplementaryView(ofKind elementKind: String, at index: Int) -> CGSize {
-        return CGSize(width: collectionContext!.containerSize.width, height: 56.0)
-    }
-    
-}
+//extension StickerFaceEditorSectionController: ListSupplementaryViewSource {
+//
+//    func supportedElementKinds() -> [String] {
+//        return [UICollectionElementKindSectionHeader]
+//    }
+//
+//    func viewForSupplementaryElement(ofKind elementKind: String, at index: Int) -> UICollectionReusableView {
+//        let view = collectionContext!.dequeue(ofKind: UICollectionElementKindSectionHeader, for: self, of: EditorSectionHeaderView.self, at: index)
+//        view.titleLabel.text = sectionModel.editorSubsection.name.uppercased()
+//
+//        return view
+//    }
+//
+//    func sizeForSupplementaryView(ofKind elementKind: String, at index: Int) -> CGSize {
+//        return CGSize(width: collectionContext!.containerSize.width, height: 48.0)
+//    }
+//
+//}
 
 // MARK: - ListAdapterDataSource
 extension StickerFaceEditorSectionController: ListAdapterDataSource {

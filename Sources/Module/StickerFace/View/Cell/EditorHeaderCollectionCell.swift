@@ -42,8 +42,7 @@ class EditorHeaderCollectionCell: UICollectionViewCell {
         
         titleLabel.pin
             .left(16.0)
-            .top(16.0)
-            .bottom(16.0)
+            .top(17.0)
             .sizeToFit(.widthFlexible)
 
         selectedIndicatorView.pin

@@ -5,12 +5,14 @@ import SkeletonView
 class EditorLayerCollectionCell: UICollectionViewCell {
     
     let layerImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.layer.cornerRadius = 8.0
-        imageView.layer.masksToBounds = true
-        imageView.isSkeletonable = true
+        let view = UIImageView()
+        view.layer.cornerRadius = 16.0
+        view.layer.masksToBounds = true
+        view.layer.borderWidth = 1.0
+        view.layer.borderColor = UIColor.sfSeparatorLight.cgColor
+        view.isSkeletonable = true
         
-        return imageView
+        return view
     }()
         
     let coinsButton: UIButton = {
@@ -25,14 +27,20 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         return button
     }()
     
+    let checkmarkImageView: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(libraryNamed: "small_cirle_checkmark")
+        
+        return view
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-                
-        contentView.layer.cornerRadius = 8.0
-        contentView.isSkeletonable = true
-        
+                    
         contentView.addSubview(layerImageView)
         contentView.addSubview(coinsButton)
+        
+        layerImageView.addSubview(checkmarkImageView)
     }
     
     required init?(coder: NSCoder) {
@@ -51,12 +59,34 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         layout()
     }
     
+    // MARK: Public methods
+    
+    func setSelected(_ isSelected: Bool) {
+        checkmarkImageView.isHidden = !isSelected
+        layerImageView.layer.borderColor = isSelected ?
+        UIColor.sfAccentBrand.cgColor :
+        UIColor.sfSeparatorLight.cgColor
+    }
+    
     private func layout() {
                 
         let titleWidth = coinsButton.title(for: .normal)?.size(withAttributes: [.font: Palette.fontBold.withSize(14.0)]).width ?? 0.0
-        coinsButton.pin.bottom().hCenter().height(22.0).width(titleWidth + 20.0)
         
-        layerImageView.pin.top().hCenter().size(frame.width - coinsButton.frame.height)
+        coinsButton.pin
+            .bottom()
+            .hCenter()
+            .height(22.0)
+            .width(titleWidth + 20.0)
+        
+        layerImageView.pin
+            .top()
+            .hCenter()
+            .size(frame.width - coinsButton.frame.height)
+        
+        checkmarkImageView.pin
+            .bottom(12)
+            .right(12)
+            .size(18)
     }
     
 }

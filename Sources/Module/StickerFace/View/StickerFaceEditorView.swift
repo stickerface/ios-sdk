@@ -136,7 +136,7 @@ class StickerFaceEditorView: RootView {
         }
         
         avatarView.snp.makeConstraints { make in
-            make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(84.0)
+            make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(85.0)
             make.centerX.equalToSuperview()
             make.size.equalTo(AvatarView.Layout.avatarImageViewHeight)
         }
@@ -153,7 +153,7 @@ class StickerFaceEditorView: RootView {
         headerCollectionView.snp.makeConstraints { make in
             make.top.equalTo(avatarView.snp.bottom)
             make.left.right.equalToSuperview()
-            make.height.equalTo(50.0)
+            make.height.equalTo(51.0)
         }
         
         separator.snp.makeConstraints { make in
@@ -165,8 +165,8 @@ class StickerFaceEditorView: RootView {
         saveButton.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(32.0)
             make.right.equalToSuperview().offset(-32.0)
-            make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom)
-            make.height.equalTo(48.0)
+            make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-1)
+            make.height.equalTo(49.0)
         }
         
     }

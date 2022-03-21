@@ -22,4 +22,8 @@ extension UIColor {
         return UIColor(hex: 0x9FA5AE)
     }
     
+    open class var sfSeparatorLight: UIColor {
+        return UIColor(hex: 0xE5E5EA)
+    }
+    
 }
