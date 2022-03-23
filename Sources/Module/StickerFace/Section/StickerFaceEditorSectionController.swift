@@ -181,7 +181,8 @@ class StickerFaceEditorSectionController: ListSectionController {
             cell.setPrice(Int(2))
         }
         
-        cell.titleLabel.text = layer
+        cell.titleLabel.text = "Honeysuckle"
+        cell.noneLabel.isHidden = layer != "0"
         
         cell.setSelected(sectionModel.selectedLayer == layer)
         

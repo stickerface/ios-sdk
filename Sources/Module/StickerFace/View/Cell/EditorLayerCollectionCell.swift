@@ -22,7 +22,7 @@ class EditorLayerCollectionCell: UICollectionViewCell {
                 selectedBackgroundImageView.isHidden = false
                 layerBackgroundView.isHidden = false
                 buyButton.semanticContentAttribute = .forceRightToLeft
-                buyButton.imageEdgeInsets = UIEdgeInsets(top: 0.0, left: 7.3, bottom: 0.0, right: 0.0)
+                buyButton.imageEdgeInsets = UIEdgeInsets(top: 0.0, left: 5.0, bottom: 0.0, right: 0.0)
                 
             case .layers:
                 contentView.layer.borderWidth = 1.0
@@ -44,6 +44,18 @@ class EditorLayerCollectionCell: UICollectionViewCell {
             }
         }
     }
+    
+    let noneLabel: UILabel = {
+        let label = UILabel()
+        label.text = "None"
+        label.font = Palette.fontSemiBold.withSize(24)
+        label.textColor = .sfTextPrimary
+        label.backgroundColor = .white
+        label.isHidden = true
+        label.textAlignment = .center
+        
+        return label
+    }()
     
     let layerImageView: UIImageView = {
         let view = UIImageView()
@@ -86,7 +98,7 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         button.setImage(UIImage(libraryNamed: "shoppingCartSmal"), for: .normal)
         button.isHidden = true
         button.setTitleColor(.sfTextPrimary, for: .normal)
-        button.titleLabel?.font = Palette.fontBold.withSize(16)
+        button.titleLabel?.font = Palette.fontBold.withSize(12)
         button.imageView?.contentMode = .scaleAspectFit
         
         return button
@@ -124,7 +136,8 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         contentView.layer.cornerRadius = 16.0
         contentView.layer.borderWidth = 1.0
         contentView.layer.borderColor = UIColor.sfSeparatorLight.cgColor
-
+        contentView.clipsToBounds = true
+        
         contentView.addSubview(selectedBackgroundImageView)
         contentView.addSubview(layerBackgroundView)
         contentView.addSubview(layerImageView)
@@ -133,6 +146,7 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         contentView.addSubview(subtitlePriceLabel)
         contentView.addSubview(buyButton)
         contentView.addSubview(checkmarkImageView)
+        contentView.addSubview(noneLabel)
     }
     
     required init?(coder: NSCoder) {
@@ -144,6 +158,7 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         
         buyButton.isHidden = true
         priceLabel.isHidden = true
+        noneLabel.isHidden = true
     }
     
     override func layoutSubviews() {
@@ -178,7 +193,7 @@ class EditorLayerCollectionCell: UICollectionViewCell {
             priceLabel.text = "\(price) TON"
         case .background:
             priceLabel.isHidden = true
-            buyButton.setTitle("\(1) TON", for: .normal)
+            buyButton.setTitle("\(price) TON", for: .normal)
         }
     }
     
@@ -199,6 +214,9 @@ class EditorLayerCollectionCell: UICollectionViewCell {
     
     private func layersLayout() {
         layerImageView.layer.cornerRadius = 0.0
+        
+        noneLabel.pin
+            .all()
         
         layerImageView.pin
             .all()
@@ -244,7 +262,7 @@ class EditorLayerCollectionCell: UICollectionViewCell {
                 .left()
                 .right()
                 .height(20.0)
-                .top(to: titleLabel.edge.bottom).marginTop(4.0)
+//                .top(to: titleLabel.edge.bottom).marginTop(4.0)
                 .bottom()
         }
         
@@ -267,6 +285,7 @@ class EditorLayerCollectionCell: UICollectionViewCell {
             .right(12.0)
             .top(to: titleLabel.edge.bottom).marginTop(29.0)
             .size(24.0)
+            .bottom()
         
         priceLabel.pin
             .top(to: titleLabel.edge.bottom).marginTop(13.0)
