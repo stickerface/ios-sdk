@@ -23,31 +23,46 @@ class StickerFaceEditorSectionController: ListSectionController {
         super.init()
         
         displayDelegate = self
-//        supplementaryViewSource = self
     }
     
     override func didUpdate(to object: Any) {
         precondition(object is EditorSubsectionSectionModel)
         sectionModel = object as? EditorSubsectionSectionModel
+        
+        if sectionModel.editorSubsection.name == "background" {
+            minimumLineSpacing = 16.0
+            minimumInteritemSpacing = 22.0
+        } else {
+            minimumLineSpacing = 12.0
+            minimumInteritemSpacing = 12.0
+        }
     }
     
     override func didSelectItem(at index: Int) {
         super.didSelectItem(at: index)
         
-        let index = layerColors.count > 0 ? index - 3 : index - 1
-        if let layer = sectionModel.editorSubsection.layers?[index] {
+        let layerIndex: Int
+        if layerColors.count > 0 {
+            layerIndex = index - 3
+        } else if sectionModel.editorSubsection.name == "background" {
+            layerIndex = index
+        } else {
+            layerIndex = index - 1
+        }
+        if let layer = sectionModel.editorSubsection.layers?[layerIndex] {
             delegate?.stickerFaceEditorSectionController(self, didSelect: layer, section: section)
         }
     }
     
     override func numberOfItems() -> Int {
-        var numberOfItems = 1
+        var numberOfItems = sectionModel.editorSubsection.name == "background" ? 0 : 1
         
         if let colors = sectionModel.editorSubsection.colors, colors.count > 0 {
-            layerColors = colors.map({ LayerColorEmbeddedSectionModel(color: $0) })
+            layerColors = colors.map { LayerColorEmbeddedSectionModel(color: $0) }
             layerColors.forEach { layerColor in
                 layerColor.isSelected = String(layerColor.color.id) == sectionModel.selectedColor
             }
+            
             numberOfItems += 2
         }
         
@@ -58,18 +73,30 @@ class StickerFaceEditorSectionController: ListSectionController {
         return numberOfItems
     }
     
+    // TODO: need fit size
+    // TODO: fix colors left spacing
     override func sizeForItem(at index: Int) -> CGSize {
-        if index == 0 || (layerColors.count > 0 && index == 2) {
-            return CGSize(width: collectionContext!.containerSize.width, height: 51.0)
-        } else if layerColors.count > 0 && index == 1 {
-            return CGSize(width: collectionContext!.containerSize.width, height: 52.0)
-        } else {
-            return CGSize(side: collectionContext!.containerSize.width / 2.0)
+        // size for background layers
+        if sectionModel.editorSubsection.name == "background" {
+            return CGSize(width: 100.0, height: 144.0)
         }
+        
+        // size for titels
+        if index == 0 || (layerColors.count > 0 && index == 2) {
+            return CGSize(width: collectionContext!.containerSize.width, height: 30.0)
+        }
+        
+        // size for colors
+        if layerColors.count > 0 && index == 1 {
+            return CGSize(width: collectionContext!.containerSize.width, height: 48.0)
+        }
+        
+        // size for layers
+        return CGSize(width: (UIScreen.main.bounds.width - 16 - 12 - 16)/2, height: 188)
     }
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
-        if index == 0 {
+        if index == 0 && sectionModel.editorSubsection.name != "background" {
             let cell = collectionContext!.dequeue(of: EditorSectionHeaderCell.self, for: self, at: index)
             cell.titleLabel.text = layerColors.count > 0 ? "COLOR" : sectionModel.editorSubsection.name.uppercased()
             
@@ -84,10 +111,18 @@ class StickerFaceEditorSectionController: ListSectionController {
             
             return cell
         } else {
-            let index = layerColors.count > 0 ? index - 3 : index - 1
-            let cell = collectionContext!.dequeue(of: EditorLayerCollectionCell.self, for: self, at: index)
+            let layerIndex: Int
+            if layerColors.count > 0 {
+                layerIndex = index - 3
+            } else if sectionModel.editorSubsection.name == "background" {
+                layerIndex = index
+            } else {
+                layerIndex = index - 1
+            }
+            
+            let cell = collectionContext!.dequeue(of: EditorLayerCollectionCell.self, for: self, at: layerIndex)
         
-            return configure(cell: cell, layer: sectionModel.editorSubsection.layers?[index])
+            return configure(cell: cell, layer: sectionModel.editorSubsection.layers?[layerIndex])
         }
     }
     
@@ -109,6 +144,15 @@ class StickerFaceEditorSectionController: ListSectionController {
             return cell
         }
         
+        // TODO: need 'if' closure for NFT
+        if sectionModel.editorSubsection.name == "background" {
+            cell.cellType = .background
+        } else if sectionModel.editorSubsection.name == "clothing" {
+            cell.cellType = .NFT
+        } else {
+            cell.cellType = .layers
+        }
+        
         let imageSide = 172
         let url = "https://stickerface.io/api/section/png/\(layer)?size=\(imageSide)"
         
@@ -123,13 +167,24 @@ class StickerFaceEditorSectionController: ListSectionController {
             }
         }
         
-        if let price = sectionModel.prices["\(layer)"] {
-            cell.coinsButton.isHidden = false
-            cell.coinsButton.setTitle("\(price)", for: .normal)
+        if let price = sectionModel.prices["\(layer)"], price != 0 {
+            cell.buyButton.isHidden = false
+            cell.setPrice(price)
+        } else {
+            cell.buyButton.isHidden = true
+            cell.priceLabel.text = "Free"
         }
+        
+        if cell.cellType == .NFT {
+            cell.buyButton.isHidden = false
+            cell.setPrice(Int(2))
+        }
+        
+        cell.titleLabel.text = layer
         
         cell.setSelected(sectionModel.selectedLayer == layer)
         
+        cell.setNeedsLayout()
         return cell
     }
     
@@ -145,26 +200,6 @@ class StickerFaceEditorSectionController: ListSectionController {
     }
     
 }
-
-// MARK: - ListSupplementaryViewSource
-//extension StickerFaceEditorSectionController: ListSupplementaryViewSource {
-//
-//    func supportedElementKinds() -> [String] {
-//        return [UICollectionElementKindSectionHeader]
-//    }
-//
-//    func viewForSupplementaryElement(ofKind elementKind: String, at index: Int) -> UICollectionReusableView {
-//        let view = collectionContext!.dequeue(ofKind: UICollectionElementKindSectionHeader, for: self, of: EditorSectionHeaderView.self, at: index)
-//        view.titleLabel.text = sectionModel.editorSubsection.name.uppercased()
-//
-//        return view
-//    }
-//
-//    func sizeForSupplementaryView(ofKind elementKind: String, at index: Int) -> CGSize {
-//        return CGSize(width: collectionContext!.containerSize.width, height: 48.0)
-//    }
-//
-//}
 
 // MARK: - ListAdapterDataSource
 extension StickerFaceEditorSectionController: ListAdapterDataSource {

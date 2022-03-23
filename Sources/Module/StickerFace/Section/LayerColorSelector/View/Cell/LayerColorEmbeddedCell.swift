@@ -12,7 +12,7 @@ class LayerColorEmbeddedCell: UICollectionViewCell {
         
     let colorView: UIView = {
         let view = UIView()
-        view.layer.cornerRadius = 20.0
+        view.layer.cornerRadius = 20.5
         
         return view
     }()
@@ -35,7 +35,7 @@ class LayerColorEmbeddedCell: UICollectionViewCell {
     }
     
     private func layout() {
-        colorView.pin.center().size(42.0)
+        colorView.pin.center().size(41.0)
 //        colorSelectionIndicatorView.pin.center(to: colorView.anchor.center).size(50.0)
     }
     

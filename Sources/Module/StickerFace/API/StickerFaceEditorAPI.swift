@@ -1,6 +1,7 @@
 import Foundation
 import Alamofire
 
+// TODO: need api
 class StickerFaceEditorAPI {
     
 //    class func editorGet(completion: @escaping ((_ data: Editor?,_ error: ErrorResponse?) -> Void)) {
