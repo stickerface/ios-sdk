@@ -2,26 +2,29 @@ import UIKit
 
 class LayerColorSelectorEmbeddedCell: UICollectionViewCell {
     
-    let colorSelectionIndicatorView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(libraryNamed: "colorSelectionIndicator")?.withRenderingMode(.alwaysTemplate)
-
-        return imageView
-    }()
+//    let colorSelectionIndicatorView: UIImageView = {
+//        let imageView = UIImageView()
+//        imageView.image = UIImage(libraryNamed: "colorSelectionIndicator")?.withRenderingMode(.alwaysTemplate)
+//
+//        return imageView
+//    }()
     
-    let collectionViewLayout: PagingFlowLayout = {
-        let collectionViewLayout = PagingFlowLayout()
-        collectionViewLayout.zoomFactor = 0.2
-        collectionViewLayout.activeDistance = 10
-        
-        return collectionViewLayout
-    }()
+//    let collectionViewLayout: PagingFlowLayout = {
+//        let collectionViewLayout = PagingFlowLayout()
+//        collectionViewLayout.zoomFactor = 0.2
+//        collectionViewLayout.activeDistance = 10
+//
+//        return collectionViewLayout
+//    }()
     
     private(set) lazy var collectionView: UICollectionView = {
-        let view = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
-        let width = 40.0
-        let offset = (bounds.width - width) / 2
-        view.contentInset = UIEdgeInsets(top: 0, left: offset, bottom: 0, right: offset)
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        
+        let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
+//        let width = 40.0
+//        let offset = (bounds.width - width) / 2
+        view.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 12.0)
         view.alwaysBounceHorizontal = true
         view.showsHorizontalScrollIndicator = false
         view.backgroundColor = .clear
@@ -34,7 +37,7 @@ class LayerColorSelectorEmbeddedCell: UICollectionViewCell {
         super.init(frame: frame)
         
         contentView.addSubview(collectionView)
-        contentView.addSubview(colorSelectionIndicatorView)
+//        contentView.addSubview(colorSelectionIndicatorView)
     }
     
     required init?(coder: NSCoder) {
@@ -49,7 +52,7 @@ class LayerColorSelectorEmbeddedCell: UICollectionViewCell {
     
     private func layout() {
         collectionView.frame = bounds
-        colorSelectionIndicatorView.pin.size(60).hCenter().vCenter()
+//        colorSelectionIndicatorView.pin.size(60).hCenter().vCenter()
     }
     
 }

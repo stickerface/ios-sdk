@@ -18,11 +18,11 @@ class LayerColorEmbeddedSectionController: ListSectionController {
     override init() {
         super.init()
         
-        inset = UIEdgeInsets(top: 0, left: 12.0, bottom: 0.0, right: 12.0)
+        inset = UIEdgeInsets(top: 0, left: 0.0, bottom: 0.0, right: 6.0)
     }
     
     override func sizeForItem(at index: Int) -> CGSize {
-        return CGSize(side: 40)
+        return CGSize(side: 52.0)
     }
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
@@ -34,8 +34,8 @@ class LayerColorEmbeddedSectionController: ListSectionController {
     private func configure(cell: LayerColorEmbeddedCell) -> LayerColorEmbeddedCell {
         cell.colorView.backgroundColor = UIColor(hex: sectionModel.color.hash)
         
-//        cell.colorSelectionIndicatorView.isHidden = !sectionModel.isSelected
-//        cell.colorSelectionIndicatorView.tintColor = viewController?.overrideUserInterfaceStyle == .dark ? .white : cell.colorView.backgroundColor
+        cell.colorSelectionIndicatorView.isHidden = !sectionModel.isSelected
+        cell.colorSelectionIndicatorView.tintColor = UIColor(hex: sectionModel.color.hash)
                 
         return cell
     }

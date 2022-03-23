@@ -30,6 +30,7 @@ class StickerFaceEditorSectionController: ListSectionController {
         sectionModel = object as? EditorSubsectionSectionModel
         
         if sectionModel.editorSubsection.name == "background" {
+            inset = UIEdgeInsets(top: 16.0, left: 0.0, bottom: 0.0, right: 0.0)
             minimumLineSpacing = 16.0
             minimumInteritemSpacing = 22.0
         } else {
@@ -88,7 +89,7 @@ class StickerFaceEditorSectionController: ListSectionController {
         
         // size for colors
         if layerColors.count > 0 && index == 1 {
-            return CGSize(width: collectionContext!.containerSize.width, height: 48.0)
+            return CGSize(width: collectionContext!.containerSize.width, height: 52.0)
         }
         
         // size for layers
@@ -129,12 +130,12 @@ class StickerFaceEditorSectionController: ListSectionController {
     private func configure(cell: LayerColorSelectorEmbeddedCell) -> LayerColorSelectorEmbeddedCell {
         adapter.collectionView = cell.collectionView
         adapter.dataSource = self
-        adapter.scrollViewDelegate = self
+//        adapter.scrollViewDelegate = self
         
-        if let index = layerColors.firstIndex(where: { String($0.color.id) == sectionModel.selectedColor }) {
-            cell.colorSelectionIndicatorView.tintColor = UIColor(hex: layerColors[index].color.hash)
-            cell.collectionView.scrollToItem(at: IndexPath(item: 0, section: index), at: .centeredHorizontally, animated: true)
-        }
+//        if let index = layerColors.firstIndex(where: { String($0.color.id) == sectionModel.selectedColor }) {
+//            cell.colorSelectionIndicatorView.tintColor = UIColor(hex: layerColors[index].color.hash)
+//            cell.collectionView.scrollToItem(at: IndexPath(item: 0, section: index), at: .left, animated: true)
+//        }
         
         return cell
     }
@@ -246,13 +247,13 @@ extension StickerFaceEditorSectionController: ListDisplayDelegate {
 }
 
 // MARK: - ScrollViewDelegate
-extension StickerFaceEditorSectionController: UIScrollViewDelegate {
-    
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        if let indexPath = centeredIndexPath(), layerColors.count > indexPath.section {
-            let color = layerColors[indexPath.section].color
-            delegate?.stickerFaceEditorSectionController(self, didSelect: String(color.id), section: section)
-        }
-    }
-
-}
+//extension StickerFaceEditorSectionController: UIScrollViewDelegate {
+//
+//    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+//        if let indexPath = centeredIndexPath(), layerColors.count > indexPath.section {
+//            let color = layerColors[indexPath.section].color
+//            delegate?.stickerFaceEditorSectionController(self, didSelect: String(color.id), section: section)
+//        }
+//    }
+//
+//}

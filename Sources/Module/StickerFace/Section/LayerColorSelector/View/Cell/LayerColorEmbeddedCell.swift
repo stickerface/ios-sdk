@@ -3,12 +3,13 @@ import PinLayout
 
 class LayerColorEmbeddedCell: UICollectionViewCell {
     
-//    let colorSelectionIndicatorView: UIImageView = {
-//        let imageView = UIImageView(image: UIImage(libraryNamed: "colorSelectionIndicator"))
-//        imageView.isHidden = true
-//
-//        return imageView
-//    }()
+    let colorSelectionIndicatorView: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(libraryNamed: "colorSelectionIndicator")?.withRenderingMode(.alwaysTemplate)
+        view.isHidden = true
+
+        return view
+    }()
         
     let colorView: UIView = {
         let view = UIView()
@@ -21,7 +22,7 @@ class LayerColorEmbeddedCell: UICollectionViewCell {
         super.init(frame: frame)
                 
         contentView.addSubview(colorView)
-//        contentView.addSubview(colorSelectionIndicatorView)
+        contentView.addSubview(colorSelectionIndicatorView)
     }
     
     required init?(coder: NSCoder) {
@@ -36,7 +37,7 @@ class LayerColorEmbeddedCell: UICollectionViewCell {
     
     private func layout() {
         colorView.pin.center().size(41.0)
-//        colorSelectionIndicatorView.pin.center(to: colorView.anchor.center).size(50.0)
+        colorSelectionIndicatorView.pin.center(to: colorView.anchor.center).size(52.0)
     }
     
 }
