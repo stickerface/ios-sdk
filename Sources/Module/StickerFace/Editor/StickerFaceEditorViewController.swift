@@ -1,10 +1,12 @@
 import UIKit
 import IGListKit
-import WebKit
-import SkeletonView
 
 protocol StickerFaceEditorViewControllerDelegate: AnyObject {
-    func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didSave layers: String)
+    func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didUpdate layers: String)
+}
+
+protocol StikerFaceEditorDelegate: AnyObject {
+    func layersWithoutBackground(_ layers: String) -> (background: String, layers: String)
 }
 
 class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
@@ -12,8 +14,10 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     enum LoadingState {
         case loading, loaded, failed
     }
-    
+        
     weak var delegate: StickerFaceEditorViewControllerDelegate?
+    
+    var layers: String = ""
     
     private var loadingState = LoadingState.loading
     private let provider = StickerFaceEditorProvider()
@@ -23,7 +27,6 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     private var viewControllers: [UIViewController]? = []
 //    private var productInput: ProductInput?
     private var newPaidLayers: String?
-    private var requestId = 0
     
     private lazy var headerAdapter: ListAdapter = {
         return ListAdapter(updater: ListAdapterUpdater(), viewController: self, workingRangeSize: 0)
@@ -33,34 +36,8 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         return ListAdapter(updater: ListAdapterUpdater(), viewController: self, workingRangeSize: 0)
     }()
     
-    private var layers: String
-    
-    init(layers: String) {
-        self.layers = layers
-        super.init(nibName: nil, bundle: nil)
-        
-        if let url = URL(string: "https://stickerface.io/render.html") {
-            mainView.renderWebView.load(URLRequest(url: url))
-        }
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        mainView.saveButton.addTarget(self, action: #selector(save), for: .touchUpInside)
-        
-        let leftSwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(changeSelectedTab))
-        leftSwipeGestureRecognizer.direction = .left
-        
-        let rightSwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(changeSelectedTab))
-        rightSwipeGestureRecognizer.direction = .right
-        
-        mainView.addGestureRecognizer(leftSwipeGestureRecognizer)
-        mainView.addGestureRecognizer(rightSwipeGestureRecognizer)
         
         headerAdapter.collectionView = mainView.headerCollectionView
         headerAdapter.dataSource = self
@@ -71,42 +48,12 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         mainView.pageViewController.dataSource = self
         mainView.pageViewController.delegate = self
         
-        mainView.renderWebView.navigationDelegate = self
-        
-        do {
-            let handler = AvatarRenderResponseHandler()
-            handler.delegate = self
-        
-            mainView.renderWebView.configuration.userContentController.add(handler, name: handler.name)
-        }
-        
         loadEditor()
     }
-        
-    private func renderAvatar() {
-        let tuple = layersWithoutBackground()
-        let id = getNextRequestId()
-        let renderFunc = createRenderFunc(requestId: id, layers: tuple.layers, size: Int(AvatarView.Layout.avatarImageViewHeight) * 4)
-        
-        mainView.renderWebView.evaluateJavaScript(renderFunc)
-        
-        ImageLoader.setAvatar(with: tuple.background,
-                              for: mainView.backgroundImageView,
-                              placeholderImage: mainView.backgroundImageView.image ?? UIImage(),
-                              side: mainView.bounds.width,
-                              cornerRadius: 0)
-    }
     
-    private func createRenderFunc(requestId: Int, layers: String, size: Int) -> String {
-        return "renderPNG(\"\(layers)\", \(requestId), \(size))"
-    }
+    // MARK: Public mehtods
     
-    private func getNextRequestId() -> Int {
-        var current = requestId
-        requestId = (current + 1) % Int.max
-        
-        return current
-    }
+    // MARK: Private methods
     
     private func loadEditor() {
         provider.loadEditor { [weak self] result in
@@ -206,36 +153,6 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         }
     }
     
-    @objc private func save() {
-        delegate?.stickerFaceEditorViewController(self, didSave: layers)
-    }
-    
-    private func layersWithoutBackground() -> (background: String, layers: String) {
-        var layers = layers
-        var backgroundLayer = "0"
-        
-        if let range = layers.range(of: "/") {
-            layers.removeSubrange(range.lowerBound..<layers.endIndex)
-        }
-        
-        var layersArray = layers.components(separatedBy: ";")
-        let backgroundLayers = objects.first(where: { model in
-            model.editorSubsection.name == "background"
-        })
-        
-        if let backLayers = backgroundLayers {
-            backLayers.editorSubsection.layers?.forEach({ layer in
-                if let index = layersArray.firstIndex(where: { $0 == layer }) {
-                    backgroundLayer = layer
-                    layersArray.remove(at: index)
-                }
-            })
-        }
-        
-        let resultLayers = layersArray.joined(separator: ";")
-        return (background: backgroundLayer, layers: resultLayers)
-    }
-    
     private func replaceCurrentLayer(with replacementLayer: String, section: Int) -> String {
         var layers = layers
         
@@ -252,7 +169,6 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                     layersArray.remove(at: index)
                 }
             }
-        
         } else if let colorLayers = objects[section].editorSubsection.colors?.compactMap({ String($0.id) }),
                   colorLayers.contains(replacementLayer) {
             colorLayers.forEach { colorLayer in
@@ -473,7 +389,7 @@ extension StickerFaceEditorViewController: StickerFaceEditorPageDelegate {
 //
 //        } else {
             layers = replaceCurrentLayer(with: layer, section: section)
-            renderAvatar()
+            delegate?.stickerFaceEditorViewController(self, didUpdate: layers)
             updateSelectedLayers()
 //        }
     }
@@ -511,23 +427,31 @@ extension StickerFaceEditorViewController: UIPageViewControllerDataSource, UIPag
     }
 }
 
-// MARK: - AvatarRenderResponseHandlerDelegate
-extension StickerFaceEditorViewController: AvatarRenderResponseHandlerDelegate {
-    
-    func onImageReady(base64: String) {
-        if let data = Data(base64Encoded: base64, options: []) {
-            mainView.avatarView.avatarImageView.image = UIImage(data: data)
-            mainView.avatarView.hideSkeleton()
+// MARK: - StikerFaceEditorDelegate
+extension StickerFaceEditorViewController: StikerFaceEditorDelegate {
+    func layersWithoutBackground(_ layers: String) -> (background: String, layers: String) {
+        var layers = layers
+        var backgroundLayer = "0"
+        
+        if let range = layers.range(of: "/") {
+            layers.removeSubrange(range.lowerBound..<layers.endIndex)
         }
+        
+        var layersArray = layers.components(separatedBy: ";")
+        let backgroundLayers = objects.first(where: { model in
+            model.editorSubsection.name == "background"
+        })
+        
+        if let backLayers = backgroundLayers {
+            backLayers.editorSubsection.layers?.forEach({ layer in
+                if let index = layersArray.firstIndex(where: { $0 == layer }) {
+                    backgroundLayer = layer
+                    layersArray.remove(at: index)
+                }
+            })
+        }
+        
+        let resultLayers = layersArray.joined(separator: ";")
+        return (background: backgroundLayer, layers: resultLayers)
     }
-    
-}
-
-// MARK: - WKScriptMessageHandler
-extension StickerFaceEditorViewController: WKNavigationDelegate {
-    
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        renderAvatar()
-    }
-    
 }
