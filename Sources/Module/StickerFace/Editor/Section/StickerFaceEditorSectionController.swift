@@ -178,7 +178,7 @@ class StickerFaceEditorSectionController: ListSectionController {
         
         if cell.cellType == .NFT {
             cell.buyButton.isHidden = false
-            cell.setPrice(Int(2))
+            cell.setPrice(2)
         }
         
         cell.titleLabel.text = "Honeysuckle"

@@ -5,7 +5,7 @@ class LayerColorEmbeddedCell: UICollectionViewCell {
     
     let colorSelectionIndicatorView: UIImageView = {
         let view = UIImageView()
-        view.image = UIImage(libraryNamed: "colorSelectionIndicator")?.withRenderingMode(.alwaysTemplate)
+        view.image = UIImage(libraryNamed: "colorSelectionIndicator")
         view.isHidden = true
 
         return view
