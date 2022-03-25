@@ -4,6 +4,11 @@ import SkeletonView
 
 class StickerFaceViewController: ViewController<StickerFaceView> {
 
+    enum PageType {
+        case editor
+        case main
+    }
+    
     // MARK: Properties
     
     weak var editorDelegate: StikerFaceEditorDelegate?
@@ -11,9 +16,16 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     private var layers: String
     private var requestId = 0
     
+    private var type: PageType = .main {
+        didSet {
+            updateChild()
+        }
+    }
+    
     // MARK: Initalization
     
-    init(layers: String) {
+    init(type: PageType, layers: String) {
+        self.type = type
         self.layers = layers
         super.init(nibName: nil, bundle: nil)
         
@@ -30,12 +42,17 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         mainView.editorViewController.delegate = self
         editorDelegate = mainView.editorViewController
         
         addChildViewController(mainView.editorViewController)
         mainView.editorViewController.didMove(toParentViewController: self)
+        
+        addChildViewController(mainView.mainViewController)
+        mainView.mainViewController.didMove(toParentViewController: self)
+        
+        updateChild()
         
         mainView.renderWebView.navigationDelegate = self
         
@@ -48,6 +65,11 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     }
     
     // MARK: Private methods
+    
+    private func updateChild() {
+        mainView.editorViewController.view.alpha = type == .editor ? 1 : 0
+        mainView.mainViewController.view.alpha = type == .main ? 1 : 0
+    }
     
     private func renderAvatar() {
         let tuple = editorDelegate?.layersWithoutBackground(layers)
@@ -76,8 +98,12 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
 
 }
 
-// MARK: - StikerFaceDelegate
+// MARK: - StickerFaceEditorViewControllerDelegate
 extension StickerFaceViewController: StickerFaceEditorViewControllerDelegate {
+    func stickerFaceEditorViewControllerShouldContinue(_ controller: StickerFaceEditorViewController) {
+        type = type == .editor ? .main : .editor
+    }
+    
     func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didUpdate layers: String) {
         self.layers = layers
         renderAvatar()

@@ -152,7 +152,7 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
     private func nextStep() {
         guard let layers = layers else { return }
         
-        let vc = StickerFaceViewController(layers: layers)
+        let vc = StickerFaceViewController(type: .editor, layers: layers)
         vc.modalPresentationStyle = .fullScreen
         
         navigationController?.pushViewController(vc, animated: true)

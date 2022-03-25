@@ -12,7 +12,7 @@ class OnboardingViewController: ViewController<OnboardingView> {
 //        let conncectVC = ConnectWalletViewController()
 //
 //        navigationController?.pushViewController(conncectVC, animated: true)
-        let vc = StickerFaceViewController(layers: ImageLoader.defaultLayers)
+        let vc = StickerFaceViewController(type: .main, layers: ImageLoader.defaultLayers)
         vc.modalPresentationStyle = .fullScreen
 
         navigationController?.pushViewController(vc, animated: true)
