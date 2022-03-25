@@ -2,12 +2,15 @@ import UIKit
 
 class StikerFaceMainView: RootView {
     
-    let nftStoreView: NFTStoreView = {
-        let view = NFTStoreView()
+    let collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        view.alwaysBounceVertical = true
+        view.showsVerticalScrollIndicator = false
         
         return view
     }()
-    
+        
     override func setup() {
         backgroundColor = .white
         
@@ -16,16 +19,14 @@ class StikerFaceMainView: RootView {
         layer.cornerRadius = 23
         layer.cornerCurve = .continuous
         
-        addSubview(nftStoreView)
+        addSubview(collectionView)
         
         setupConstraints()
     }
     
     private func setupConstraints() {
-        nftStoreView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(16.0)
-            make.left.equalToSuperview().offset(16.0)
-            make.right.equalToSuperview().offset(-16.0)
+        collectionView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
     }
     
