@@ -60,6 +60,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     
     @objc private func saveButtonTapped() {
         delegate?.stickerFaceEditorViewControllerShouldContinue(self)
+        mainView.saveButton.isHidden = true
     }
     
     @objc func buyLayers() {
