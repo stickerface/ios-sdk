@@ -56,6 +56,10 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     
     // MARK: Public mehtods
     
+    func shouldHideSaveButton(_ isHidden: Bool) {
+        mainView.saveButton.isHidden = isHidden
+    }
+    
     // MARK: Private actions
     
     @objc private func saveButtonTapped() {

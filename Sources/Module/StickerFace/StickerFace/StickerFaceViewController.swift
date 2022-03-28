@@ -31,6 +31,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         
         mainView.backButton.isHidden = true
         mainView.editButton.isHidden = type == .editor
+        mainView.editorViewController.shouldHideSaveButton(type != .editor)
         
         if let url = URL(string: "https://stickerface.io/render.html") {
             mainView.renderWebView.load(URLRequest(url: url))
