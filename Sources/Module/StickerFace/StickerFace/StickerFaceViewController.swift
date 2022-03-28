@@ -29,6 +29,9 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         self.layers = layers
         super.init(nibName: nil, bundle: nil)
         
+        mainView.backButton.isHidden = true
+        mainView.editButton.isHidden = type == .editor
+        
         if let url = URL(string: "https://stickerface.io/render.html") {
             mainView.renderWebView.load(URLRequest(url: url))
         }
@@ -43,6 +46,12 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        mainView.rightTopButton.addTarget(self, action: #selector(avatarButtonTapped), for: .touchUpInside)
+        mainView.editButton.addTarget(self, action: #selector(avatarButtonTapped), for: .touchUpInside)
+        mainView.hangerButton.addTarget(self, action: #selector(avatarButtonTapped), for: .touchUpInside)
+        mainView.backButton.addTarget(self, action: #selector(avatarButtonTapped), for: .touchUpInside)
+        
+        mainView.editorViewController.layers = layers
         mainView.editorViewController.delegate = self
         editorDelegate = mainView.editorViewController
         
@@ -61,6 +70,46 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
             handler.delegate = self
         
             mainView.renderWebView.configuration.userContentController.add(handler, name: handler.name)
+        }
+    }
+    
+    // MARK: Private Actions
+    
+    @objc private func avatarButtonTapped(_ sender: AvatarButton) {
+        // TODO: нужно запоминать пол
+        // TODO: Что должно происходить при смене пола?
+        // TODO: Сделать модалки для гардероба и настроек
+        switch sender.imageType {
+        case .settings:
+            break
+            
+        case .male:
+            sender.setImageType(.female)
+            
+        case .female:
+            sender.setImageType(.male)
+            
+        case .edit:
+            mainView.tonBalanceView.isHidden = true
+            mainView.backButton.isHidden = false
+            mainView.editButton.isHidden = true
+            mainView.rightTopButton.setImageType(.male)
+            type = .editor
+            
+        case .hanger:
+            break
+            
+        case .close:
+            mainView.editButton.isHidden = false
+            mainView.rightTopButton.setImageType(.settings)
+            type = .main
+            
+        case .back:
+            mainView.tonBalanceView.isHidden = false
+            mainView.backButton.isHidden = true
+            mainView.editButton.isHidden = false
+            mainView.rightTopButton.setImageType(.settings)
+            type = .main
         }
     }
     
@@ -101,7 +150,9 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
 // MARK: - StickerFaceEditorViewControllerDelegate
 extension StickerFaceViewController: StickerFaceEditorViewControllerDelegate {
     func stickerFaceEditorViewControllerShouldContinue(_ controller: StickerFaceEditorViewController) {
-        type = type == .editor ? .main : .editor
+        type = .main
+        mainView.editButton.isHidden = false
+        mainView.rightTopButton.setImageType(.settings)
     }
     
     func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didUpdate layers: String) {
