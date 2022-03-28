@@ -19,13 +19,16 @@ class StikerFaceMainViewController: ViewController<StikerFaceMainView> {
 // MARK: - ListAdapterDataSource
 extension StikerFaceMainViewController: ListAdapterDataSource {
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
-        return [StickerFaceMainStore()]
+        return [StickerFaceMainStore(), StickerFaceMainMint()]
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
         switch object {
         case is StickerFaceMainStore:
             return StickerFaceMainStoreSectionController()
+            
+        case is StickerFaceMainMint:
+            return StickerFaceMainMintSectionController()
             
         default:
             preconditionFailure("Unknown object type")

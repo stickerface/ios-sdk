@@ -10,6 +10,17 @@ class StikerFaceMainView: RootView {
         
         return view
     }()
+    
+    let exportButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Export stickers", for: .normal)
+        button.setTitleColor(.sfDefaultWhite, for: .normal)
+        button.titleLabel?.font = Palette.fontBold.withSize(16.0)
+        button.backgroundColor = .sfAccentBrand
+        button.layer.cornerRadius = 12.0
+        
+        return button
+    }()
         
     override func setup() {
         backgroundColor = .white
@@ -20,6 +31,7 @@ class StikerFaceMainView: RootView {
         layer.cornerCurve = .continuous
         
         addSubview(collectionView)
+        addSubview(exportButton)
         
         setupConstraints()
     }
@@ -27,6 +39,13 @@ class StikerFaceMainView: RootView {
     private func setupConstraints() {
         collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+        }
+        
+        exportButton.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(32.0)
+            make.right.equalToSuperview().offset(-32.0)
+            make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-1)
+            make.height.equalTo(49.0)
         }
     }
     

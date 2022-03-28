@@ -81,7 +81,6 @@ class StickerFaceEditorView: RootView {
             make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-1)
             make.height.equalTo(49.0)
         }
-        
     }
 
 }
