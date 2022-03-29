@@ -29,9 +29,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         self.layers = layers
         super.init(nibName: nil, bundle: nil)
         
-        mainView.backButton.isHidden = true
-        mainView.editButton.isHidden = type == .editor
-        mainView.editorViewController.shouldHideSaveButton(type != .editor)
+        setupView(with: type)
         
         if let url = URL(string: "https://stickerface.io/render.html") {
             mainView.renderWebView.load(URLRequest(url: url))
@@ -121,6 +119,14 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     private func updateChild() {
         mainView.editorViewController.view.alpha = type == .editor ? 1 : 0
         mainView.mainViewController.view.alpha = type == .main ? 1 : 0
+    }
+    
+    // TODO: выставлять пол из дефолтс
+    private func setupView(with type: PageType) {
+        mainView.backButton.isHidden = true
+        mainView.editButton.isHidden = type == .editor
+        mainView.rightTopButton.setImageType(type == .editor ? .male : .settings)
+        mainView.editorViewController.shouldHideSaveButton(type != .editor)
     }
     
     private func renderAvatar() {
