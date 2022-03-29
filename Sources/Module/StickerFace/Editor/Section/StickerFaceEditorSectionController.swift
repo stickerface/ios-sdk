@@ -99,7 +99,7 @@ class StickerFaceEditorSectionController: ListSectionController {
     override func cellForItem(at index: Int) -> UICollectionViewCell {
         if index == 0 && sectionModel.editorSubsection.name != "background" {
             let cell = collectionContext!.dequeue(of: EditorSectionHeaderCell.self, for: self, at: index)
-            cell.titleLabel.text = layerColors.count > 0 ? "COLOR" : sectionModel.editorSubsection.name.uppercased()
+            cell.titleLabel.text = layerColors.count > 0 ? "commonColorCups".libraryLocalized : sectionModel.editorSubsection.name.uppercased()
             
             return cell
         } else if layerColors.count > 0 && index == 1 {

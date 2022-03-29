@@ -33,7 +33,7 @@ class StickerFaceEditorView: RootView {
         
     let saveButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Save and continue", for: .normal)
+        button.setTitle("editorSave".libraryLocalized, for: .normal)
         button.setTitleColor(.sfDefaultWhite, for: .normal)
         button.titleLabel?.font = Palette.fontBold.withSize(16.0)
         button.backgroundColor = .sfAccentBrand
