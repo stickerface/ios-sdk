@@ -3,7 +3,7 @@ import UIKit
 class StickerFaceMainMintCell: UICollectionViewCell {
     
     static func cellSize(containerSize: CGSize) -> CGSize {
-        return CGSize(width: containerSize.width, height: 148.0)
+        return CGSize(width: containerSize.width, height: 136.0)
     }
     
     let iamgeView: UIImageView = {
@@ -27,7 +27,7 @@ class StickerFaceMainMintCell: UICollectionViewCell {
     
     private func setupConstraints() {
         iamgeView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(16.0)
+            make.top.equalToSuperview().offset(18.0)
             make.left.equalToSuperview().offset(16.0)
             make.right.equalToSuperview().offset(-16.0)
         }

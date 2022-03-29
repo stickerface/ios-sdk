@@ -53,6 +53,8 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         mainView.backButton.addTarget(self, action: #selector(avatarButtonTapped), for: .touchUpInside)
         
         mainView.editorViewController.layers = layers
+        mainView.mainViewController.updateLayers(layers)
+        
         mainView.editorViewController.delegate = self
         editorDelegate = mainView.editorViewController
         
@@ -158,6 +160,7 @@ extension StickerFaceViewController: StickerFaceEditorViewControllerDelegate {
     
     func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didUpdate layers: String) {
         self.layers = layers
+        mainView.mainViewController.updateLayers(layers)
         renderAvatar()
     }
 }

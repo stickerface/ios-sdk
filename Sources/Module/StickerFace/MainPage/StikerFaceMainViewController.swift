@@ -3,6 +3,8 @@ import IGListKit
 
 class StikerFaceMainViewController: ViewController<StikerFaceMainView> {
 
+    var layers = ""
+    
     private lazy var adapter: ListAdapter = {
         return ListAdapter(updater: ListAdapterUpdater(), viewController: self, workingRangeSize: 0)
     }()
@@ -14,12 +16,21 @@ class StikerFaceMainViewController: ViewController<StikerFaceMainView> {
         adapter.dataSource = self
     }
     
+    func updateLayers(_ layers: String) {
+        self.layers = layers
+        adapter.reloadData(completion: nil)
+    }
+    
 }
 
 // MARK: - ListAdapterDataSource
 extension StikerFaceMainViewController: ListAdapterDataSource {
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
-        return [StickerFaceMainStore(), StickerFaceMainMint()]
+        return [
+            StickerFaceMainStore(),
+            StickerFaceMainMint(),
+            StickerFaceMainSticker(layers: layers)
+        ]
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
@@ -29,6 +40,9 @@ extension StikerFaceMainViewController: ListAdapterDataSource {
             
         case is StickerFaceMainMint:
             return StickerFaceMainMintSectionController()
+            
+        case is StickerFaceMainSticker:
+            return StickerFaceMainStickersSectionController()
             
         default:
             preconditionFailure("Unknown object type")
