@@ -197,11 +197,9 @@ class EditorLayerCollectionCell: UICollectionViewCell {
     private func layersLayout() {
         layerImageView.layer.cornerRadius = 0.0
         
-        noneLabel.pin
-            .all()
+        noneLabel.pin.all()
         
-        layerImageView.pin
-            .all()
+        layerImageView.pin.all()
         
         checkmarkImageView.pin
             .bottom(12.0)
