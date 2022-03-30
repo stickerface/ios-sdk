@@ -26,9 +26,7 @@ class StickerFaceMainStoreCell: UICollectionViewCell {
     
     private func setupConstraints() {
         nftStoreView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(16.0)
-            make.left.equalToSuperview().offset(16.0)
-            make.right.equalToSuperview().offset(-16.0)
+            make.top.right.left.equalToSuperview().inset(16.0)
         }
     }
     

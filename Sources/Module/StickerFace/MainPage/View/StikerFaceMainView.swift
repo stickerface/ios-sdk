@@ -42,8 +42,7 @@ class StikerFaceMainView: RootView {
         }
         
         exportButton.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(32.0)
-            make.right.equalToSuperview().offset(-32.0)
+            make.left.right.equalToSuperview().inset(32.0)
             make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-1)
             make.height.equalTo(49.0)
         }
