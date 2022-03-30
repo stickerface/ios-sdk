@@ -3,6 +3,7 @@ import IGListKit
 
 protocol StickerFaceEditorViewControllerDelegate: AnyObject {
     func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didUpdate layers: String)
+    func stickerFaceEditorViewControllerShouldContinue(_ controller: StickerFaceEditorViewController)
 }
 
 protocol StikerFaceEditorDelegate: AnyObject {
@@ -14,7 +15,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     enum LoadingState {
         case loading, loaded, failed
     }
-        
+    
     weak var delegate: StickerFaceEditorViewControllerDelegate?
     
     var layers: String = ""
@@ -25,7 +26,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     private var headers: [EditorHeaderSectionModel] = []
     private var objects: [EditorSubsectionSectionModel] = []
     private var viewControllers: [UIViewController]? = []
-//    private var productInput: ProductInput?
+    //    private var productInput: ProductInput?
     private var newPaidLayers: String?
     
     private lazy var headerAdapter: ListAdapter = {
@@ -39,9 +40,11 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        mainView.saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
+        
         headerAdapter.collectionView = mainView.headerCollectionView
         headerAdapter.dataSource = self
-            
+        
         addChildViewController(mainView.pageViewController)
         
         mainView.pageViewController.didMove(toParentViewController: self)
@@ -53,6 +56,85 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     
     // MARK: Public mehtods
     
+    func shouldHideSaveButton(_ isHidden: Bool) {
+        mainView.saveButton.isHidden = isHidden
+    }
+    
+    // MARK: Private actions
+    
+    @objc private func saveButtonTapped() {
+        delegate?.stickerFaceEditorViewControllerShouldContinue(self)
+        mainView.saveButton.isHidden = true
+    }
+    
+    @objc func buyLayers() {
+        //        guard let productInput = productInput,
+        //              let modal = presentedViewController as? ModalConfirmationController else {
+        //            return
+        //        }
+        //
+        //        modal.loaderView.show()
+        //        provider.buyProduct(productId: productInput.productId, price: productInput.price) { [weak self] result in
+        //            switch result {
+        //            case .success:
+        ////                Analytics.shared.register(event: SettingsAnalyticsEvent.stickerFaceBuy(value: true))
+        //
+        //                if let coins = UserSettings.coins {
+        //                    UserSettings.coins = coins - productInput.price
+        //                    self?.mainView.coinsButton.setTitle(String(coins - productInput.price), for: .normal)
+        //                }
+        //
+        //                self?.close()
+        //                self?.updatePrices([productInput.productId])
+        //
+        //                if let newPaidLayers = self?.newPaidLayers {
+        //                    self?.layers = newPaidLayers
+        //                    self?.updateSelectedLayers()
+        //
+        //                    let vc = InviteViewController(type: .newPurchase(newLayers: newPaidLayers))
+        //                    self?.present(vc, animated: true)
+        //                }
+        //
+        //            case .failure(let error):
+        //                if let error = error as? ImModelError {
+        //                    modal.loaderView.showError(error.message())
+        //                }
+        //            }
+        //        }
+    }
+    
+    @objc private func changeSelectedTab(_ gestureRecognizer: UISwipeGestureRecognizer) {
+        guard let selectedIndex = headers.firstIndex(where: { $0.isSelected }) else {
+            return
+        }
+        
+        var newIndex = selectedIndex
+        if gestureRecognizer.direction == .left, selectedIndex + 1 < viewControllers?.count ?? 0 {
+            newIndex = selectedIndex + 1
+        } else if gestureRecognizer.direction == .right, selectedIndex - 1 >= 0 {
+            newIndex = selectedIndex - 1
+        }
+        
+        if let viewController = mainView.pageViewController.viewControllers?.first as? StickerFaceEditorPageController {
+            guard
+                let viewControllers = viewControllers,
+                viewControllers.count > newIndex,
+                let vc = viewControllers[newIndex] as? StickerFaceEditorPageController
+            else { return }
+            
+            if newIndex > viewController.index {
+                mainView.pageViewController.setViewControllers([vc], direction: .forward, animated: true)
+            } else if newIndex < viewController.index {
+                mainView.pageViewController.setViewControllers([vc], direction: .reverse, animated: true)
+            }
+            
+            headers.forEach { $0.isSelected = $0.title == vc.sectionModel.editorSubsection.name }
+            headerAdapter.reloadData(completion: nil)
+            
+            mainView.headerCollectionView.scrollToItem(at: IndexPath(item: 0, section: vc.index), at: .centeredHorizontally, animated: true)
+        }
+    }
+    
     // MARK: Private methods
     
     private func loadEditor() {
@@ -62,90 +144,54 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                 self?.headers = editor.sections.flatMap({ $0.subsections }).map({ EditorHeaderSectionModel(title: $0.name) })
                 self?.headers.first?.isSelected = true
                 self?.headerAdapter.performUpdates(animated: true)
-
+                
                 self?.prices = editor.prices
                 self?.objects = editor.sections.flatMap({ $0.subsections }).map({ EditorSubsectionSectionModel(editorSubsection: $0, prices: editor.prices) })
                 self?.viewControllers = self?.objects.enumerated().map { index, object in
                     let controller = StickerFaceEditorPageController(sectionModel: object)
                     controller.delegate = self
                     controller.index = index
-
+                    
                     return controller
                 }
                 self?.updateSelectedLayers()
                 self?.loadingState = .loaded
-
+                
                 if let viewController = self?.viewControllers?[0] {
                     self?.mainView.pageViewController.setViewControllers([viewController], direction: .reverse, animated: true)
                 }
-
+                
                 self?.updateUserProducts()
-
+                
             case .failure(let error):
-//                if let error = error as? ImModelError {
-//                    self?.mainView.loaderView.showError(error.message())
-//                }
+                //                if let error = error as? ImModelError {
+                //                    self?.mainView.loaderView.showError(error.message())
+                //                }
                 self?.mainView.loaderView.showError(error.localizedDescription)
                 self?.loadingState = .failed
             }
         }
     }
     
-    @objc func buyLayers() {
-//        guard let productInput = productInput,
-//              let modal = presentedViewController as? ModalConfirmationController else {
-//            return
-//        }
-//
-//        modal.loaderView.show()
-//        provider.buyProduct(productId: productInput.productId, price: productInput.price) { [weak self] result in
-//            switch result {
-//            case .success:
-////                Analytics.shared.register(event: SettingsAnalyticsEvent.stickerFaceBuy(value: true))
-//
-//                if let coins = UserSettings.coins {
-//                    UserSettings.coins = coins - productInput.price
-//                    self?.mainView.coinsButton.setTitle(String(coins - productInput.price), for: .normal)
-//                }
-//
-//                self?.close()
-//                self?.updatePrices([productInput.productId])
-//
-//                if let newPaidLayers = self?.newPaidLayers {
-//                    self?.layers = newPaidLayers
-//                    self?.updateSelectedLayers()
-//
-//                    let vc = InviteViewController(type: .newPurchase(newLayers: newPaidLayers))
-//                    self?.present(vc, animated: true)
-//                }
-//
-//            case .failure(let error):
-//                if let error = error as? ImModelError {
-//                    modal.loaderView.showError(error.message())
-//                }
-//            }
-//        }
-    }
-    
     private func updateUserProducts() {
-//        provider.getUserProducts { [weak self] result in
-//            switch result {
-//            case .success(let productIds):
-//                self?.updatePrices(productIds)
-//                
-//            case .failure(let error):
-//                if let error = error as? ImModelError {
-//                    self?.mainView.loaderView.showError(error.message())
-//                }
-//            }
-//        }
+        //        provider.getUserProducts { [weak self] result in
+        //            switch result {
+        //            case .success(let productIds):
+        //                self?.updatePrices(productIds)
+        //
+        //            case .failure(let error):
+        //                if let error = error as? ImModelError {
+        //                    self?.mainView.loaderView.showError(error.message())
+        //                }
+        //            }
+        //        }
     }
     
     private func updatePrices(_ layers: [String]) {
         layers.forEach { prices.removeValue(forKey: $0) }
         objects.enumerated().forEach { index, object in
             object.prices = prices
-        
+            
             if let viewController = viewControllers?[index] as? StickerFaceEditorPageController {
                 viewController.sectionModel = object
                 viewController.adapter.reloadData(completion: nil)
@@ -161,7 +207,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         }
         
         var layersArray = layers.components(separatedBy: ";")
-    
+        
         if let editorLayers = objects[section].editorSubsection.layers,
            editorLayers.contains(replacementLayer) {
             editorLayers.forEach { editorLayer in
@@ -177,7 +223,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                 }
             }
         }
-
+        
         layers = layersArray.joined(separator: ";") + ";\(replacementLayer);"
         
         return layers
@@ -216,81 +262,49 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     }
     
     private func showConfirmBuyingLayers(price: Int, layers: String) {
-//        let modal = ModalConfirmationController(type: .buyProduct(price: price, layers: layers))
-//
-//        let actionBuyLayers = ProfileTableViewCell(icon: UIImage(libraryNamed: "check_48"), label: "modalChoosePurchasesAgree".libraryLocalized)
-//        actionBuyLayers.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(buyLayers)))
-//
-//        let actionClose = ProfileTableViewCell(icon: UIImage(libraryNamed: "close_28"), label: "modalChoosePurchasesCancel".libraryLocalized)
-//        actionClose.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(closeConfirmBuyingLayers)))
-//
-//        modal.actionsStackView.addArrangedSubview(actionBuyLayers)
-//        modal.actionsStackView.addArrangedSubview(actionClose)
-//
-//        modal.actionsStackView.arrangedSubviews.enumerated().forEach { view in
-//            if view.offset != modal.actionsStackView.arrangedSubviews.count - 1 {
-//                (view.element as? ProfileTableViewCell)?.separator.isHidden = false
-//            }
-//        }
-//
-//        present(modal, animated: true)
+        //        let modal = ModalConfirmationController(type: .buyProduct(price: price, layers: layers))
+        //
+        //        let actionBuyLayers = ProfileTableViewCell(icon: UIImage(libraryNamed: "check_48"), label: "modalChoosePurchasesAgree".libraryLocalized)
+        //        actionBuyLayers.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(buyLayers)))
+        //
+        //        let actionClose = ProfileTableViewCell(icon: UIImage(libraryNamed: "close_28"), label: "modalChoosePurchasesCancel".libraryLocalized)
+        //        actionClose.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(closeConfirmBuyingLayers)))
+        //
+        //        modal.actionsStackView.addArrangedSubview(actionBuyLayers)
+        //        modal.actionsStackView.addArrangedSubview(actionClose)
+        //
+        //        modal.actionsStackView.arrangedSubviews.enumerated().forEach { view in
+        //            if view.offset != modal.actionsStackView.arrangedSubviews.count - 1 {
+        //                (view.element as? ProfileTableViewCell)?.separator.isHidden = false
+        //            }
+        //        }
+        //
+        //        present(modal, animated: true)
     }
     
     private func showConfirmNotEnoughCoins() {
-//        let modal = ModalConfirmationController(type: .notEnoughCoins)
-//        
-//        let actionBuyLayers = ProfileTableViewCell(icon: UIImage(libraryNamed: "check_48"), label: "modalChooseBuyCoinsAgree".libraryLocalized)
-//        actionBuyLayers.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(openCoinsShop)))
-//        
-//        let actionClose = ProfileTableViewCell(icon: UIImage(libraryNamed: "close_28"), label: "modalChoosePurchasesCancel".libraryLocalized)
-//        actionClose.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(close)))
-//        
-//        modal.actionsStackView.addArrangedSubview(actionBuyLayers)
-//        modal.actionsStackView.addArrangedSubview(actionClose)
-//        
-//        modal.actionsStackView.arrangedSubviews.enumerated().forEach { view in
-//            if view.offset != modal.actionsStackView.arrangedSubviews.count - 1 {
-//                (view.element as? ProfileTableViewCell)?.separator.isHidden = false
-//            }
-//        }
-//        
-//        present(modal, animated: true)
+        //        let modal = ModalConfirmationController(type: .notEnoughCoins)
+        //
+        //        let actionBuyLayers = ProfileTableViewCell(icon: UIImage(libraryNamed: "check_48"), label: "modalChooseBuyCoinsAgree".libraryLocalized)
+        //        actionBuyLayers.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(openCoinsShop)))
+        //
+        //        let actionClose = ProfileTableViewCell(icon: UIImage(libraryNamed: "close_28"), label: "modalChoosePurchasesCancel".libraryLocalized)
+        //        actionClose.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(close)))
+        //
+        //        modal.actionsStackView.addArrangedSubview(actionBuyLayers)
+        //        modal.actionsStackView.addArrangedSubview(actionClose)
+        //
+        //        modal.actionsStackView.arrangedSubviews.enumerated().forEach { view in
+        //            if view.offset != modal.actionsStackView.arrangedSubviews.count - 1 {
+        //                (view.element as? ProfileTableViewCell)?.separator.isHidden = false
+        //            }
+        //        }
+        //
+        //        present(modal, animated: true)
     }
-        
+    
     @objc private func closeConfirmBuyingLayers() {
-//        Analytics.shared.register(event: SettingsAnalyticsEvent.stickerFaceBuy(value: false))
-    }
-        
-    @objc private func changeSelectedTab(_ gestureRecognizer: UISwipeGestureRecognizer) {
-        guard let selectedIndex = headers.firstIndex(where: { $0.isSelected }) else {
-            return
-        }
-        
-        var newIndex = selectedIndex
-        if gestureRecognizer.direction == .left, selectedIndex + 1 < viewControllers?.count ?? 0 {
-            newIndex = selectedIndex + 1
-        } else if gestureRecognizer.direction == .right, selectedIndex - 1 >= 0 {
-            newIndex = selectedIndex - 1
-        }
-        
-        if let viewController = mainView.pageViewController.viewControllers?.first as? StickerFaceEditorPageController {
-            guard
-                let viewControllers = viewControllers,
-                viewControllers.count > newIndex,
-                let vc = viewControllers[newIndex] as? StickerFaceEditorPageController
-            else { return }
-            
-            if newIndex > viewController.index {
-                mainView.pageViewController.setViewControllers([vc], direction: .forward, animated: true)
-            } else if newIndex < viewController.index {
-                mainView.pageViewController.setViewControllers([vc], direction: .reverse, animated: true)
-            }
-            
-            headers.forEach { $0.isSelected = $0.title == vc.sectionModel.editorSubsection.name }
-            headerAdapter.reloadData(completion: nil)
-            
-            mainView.headerCollectionView.scrollToItem(at: IndexPath(item: 0, section: vc.index), at: .centeredHorizontally, animated: true)
-        }
+        //        Analytics.shared.register(event: SettingsAnalyticsEvent.stickerFaceBuy(value: false))
     }
     
 }
@@ -299,7 +313,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
 extension StickerFaceEditorViewController: ListAdapterDataSource {
     
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
-            return headers
+        return headers
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
@@ -352,9 +366,9 @@ extension StickerFaceEditorViewController: StickerFaceEditorPageDelegate {
             emptyView.caption = "commonNothingWasFound".libraryLocalized
             emptyView.buttonText = String()
             
-//            emptyView.buttonOnClick = {
-//                Utils.getRootNavigationController()?.present(ModalInvite(), animated: true)
-//            }
+            //            emptyView.buttonOnClick = {
+            //                Utils.getRootNavigationController()?.present(ModalInvite(), animated: true)
+            //            }
             
             return HolderView(view: emptyView)
         case .failed:
@@ -376,22 +390,22 @@ extension StickerFaceEditorViewController: StickerFaceEditorPageDelegate {
     }
     
     func stickerFaceEditorPageController(_ controller: StickerFaceEditorPageController, didSelect layer: String, section: Int) {
-//        if let price = prices["\(layer)"], let coins = UserSettings.coins {
-//
-//            newPaidLayers = replaceCurrentLayer(with: layer, section: section)
-//            productInput = ProductInput(productId: "\(layer)", price: price)
-//
-//            if coins < price {
-//                showConfirmNotEnoughCoins()
-//            } else if let newPaidLayers = newPaidLayers {
-//                showConfirmBuyingLayers(price: price, layers: newPaidLayers)
-//            }
-//
-//        } else {
-            layers = replaceCurrentLayer(with: layer, section: section)
-            delegate?.stickerFaceEditorViewController(self, didUpdate: layers)
-            updateSelectedLayers()
-//        }
+        //        if let price = prices["\(layer)"], let coins = UserSettings.coins {
+        //
+        //            newPaidLayers = replaceCurrentLayer(with: layer, section: section)
+        //            productInput = ProductInput(productId: "\(layer)", price: price)
+        //
+        //            if coins < price {
+        //                showConfirmNotEnoughCoins()
+        //            } else if let newPaidLayers = newPaidLayers {
+        //                showConfirmBuyingLayers(price: price, layers: newPaidLayers)
+        //            }
+        //
+        //        } else {
+        layers = replaceCurrentLayer(with: layer, section: section)
+        delegate?.stickerFaceEditorViewController(self, didUpdate: layers)
+        updateSelectedLayers()
+        //        }
     }
 }
 
@@ -417,7 +431,7 @@ extension StickerFaceEditorViewController: UIPageViewControllerDataSource, UIPag
         if !completed || !finished {
             return
         }
-
+        
         if let viewController = mainView.pageViewController.viewControllers?.first as? StickerFaceEditorPageController {
             headers.enumerated().forEach { $0.element.isSelected = $0.element.title == viewController.sectionModel.editorSubsection.name }
             headerAdapter.reloadData(completion: nil)
