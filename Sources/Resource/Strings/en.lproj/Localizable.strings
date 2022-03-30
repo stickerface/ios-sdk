@@ -1,9 +1,13 @@
+// Common
 "commonContinue" = "Continue";
+"commonColorCups" = "COLOR";
 
+// Onboarding
 "onboardingTitle" = "Welcome to StickerFace";
 "onboardingSubtitle" = "Design your awesome character and get the NFT to own your unique set";
 "onboardingPrivacyPolicyAndRules" = "By continuing you agree to our <a href='TermsOFServiceURL'>Terms of Service</a> and <a href='PrivacyPolicyURL'>Privacy Policy</a>";
 
+// Setup Avatar
 "setupAvatarTitle" = "Avatar";
 "setupAvatarSubtitle" = "Let’s start creating your avatar";
 "setupAvatarDescription" = "Pics are not stored and used one time for the AI avatar generation";
@@ -12,7 +16,11 @@
 "setupAvatarGenerateTitle" = "Generate avatar";
 "setupAvatarGenerateNewTitle" = "Generate new avatar";
 
+// Connect Wallet
 "connectWalletTitle" = "Connect your crypto wallet";
 "connectWalletSubtitle" = "To continue you need to have a cryptocurrency wallet Tonkeeper";
 "connectWalletWithoutWallet" = "Continue without wallet";
 "connectWalletConnectTitle" = "Connect with Tonkeeper";
+
+// Editor
+"editorSave" = "Save and Continue";
