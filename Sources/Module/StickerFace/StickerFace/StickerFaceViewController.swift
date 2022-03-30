@@ -82,7 +82,9 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         // TODO: Сделать модалки для гардероба и настроек
         switch sender.imageType {
         case .settings:
-            break
+            let viewController = ModalSettingsController()
+            viewController.view.layoutIfNeeded()
+            present(viewController, animated: true)
             
         case .male:
             sender.setImageType(.female)
