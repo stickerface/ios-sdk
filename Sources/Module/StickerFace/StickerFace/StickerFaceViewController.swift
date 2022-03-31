@@ -53,6 +53,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         mainView.editorViewController.layers = layers
         mainView.mainViewController.updateLayers(layers)
         
+        mainView.mainViewController.delegate = self
         mainView.editorViewController.delegate = self
         editorDelegate = mainView.editorViewController
         
@@ -156,6 +157,15 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         return current
     }
 
+}
+
+extension StickerFaceViewController: StikerFaceMainViewControllerDelegate {
+    func stikerFaceMainViewController(didSelect sticker: UIImage?) {
+        let viewController = ModalShareController(shareImage: sticker)
+        viewController.view.layoutIfNeeded()
+        
+        present(viewController, animated: true)
+    }
 }
 
 // MARK: - StickerFaceEditorViewControllerDelegate

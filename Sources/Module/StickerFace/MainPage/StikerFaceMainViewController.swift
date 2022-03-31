@@ -1,9 +1,15 @@
 import UIKit
 import IGListKit
 
+protocol StikerFaceMainViewControllerDelegate: AnyObject {
+    func stikerFaceMainViewController(didSelect sticker: UIImage?)
+}
+
 class StikerFaceMainViewController: ViewController<StikerFaceMainView> {
 
     var layers = ""
+    
+    weak var delegate: StikerFaceMainViewControllerDelegate?
     
     private lazy var adapter: ListAdapter = {
         return ListAdapter(updater: ListAdapterUpdater(), viewController: self, workingRangeSize: 0)
@@ -42,7 +48,10 @@ extension StikerFaceMainViewController: ListAdapterDataSource {
             return StickerFaceMainMintSectionController()
             
         case is StickerFaceMainSticker:
-            return StickerFaceMainStickersSectionController()
+            let section = StickerFaceMainStickersSectionController()
+            section.delegate = self
+            
+            return section
             
         default:
             preconditionFailure("Unknown object type")
@@ -51,6 +60,12 @@ extension StikerFaceMainViewController: ListAdapterDataSource {
     
     func emptyView(for listAdapter: ListAdapter) -> UIView? {
         return nil
+    }
+}
+
+extension StikerFaceMainViewController: StickersSectionControllerDelegate {
+    func stickersSectionController(didSelect sticker: UIImage?) {
+        delegate?.stikerFaceMainViewController(didSelect: sticker)
     }
 }
 

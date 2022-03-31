@@ -1,10 +1,5 @@
 import UIKit
 import PinLayout
-import Atributika
-
-protocol ModalSettingsControllerDelegate: AnyObject {
-    func confirmBuyLayers(controller: ModalSettingsController)
-}
 
 class ModalSettingsController: ModalScrollViewController {
     
@@ -12,8 +7,6 @@ class ModalSettingsController: ModalScrollViewController {
     let loaderView = LoaderView()
     
     var models = [ModalSettingsModel]()
-    
-    weak var delegate: ModalSettingsControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()

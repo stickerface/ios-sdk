@@ -1,9 +1,14 @@
 import UIKit
 import IGListKit
 
+protocol StickersSectionControllerDelegate: AnyObject {
+    func stickersSectionController(didSelect sticker: UIImage?)
+}
+
 class StickerFaceMainStickersSectionController: ListSectionController {
     
     var sticker: StickerFaceMainSticker!
+    weak var delegate: StickersSectionControllerDelegate?
     
     override init() {
         super.init()
@@ -19,6 +24,12 @@ class StickerFaceMainStickersSectionController: ListSectionController {
         sticker = object as? StickerFaceMainSticker
     }
     
+    override func didSelectItem(at index: Int) {
+        if let cell = collectionContext?.cellForItem(at: index, sectionController: self) as? StickerFaceMainStickersCell {
+            delegate?.stickersSectionController(didSelect: cell.imageView.image)
+        }
+    }
+    
     override func numberOfItems() -> Int {
         return 29
     }
@@ -31,7 +42,7 @@ class StickerFaceMainStickersSectionController: ListSectionController {
         let cell = collectionContext!.dequeue(of: StickerFaceMainStickersCell.self, for: self, at: index)
         
         let layers = "s\(index + 1);" + sticker.layers
-        ImageLoader.setImage(layers: layers, imgView: cell.imageView, size: 163)
+        ImageLoader.setImage(layers: layers, imgView: cell.imageView, size: 248)
         
         return cell
     }
