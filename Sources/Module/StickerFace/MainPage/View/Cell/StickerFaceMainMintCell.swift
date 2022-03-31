@@ -28,8 +28,7 @@ class StickerFaceMainMintCell: UICollectionViewCell {
     private func setupConstraints() {
         iamgeView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(18.0)
-            make.left.equalToSuperview().offset(16.0)
-            make.right.equalToSuperview().offset(-16.0)
+            make.left.right.equalToSuperview().inset(16.0)
         }
     }
     

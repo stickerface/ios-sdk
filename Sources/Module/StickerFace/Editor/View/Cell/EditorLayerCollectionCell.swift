@@ -12,35 +12,17 @@ class EditorLayerCollectionCell: UICollectionViewCell {
     
     var cellType: CellType = .layers {
         didSet {
-            switch cellType {
-            case .background:
-                contentView.layer.borderWidth = 0.0
-                titleLabel.isHidden = false
-                priceLabel.isHidden = false
-                subtitlePriceLabel.isHidden = false
-                buyButton.isHidden = false
-                selectedBackgroundImageView.isHidden = false
-                layerBackgroundView.isHidden = false
+            contentView.layer.borderWidth = cellType == .background ? 0 : 1
+            titleLabel.isHidden = cellType == .layers ? true : false
+            priceLabel.isHidden = cellType == .layers ? true : false
+            subtitlePriceLabel.isHidden = cellType == .layers ? true : false
+            buyButton.isHidden = cellType == .layers ? true : false
+            selectedBackgroundImageView.isHidden = cellType == .background ? false : true
+            layerBackgroundView.isHidden = cellType == .layers ? true : false
+            
+            if cellType == .background {
                 buyButton.semanticContentAttribute = .forceRightToLeft
                 buyButton.imageEdgeInsets = UIEdgeInsets(top: 0.0, left: 5.0, bottom: 0.0, right: 0.0)
-                
-            case .layers:
-                contentView.layer.borderWidth = 1.0
-                titleLabel.isHidden = true
-                priceLabel.isHidden = true
-                subtitlePriceLabel.isHidden = true
-                buyButton.isHidden = true
-                selectedBackgroundImageView.isHidden = true
-                layerBackgroundView.isHidden = true
-                
-            case .NFT:
-                contentView.layer.borderWidth = 1.0
-                titleLabel.isHidden = false
-                priceLabel.isHidden = false
-                subtitlePriceLabel.isHidden = false
-                buyButton.isHidden = false
-                selectedBackgroundImageView.isHidden = true
-                layerBackgroundView.isHidden = true
             }
         }
     }
@@ -215,11 +197,9 @@ class EditorLayerCollectionCell: UICollectionViewCell {
     private func layersLayout() {
         layerImageView.layer.cornerRadius = 0.0
         
-        noneLabel.pin
-            .all()
+        noneLabel.pin.all()
         
-        layerImageView.pin
-            .all()
+        layerImageView.pin.all()
         
         checkmarkImageView.pin
             .bottom(12.0)
