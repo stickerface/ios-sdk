@@ -1,7 +1,9 @@
 import UIKit
 
-class ModalShareArrangedView: UIView {
+class ModalShareArrangedView: RootView {
 
+    var action: Action?
+    
     let imageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
@@ -18,20 +20,18 @@ class ModalShareArrangedView: UIView {
         return label
     }()
     
-    init(image: UIImage?, text: String) {
-        super.init(frame: .zero)
-        
-        imageView.image = image
-        titleLabel.text = text
-        
+    override func setup() {
         addSubview(imageView)
         addSubview(titleLabel)
+        
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(viewTapped))
+        addGestureRecognizer(gesture)
         
         setupConstraints()
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    @objc private func viewTapped() {
+        action?()
     }
     
     private func setupConstraints() {

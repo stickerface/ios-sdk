@@ -6,7 +6,7 @@ class ModalSettingsController: ModalScrollViewController {
     let settingsView = ModalSettingsView()
     let loaderView = LoaderView()
     
-    var models = [ModalSettingsModel]()
+    var models = [ModalSettingsCellModel]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,16 +52,16 @@ class ModalSettingsController: ModalScrollViewController {
     
     private func setupModels() {
         models = [
-            ModalSettingsModel(title: "Language",
+            ModalSettingsCellModel(title: "Language",
                                image: UIImage(libraryNamed: "language"),
                                action: languageAction),
-            ModalSettingsModel(title: "FAQ",
+            ModalSettingsCellModel(title: "FAQ",
                                image: UIImage(libraryNamed: "FAQ"),
                                action: faqAction),
-            ModalSettingsModel(title: "Rate us",
+            ModalSettingsCellModel(title: "Rate us",
                                image: UIImage(libraryNamed: "icon-24_outline"),
                                action: rateAction),
-            ModalSettingsModel(title: "About app",
+            ModalSettingsCellModel(title: "About app",
                                image: UIImage(libraryNamed: "info"),
                                action: aboutAction)
         ]

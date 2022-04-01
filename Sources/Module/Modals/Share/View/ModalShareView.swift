@@ -47,11 +47,6 @@ class ModalShareView: RootView {
         addSubview(subtitleLabel)
         addSubview(imageView)
         addSubview(shareStackView)
-        
-        shareStackView.addArrangedSubview(ModalShareArrangedView(image: UIImage(libraryNamed: "telegram"), text: "Telegram"))
-        shareStackView.addArrangedSubview(ModalShareArrangedView(image: UIImage(libraryNamed: "share_fb"), text: "Facebook"))
-        shareStackView.addArrangedSubview(ModalShareArrangedView(image: UIImage(libraryNamed: "share_whatsapp"), text: "WhatsApp"))
-        shareStackView.addArrangedSubview(ModalShareArrangedView(image: UIImage(libraryNamed: "share_other"), text: "Other"))
     }
     
     override func layoutSubviews() {
