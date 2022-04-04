@@ -101,7 +101,9 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
             type = .editor
             
         case .hanger:
-            break
+            let viewController = ModalWardrobeController()
+            viewController.view.layoutIfNeeded()
+            present(viewController, animated: true)
             
         case .close:
             mainView.editButton.isHidden = false
@@ -159,6 +161,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
 
 }
 
+// MARK: - StikerFaceMainViewControllerDelegate
 extension StickerFaceViewController: StikerFaceMainViewControllerDelegate {
     func stikerFaceMainViewController(didSelect sticker: UIImage?) {
         let viewController = ModalShareController(shareImage: sticker)
