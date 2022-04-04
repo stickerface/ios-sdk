@@ -4,6 +4,7 @@ class StickerFaceMainStickersCell: UICollectionViewCell {
     
     let imageView: UIImageView = {
         let view = UIImageView()
+        view.backgroundColor = .clear
         
         return view
     }()

@@ -38,9 +38,9 @@ class ModalShareController: ModalScrollViewController {
     }
     
     private lazy var otherShareAction: Action = { [weak self] in
-        guard let self = self else { return }
+        guard let self = self, let image = self.shareImage else { return }
         
-        let activityViewController = UIActivityViewController(activityItems: [self.shareImage], applicationActivities: nil)
+        let activityViewController = UIActivityViewController(activityItems: [image], applicationActivities: nil)
         activityViewController.popoverPresentationController?.sourceView = self.view
         
 //        activityViewController.excludedActivityTypes = [ UIActivity.ActivityType.airDrop, UIActivity.ActivityType.postToFacebook ]
@@ -82,7 +82,7 @@ class ModalShareController: ModalScrollViewController {
         
         shareView.layoutIfNeeded()
         
-        contentHeight = shareView.bounds.height
+        contentHeight = shareView.containerView.bounds.height
     }
     
 }

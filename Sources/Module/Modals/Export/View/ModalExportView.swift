@@ -1,7 +1,7 @@
 import UIKit
 
-class ModalShareView: RootView {
-
+class ModalExportView: RootView {
+    
     let containerView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
@@ -11,7 +11,7 @@ class ModalShareView: RootView {
     
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Share"
+        label.text = "Export"
         label.font = Palette.fontBold.withSize(24)
         label.textColor = .sfTextPrimary
         label.textAlignment = .center
@@ -19,18 +19,37 @@ class ModalShareView: RootView {
         return label
     }()
     
+    // TODO: attributed label
     let subtitleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Send sticker to friends"
+        label.text = "Use all stickers in Telegram, WhatsApp or native keyboard"
         label.font = Palette.fontMedium.withSize(16)
         label.textColor = .sfTextPrimary
         label.textAlignment = .center
+        label.numberOfLines = 0
         
         return label
     }()
     
-    let imageView: UIImageView = {
+    let leftImageView: UIImageView = {
         let view = UIImageView()
+        view.layer.cornerRadius = 65.0
+        view.clipsToBounds = true
+        
+        return view
+    }()
+    
+    let centerImageView: UIImageView = {
+        let view = UIImageView()
+        view.layer.cornerRadius = 87.0
+        view.clipsToBounds = true
+        
+        return view
+    }()
+    
+    let rightImageView: UIImageView = {
+        let view = UIImageView()
+        view.layer.cornerRadius = 65.0
         view.clipsToBounds = true
         
         return view
@@ -41,6 +60,14 @@ class ModalShareView: RootView {
         view.axis = .horizontal
         view.spacing = 24
         view.distribution = .fillEqually
+        
+        return view
+    }()
+    
+    let centerImageBackView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.layer.cornerRadius = 90.0
         
         return view
     }()
@@ -61,7 +88,10 @@ class ModalShareView: RootView {
         
         containerView.addSubview(titleLabel)
         containerView.addSubview(subtitleLabel)
-        containerView.addSubview(imageView)
+        containerView.addSubview(leftImageView)
+        containerView.addSubview(rightImageView)
+        containerView.addSubview(centerImageBackView)
+        containerView.addSubview(centerImageView)
         containerView.addSubview(shareStackView)
     }
     
@@ -89,15 +119,29 @@ class ModalShareView: RootView {
             .right()
             .sizeToFit(.width)
         
-        imageView.pin
+        centerImageView.pin
             .top(to: subtitleLabel.edge.bottom).marginTop(40.0)
             .hCenter()
-            .size(248.0)
+            .size(174.0)
+        
+        centerImageBackView.pin
+            .center(to: centerImageView.anchor.center)
+            .size(180.0)
+        
+        leftImageView.pin
+            .left(29.0)
+            .vCenter(to: centerImageView.edge.vCenter)
+            .size(130.0)
+        
+        rightImageView.pin
+            .right(29.0)
+            .vCenter(to: centerImageView.edge.vCenter)
+            .size(130.0)
         
         shareStackView.pin
-            .top(to: imageView.edge.bottom).marginTop(48.0)
-            .left(23)
-            .right(23)
+            .top(to: centerImageView.edge.bottom).marginTop(48.0)
+            .left(67.0)
+            .right(67.0)
             .height(86.0)
         
         bottomView.pin
@@ -111,5 +155,5 @@ class ModalShareView: RootView {
         
         pin.height(bottomView.frame.maxY)
     }
-
+    
 }

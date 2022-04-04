@@ -2,6 +2,13 @@ import UIKit
 
 class ModalSettingsView: RootView {
     
+    let containerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        
+        return view
+    }()
+    
     let titleLabel: UILabel = {
         let label = UILabel()
         label.font = Palette.fontBold.withSize(20)
@@ -72,13 +79,23 @@ class ModalSettingsView: RootView {
         return button
     }()
     
+    let bottomView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        
+        return view
+    }()
+    
     override func setup() {
         backgroundColor = .white
         layer.cornerRadius = 23
         
-        addSubview(titleLabel)
-        addSubview(tableView)
-        addSubview(tonView)
+        addSubview(containerView)
+        addSubview(bottomView)
+        
+        containerView.addSubview(titleLabel)
+        containerView.addSubview(tableView)
+        containerView.addSubview(tonView)
         
         tonView.addSubview(tonImageView)
         tonView.addSubview(tonTitleLabel)
@@ -93,6 +110,11 @@ class ModalSettingsView: RootView {
     }
     
     private func layout() {
+        containerView.pin
+            .left()
+            .right()
+            .top()
+        
         titleLabel.pin
             .top(24.0)
             .left()
@@ -133,6 +155,15 @@ class ModalSettingsView: RootView {
             .left(to: tonImageView.edge.right).marginLeft(8.0)
             .sizeToFit(.widthFlexible)
         
-        pin.height(tonView.frame.maxY + Utils.safeArea().bottom)
+        bottomView.pin
+            .top(to: tonView.edge.bottom)
+            .left()
+            .right()
+            .height(UIScreen.main.bounds.height)
+        
+        containerView.pin
+            .height(tonView.frame.maxY + Utils.safeArea().bottom)
+        
+        pin.height(bottomView.frame.maxY)
     }
 }

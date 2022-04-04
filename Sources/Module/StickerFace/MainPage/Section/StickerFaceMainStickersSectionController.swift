@@ -42,7 +42,7 @@ class StickerFaceMainStickersSectionController: ListSectionController {
         let cell = collectionContext!.dequeue(of: StickerFaceMainStickersCell.self, for: self, at: index)
         
         let layers = "s\(index + 1);" + sticker.layers
-        ImageLoader.setImage(layers: layers, imgView: cell.imageView, outlined: true, size: 248)
+        ImageLoader.setAvatar(with: layers, outlined: true, backgroundColor: .clear, for: cell.imageView, side: 248, cornerRadius: 0)
         
         return cell
     }

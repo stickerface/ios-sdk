@@ -18,6 +18,8 @@ class StikerFaceMainViewController: ViewController<StikerFaceMainView> {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        mainView.exportButton.addTarget(self, action: #selector(exportButtonTapped), for: .touchUpInside)
+        
         adapter.collectionView = mainView.collectionView
         adapter.dataSource = self
     }
@@ -25,6 +27,14 @@ class StikerFaceMainViewController: ViewController<StikerFaceMainView> {
     func updateLayers(_ layers: String) {
         self.layers = layers
         adapter.reloadData(completion: nil)
+    }
+    
+    @objc private func exportButtonTapped() {
+        let viewController = ModalExportController()
+        viewController.layers = layers
+        viewController.view.layoutIfNeeded()
+        
+        present(viewController, animated: true)
     }
     
 }

@@ -72,7 +72,7 @@ class ModalSettingsController: ModalScrollViewController {
 
         settingsView.layoutIfNeeded()
         
-        contentHeight = settingsView.bounds.height
+        contentHeight = settingsView.containerView.bounds.height
     }
     
 }
