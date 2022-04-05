@@ -189,6 +189,11 @@ extension StickerFaceViewController: StickerFaceEditorViewControllerDelegate {
         let modal = ModalBuyController(type: .nft)
         modal.buyView.layoutIfNeeded()
         
+        ImageLoader.setAvatar(with: layers,
+                              for: modal.buyView.imageView,
+                              side: mainView.bounds.width,
+                              cornerRadius: 197/2)
+        
         present(modal, animated: true)
     }
 }

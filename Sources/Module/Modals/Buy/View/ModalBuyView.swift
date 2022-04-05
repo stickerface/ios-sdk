@@ -25,8 +25,8 @@ class ModalBuyView: UIView {
     let subtitleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .sfTextSecondary
-        label.font = Palette.fontBold.withSize(20)
-        label.text = "To buy a NFT connect the Tonkepeer"
+        label.font = Palette.fontMedium.withSize(16)
+        label.text = "To buy a NFT connect\nthe Tonkepeer"
         label.textAlignment = .center
         label.numberOfLines = 0
         
@@ -36,7 +36,7 @@ class ModalBuyView: UIView {
     let imageView: UIImageView = {
         let view = UIImageView()
         view.clipsToBounds = true
-        view.backgroundColor = .purple
+        view.layer.cornerRadius = 197/2
         
         return view
     }()
