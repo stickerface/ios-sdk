@@ -47,9 +47,6 @@ Pod::Spec.new do |s|
   s.dependency 'IGListKit'
   s.dependency 'PinLayout'
   s.dependency 'Alamofire'
-  
-#  нужны ли эти зависимости
-  s.dependency 'StickerFaceEditor'
   s.dependency 'SkeletonView', '~> 1.25.1'
   
 end

@@ -4,7 +4,6 @@ platform :ios, '13.0'
 
 target 'StikerFace_Example' do
 
-  pod 'StickerFaceEditor', :git => 'git@github.com:sflabsorg/stickerfaceeditor-ios.git', :commit => 'abe6792'
   pod 'StikerFace', :path => '../'
 
 end
