@@ -184,6 +184,13 @@ extension StickerFaceViewController: StickerFaceEditorViewControllerDelegate {
         mainView.mainViewController.updateLayers(layers)
         renderAvatar()
     }
+    
+    func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didSelectPaid layers: String) {
+        let modal = ModalBuyController(type: .nft)
+        modal.buyView.layoutIfNeeded()
+        
+        present(modal, animated: true)
+    }
 }
 
 // MARK: - AvatarRenderResponseHandlerDelegate

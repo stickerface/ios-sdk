@@ -24,7 +24,7 @@ class ModalBuyView: UIView {
     // TODO: add attributed label
     let subtitleLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .sfTextPrimary
+        label.textColor = .sfTextSecondary
         label.font = Palette.fontBold.withSize(20)
         label.text = "To buy a NFT connect the Tonkepeer"
         label.textAlignment = .center

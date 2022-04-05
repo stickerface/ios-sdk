@@ -3,6 +3,7 @@ import IGListKit
 
 protocol StickerFaceEditorViewControllerDelegate: AnyObject {
     func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didUpdate layers: String)
+    func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didSelectPaid layers: String)
     func stickerFaceEditorViewControllerShouldContinue(_ controller: StickerFaceEditorViewController)
 }
 
@@ -27,7 +28,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     private var objects: [EditorSubsectionSectionModel] = []
     private var viewControllers: [UIViewController]? = []
     //    private var productInput: ProductInput?
-    private var newPaidLayers: String?
+//    private var newPaidLayers: String?
     
     private lazy var headerAdapter: ListAdapter = {
         return ListAdapter(updater: ListAdapterUpdater(), viewController: self, workingRangeSize: 0)
@@ -390,22 +391,23 @@ extension StickerFaceEditorViewController: StickerFaceEditorPageDelegate {
     }
     
     func stickerFaceEditorPageController(_ controller: StickerFaceEditorPageController, didSelect layer: String, section: Int) {
-        //        if let price = prices["\(layer)"], let coins = UserSettings.coins {
-        //
-        //            newPaidLayers = replaceCurrentLayer(with: layer, section: section)
-        //            productInput = ProductInput(productId: "\(layer)", price: price)
-        //
-        //            if coins < price {
-        //                showConfirmNotEnoughCoins()
-        //            } else if let newPaidLayers = newPaidLayers {
-        //                showConfirmBuyingLayers(price: price, layers: newPaidLayers)
-        //            }
-        //
-        //        } else {
-        layers = replaceCurrentLayer(with: layer, section: section)
-        delegate?.stickerFaceEditorViewController(self, didUpdate: layers)
-        updateSelectedLayers()
-        //        }
+        if let price = prices["\(layer)"] {
+            
+            let newPaidLayers = replaceCurrentLayer(with: layer, section: section)
+            
+//            if coins < price {
+//                showConfirmNotEnoughCoins()
+//            } else if let newPaidLayers = newPaidLayers {
+//                showConfirmBuyingLayers(price: price, layers: newPaidLayers)
+//            }
+            
+            delegate?.stickerFaceEditorViewController(self, didSelectPaid: newPaidLayers)
+            
+        } else {
+            layers = replaceCurrentLayer(with: layer, section: section)
+            delegate?.stickerFaceEditorViewController(self, didUpdate: layers)
+            updateSelectedLayers()
+        }
     }
 }
 
