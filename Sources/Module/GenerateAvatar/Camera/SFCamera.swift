@@ -69,7 +69,7 @@ class SFCamera: NSObject {
             } catch {
                 print("[Camera]: Error locking configuration")
             }
-        
+            
             do {
                 let videoDeviceInput = try AVCaptureDeviceInput(device: device)
                 
@@ -192,7 +192,7 @@ extension SFCamera: AVCapturePhotoCaptureDelegate {
         if let error = error {
             print(error.localizedDescription)
         }
-
+        
         guard let data = photo.fileDataRepresentation() else {
             return
         }
@@ -204,17 +204,21 @@ extension SFCamera: AVCapturePhotoCaptureDelegate {
 // MARK: - AVCaptureVideoDataOutputSampleBufferDelegate
 
 extension SFCamera: AVCaptureVideoDataOutputSampleBufferDelegate {
-    
-    
-    
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         
         let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
         let attachments = CMCopyDictionaryOfAttachments(kCFAllocatorDefault, sampleBuffer, kCMAttachmentMode_ShouldPropagate)
-        let ciImage = CIImage(cvImageBuffer: pixelBuffer!, options: attachments as? [String : Any])
-        let options: [String : Any] = [CIDetectorImageOrientation: 6,
-                                       CIDetectorSmile: true,
-                                       CIDetectorEyeBlink: true]
+        
+        let ciImage = CIImage(
+            cvImageBuffer: pixelBuffer!,
+            options: attachments as? [String : Any]
+        )
+        
+        let options: [String : Any] = [
+            CIDetectorImageOrientation: 6,
+            CIDetectorSmile: true,
+            CIDetectorEyeBlink: true
+        ]
         
         let allFeatures = faceDetector?.features(in: ciImage, options: options)
         
@@ -229,7 +233,7 @@ extension SFCamera: AVCaptureVideoDataOutputSampleBufferDelegate {
                 
                 var minFaceSize: CGFloat = 0
                 DispatchQueue.main.sync {
-                   minFaceSize = previewLayer!.frame.width * 0.45
+                    minFaceSize = previewLayer!.frame.width * 0.45
                 }
                 if faceRect.width < minFaceSize || faceRect.height < minFaceSize {
                     self.delegate?.cameraFacesSmallDetect(self)

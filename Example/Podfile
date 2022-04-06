@@ -5,5 +5,5 @@ platform :ios, '13.0'
 target 'StikerFace_Example' do
 
   pod 'StikerFace', :path => '../'
-
+  
 end

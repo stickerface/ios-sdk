@@ -17,6 +17,11 @@ class LinesRoundRotateAnimationView: UIView {
     private let lineHeight: CGFloat = 4.0
     private let lineWidth: CGFloat = 16.0
     private let shapeLayer = CAShapeLayer()
+    private let slowRotationDuration: TimeInterval = 15
+    private let fastRotationDuration: TimeInterval = 10
+    private var isLoader = false
+    private var active = false
+    private let lightGenerator = UIImpactFeedbackGenerator(style: .light)
     
     private var lines: [UIView] = []
     
@@ -36,7 +41,6 @@ class LinesRoundRotateAnimationView: UIView {
         for _ in 0..<linesCount {
             let line = UIView()
             line.backgroundColor = .sfAccentBrand
-            line.layer.cornerRadius = 1.25
             line.layer.anchorPoint = .zero
 
             addSubview(line)
@@ -44,13 +48,12 @@ class LinesRoundRotateAnimationView: UIView {
         }
     }
     
-    func start() {
-        stop()
-        update(lineType: .dot)
+    func rotate(_ duration: TimeInterval = 15) {
+        stopRotate()
         
         let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation")
         rotationAnimation.toValue = Double.pi * 2.0
-        rotationAnimation.duration = 10.0
+        rotationAnimation.duration = duration
         rotationAnimation.repeatCount = Float.infinity
         
         if let present = layer.presentation() {
@@ -62,15 +65,42 @@ class LinesRoundRotateAnimationView: UIView {
         layer.add(rotationAnimation, forKey: "infiniteRotationAnimation")
     }
     
-    func stop() {
+    func stopRotate() {
         layer.removeAnimation(forKey: "infiniteRotationAnimation")
+    }
+    
+    func setState(_ active: Bool) {
+        if active == self.active {
+            return
+        }
+        self.active = active
+
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: {
+            self.update(lineType: .line)
+        })
+        
+        rotate(active ? fastRotationDuration : slowRotationDuration)
+
+        if active {
+            lightGenerator.impactOccurred()
+        }
+    }
+    
+    func loader(_ isLoader: Bool, completion: @escaping (() -> ())) {
+        self.isLoader = isLoader
+        self.active = isLoader
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
+            self.update(lineType: .line)
+        }, completion: { _ in
+            completion()
+        })
     }
     
     func update(lineType: LineType) {
         let center = Layout.side / 2
         let lineHeight = lineType == .dot ? dotSize : lineHeight
         let lineWidth = lineType == .dot ? dotSize : lineWidth
-        let radius = radius
+        let radius: CGFloat = isLoader ? 24.0 : self.radius
 
         for i in 0..<linesCount {
             var angle: CGFloat = (CGFloat(360 / linesCount) * CGFloat(i)) * .pi / 180
@@ -82,7 +112,14 @@ class LinesRoundRotateAnimationView: UIView {
             lines[i].frame = CGRect(origin: CGPoint(x: x, y: y),
                                     size: CGSize(width: lineWidth, height: lineHeight))
 
+            lines[i].layer.cornerRadius = lineType == .dot ? 2.5 : 1.25
             lines[i].transform = CGAffineTransform(rotationAngle: angle)
+            
+            if isLoader && i % 2 == 0 {
+                lines[i].alpha = 0
+            } else {
+                lines[i].alpha = 1
+            }
         }
     }
     

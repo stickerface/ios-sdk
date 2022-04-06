@@ -3,16 +3,22 @@ import AVFoundation
 
 class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
     
+    enum InfoLabels {
+        case waitingCameraAccess
+        case noFace
+        case smallFace
+        case takingPhoto
+        case nothing
+    }
+    
     private var layers: String?
     private var shouldAutoOpenCamera: Bool = true
-    private var cameraOpenCount: Int = 0
     private var isAvatarGenerated: Bool = false
     private var faceDetected = false
     private var smallFace = false
     private var faceDetectTimer: Timer?
     private var locked = false
     private var uploadTask: URLSessionDataTask?
-    private var deiniting = false
     
     private let player: AVPlayer = {
         let path = Bundle.resourceBundle.path(forResource: "onboardingAvatar", ofType: "mp4")!
@@ -20,6 +26,14 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
         
         return player
     }()
+    
+    var infoLabel: InfoLabels = .waitingCameraAccess {
+        didSet {
+            DispatchQueue.main.async {
+                self.updateInfoLabel()
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,6 +60,8 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
     }
     
     @objc private func close() {
+        mainView.linesRoundRotateAnimationView.rotate()
+        
         UIView.animate(withDuration: 0.3) {
             self.mainView.onboardingAvatarVideoView.alpha = 0
             self.mainView.avatarPlaceholderView.alpha = 1
@@ -76,12 +92,12 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
     }
     
     @objc private func openCamera() {
-        showCameraController()
+        initCamera()
     }
     
     @objc private func continueButtonTapped() {
         if isAvatarGenerated {
-            showCameraController()
+            initCamera()
         } else {
             shouldAutoOpenCamera = false
             layers = ImageLoader.defaultLayers
@@ -99,7 +115,7 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
             
             if status == .authorized {
                 close()
-                showCameraController()
+                
             } else {
                 guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else { return }
                 
@@ -136,20 +152,15 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
     }
     
     private func showCameraController() {
-        cameraOpenCount += 1
-        
-        //        StickerFace.shared.tintColor = .sfAccentBrand
-//        let controller = StickerFace.shared.getCameraViewController()
-        //        controller.copyrightVisible = false
-        //        controller.delegate = self
         initCamera()
-        //        present(controller, animated: true)
     }
     
     private func updateAvatar() {
+        mainView.camera.previewLayer.alpha = 0
         mainView.avatarPlaceholderView.alpha = 0
         mainView.linesRoundRotateAnimationView.alpha = 0
         mainView.descriptionLabel.alpha = 0
+        mainView.avatarImageView.alpha = 1
         isAvatarGenerated = true
         
         let side = mainView.avatarImageView.bounds.size.height
@@ -187,25 +198,31 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
     }
     
     func initCamera() {
+        mainView.avatarPlaceholderView.alpha = 1
+        mainView.linesRoundRotateAnimationView.alpha = 1
+        mainView.avatarImageView.alpha = 0
         mainView.camera.previewLayer.alpha = 1
-        
-        //        DispatchQueue.global(qos: .background).async {
-        self.mainView.camera.session.startRunning()
-        //        }
+        mainView.linesRoundRotateAnimationView.setState(false)
+        mainView.linesRoundRotateAnimationView.loader(false, completion: {
+            let session = self.mainView.camera.session
+            
+            DispatchQueue.global(qos: .background).async {
+                session.startRunning()
+            }
+        })
     }
     
     @objc func hasFaceDidChange() {
         if faceDetected {
-            //            effectsController.setState(true)
-            
+            mainView.linesRoundRotateAnimationView.setState(true)
             faceDetectTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(takePhoto), userInfo: nil, repeats: false)
         } else if smallFace {
-            //            infoLabel = .smallFace
+            infoLabel = .smallFace
         } else {
-            //            infoLabel = .noFace
+            infoLabel = .noFace
         }
         
-        //        self.effectsController.setState(faceDetected)
+        mainView.linesRoundRotateAnimationView.setState(faceDetected)
     }
     
     @objc func takePhoto() {
@@ -237,6 +254,7 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
     }
     
     func upload(_ image: Data) {
+        let defaultLayers = "1;28;35;67;69;159;160;16;13;37"
         let resizedImage = resizeImage(image: UIImage(data: image, scale:1.0)!, targetSize: CGSize(width: 600, height: 600))
         
         let imageData = UIImageJPEGRepresentation(resizedImage, 0.9)
@@ -268,19 +286,19 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
                 return
             }
             
-            if let error = error {
-//                self.forceClose()
+            if error != nil {
+                self.setupLayers(defaultLayers)
                 
             } else if let data = data {
                 do {
                     guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
-//                        self.forceClose()
+                        self.setupLayers(defaultLayers)
                         
                         return
                     }
                     
                     guard json["error"] == nil else {
-//                        self.forceClose()
+                        self.setupLayers(defaultLayers)
                         
                         return
                     }
@@ -294,17 +312,12 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
                     
                     if let layers = json["model"] as? String {
                         DispatchQueue.main.async {
-//                            self.delegate?.sfCameraViewController(self, didGenerate: layers, stickers: stickers)
-//                            self.dismiss(animated: true)
-                            self.mainView.camera.previewLayer.alpha = 0
-                            self.layers = layers
-                            self.updateAvatar()
-                            self.updateButtonTitles()
+                            self.setupLayers(layers)
                         }
                     }
                     
                 } catch {
-//                    self.forceClose()
+                    self.setupLayers(defaultLayers)
                 }
             }
             
@@ -312,21 +325,36 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
         
         uploadTask?.resume()
     }
+    
+    private func setupLayers(_ layers: String) {
+        self.layers = layers
+        locked = false
+        smallFace = false
+        faceDetected = false
+        updateAvatar()
+        updateButtonTitles()
+    }
+    
+    func updateInfoLabel() {
+        var text: String
+        switch infoLabel {
+        case .waitingCameraAccess:
+            text = "Waiting for access…"
+        case .noFace:
+            text = "Take a selfie to make stickers"
+        case .smallFace:
+            text = "Move the face closer"
+        case .takingPhoto:
+            text = "Stay focused! Taking a photo…"
+        case .nothing:
+            text = ""
+        }
+        
+        mainView.subtitleLabel.text = text
+    }
 }
 
-// MARK: - SFCameraViewControllerDelegate
-//extension GenerateAvatarViewController: SFCameraViewControllerDelegate {
-//
-//    func sfCameraViewController(_ controller: SFCameraViewController, didGenerate layers: String, stickers: [String]) {
-//        self.layers = layers
-//        updateAvatar()
-//        updateButtonTitles()
-//    }
-//
-//    func sfCameraViewControllerDidCancel(_ controller: SFCameraViewController) { }
-//
-//}
-
+// MARK: - SFCameraDelegate
 extension GenerateAvatarViewController: SFCameraDelegate {
     func camera(_ camera: SFCamera, faceDidDetect frame: CGRect) {
         if faceDetected || locked {
@@ -368,12 +396,12 @@ extension GenerateAvatarViewController: SFCameraDelegate {
     }
     
     func camera(_ camera: SFCamera, photoDidTake image: Data) {
-        //        effectsController.loader(true) {
-        upload(image)
-        //        }
+        mainView.avatarPlaceholderView.alpha = 0
+        camera.previewLayer.alpha = 0
         
-        //        cameraPlaceholderView.transform = CGAffineTransform(scaleX: 0, y: 0)
-        camera.previewLayer?.transform = CGAffineTransform(scaleX: 0, y: 0)
+        mainView.linesRoundRotateAnimationView.loader(true) {
+            self.upload(image)
+        }
         
         mainView.camera.session.stopRunning()
     }
