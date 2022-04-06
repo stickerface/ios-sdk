@@ -34,7 +34,14 @@ class ModalShareController: ModalScrollViewController {
     
     private lazy var telegramShareAction: Action = { [weak self] in
         guard let self = self else { return }
+        let pb: UIPasteboard = UIPasteboard.general
+        pb.image = self.shareImage
         
+        let urlString = "tg://msg?text="
+        let tgUrl = URL.init(string:urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!)
+        if UIApplication.shared.canOpenURL(tgUrl!) {
+            UIApplication.shared.open(tgUrl!)
+        }
     }
     
     private lazy var otherShareAction: Action = { [weak self] in

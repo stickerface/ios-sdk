@@ -1,9 +1,21 @@
 import UIKit
+import TelegramStickersImport
 
 class ModalExportController: ModalScrollViewController {
     
     let exportView = ModalExportView()
     var layers = ""
+    var isLoading = false
+    let emojis = [
+        "☺️", "😰", "😱", "👌",
+        "😡", "😘", "🤑", "🫵",
+        "🖕", "🤘", "😬", "😂",
+        "😅", "🤔", "😎", "😭",
+        "🤦‍♂️", "😢", "👍", "👋",
+        "🤷‍♂️", "🙅‍♂️", "😠", "🤯",
+        "😑", "😴", "😇", "🍷",
+        "🫣"
+    ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,8 +35,29 @@ class ModalExportController: ModalScrollViewController {
     // MARK: Private actions
     
     private lazy var telegramExportAction: Action = { [weak self] in
-        guard let self = self else { return }
+        guard let self = self, !self.isLoading else { return }
         
+        self.isLoading = true
+        let stickerSet = StickerSet(software: "Example Software", type: .image)
+        let tmpImageView = UIImageView()
+        let path = "http://sticker.face.cat/api/png/"
+        
+        for i in 0...28 {
+            let url = path + "s\(i + 1);\(self.layers)?outline=true"
+            ImageLoader.shared.loadImage(url: url as NSString) { image in
+                if let stickerData = Sticker.StickerData(image: image) {
+                    try? stickerSet.addSticker(
+                        data: stickerData,
+                        emojis: [self.emojis[i]]
+                    )
+                }
+                
+                if stickerSet.stickers.count == 28 {
+                    try? stickerSet.import()
+                    self.isLoading = false
+                }
+            }
+        }
     }
 
     private lazy var keyboardExportAction: Action = { [weak self] in
@@ -57,13 +90,13 @@ class ModalExportController: ModalScrollViewController {
     
     private func setupImages() {
         let firstLayers = "s3;" + layers
-        ImageLoader.setImage(layers: firstLayers, imgView: exportView.leftImageView, outlined: false, size: 248)
+        ImageLoader.setImage(layers: firstLayers, imgView: exportView.leftImageView, outlined: true, size: 248)
         
         let secondLayers = "s15;" + layers
-        ImageLoader.setImage(layers: secondLayers, imgView: exportView.centerImageView, outlined: false, size: 248)
+        ImageLoader.setImage(layers: secondLayers, imgView: exportView.centerImageView, outlined: true, size: 248)
         
         let thirdLayers = "s27;" + layers
-        ImageLoader.setImage(layers: thirdLayers, imgView: exportView.rightImageView, outlined: false, size: 248)
+        ImageLoader.setImage(layers: thirdLayers, imgView: exportView.rightImageView, outlined: true, size: 248)
     }
     
     private func layout() {

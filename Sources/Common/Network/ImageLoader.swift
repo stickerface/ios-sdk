@@ -3,7 +3,7 @@ import Kingfisher
 
 class ImageLoader: NSObject {
 
-    static var instance: ImageLoader = {
+    static var shared: ImageLoader = {
        return ImageLoader()
     }()
     

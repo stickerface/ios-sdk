@@ -48,5 +48,6 @@ Pod::Spec.new do |s|
   s.dependency 'PinLayout'
   s.dependency 'Alamofire'
   s.dependency 'SkeletonView', '~> 1.25.1'
+  s.dependency 'TelegramStickersImport'
   
 end

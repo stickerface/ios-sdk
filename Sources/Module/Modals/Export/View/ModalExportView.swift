@@ -66,7 +66,7 @@ class ModalExportView: RootView {
     
     let centerImageBackView: UIView = {
         let view = UIView()
-        view.backgroundColor = .white
+        view.backgroundColor = .clear   
         view.layer.cornerRadius = 90.0
         
         return view
