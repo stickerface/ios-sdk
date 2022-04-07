@@ -126,7 +126,7 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         contentView.addSubview(checkmarkImageView)
         contentView.addSubview(noneImageView)
         
-        contentView.showSkeleton()
+        contentView.showGradientSkeleton()
         contentView.startSkeletonAnimation()
     }
     
