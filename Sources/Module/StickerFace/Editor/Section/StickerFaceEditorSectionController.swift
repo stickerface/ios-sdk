@@ -156,14 +156,10 @@ class StickerFaceEditorSectionController: ListSectionController {
         
         let imageSide = 172
         let url = "https://stickerface.io/api/section/png/\(layer)?size=\(imageSide)"
-        
-        if cell.layerImageView.image == nil {
-            cell.layerImageView.showSkeleton()
-        }
-        
+                
         ImageLoader.setImage(url: url, imgView: cell.layerImageView) { result in
             switch result {
-            case .success: cell.layerImageView.hideSkeleton()
+            case .success: cell.contentView.hideSkeleton()
             case .failure: break
             }
         }

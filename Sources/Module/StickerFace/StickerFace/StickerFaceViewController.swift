@@ -3,7 +3,7 @@ import WebKit
 import SkeletonView
 
 class StickerFaceViewController: ViewController<StickerFaceView> {
-
+    
     enum PageType {
         case editor
         case main
@@ -70,9 +70,15 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         do {
             let handler = AvatarRenderResponseHandler()
             handler.delegate = self
-        
+            
             mainView.renderWebView.configuration.userContentController.add(handler, name: handler.name)
         }
+    }
+        
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        mainView.backgroundImageView.showSkeleton()
     }
     
     // MARK: Private Actions
@@ -141,11 +147,12 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         
         mainView.renderWebView.evaluateJavaScript(renderFunc)
         
-        ImageLoader.setAvatar(with: tuple?.background,
-                              for: mainView.backgroundImageView,
-                              placeholderImage: mainView.backgroundImageView.image ?? UIImage(),
-                              side: mainView.bounds.width,
-                              cornerRadius: 0)
+        ImageLoader.setImage(layers: tuple?.background ?? "", imgView: mainView.backgroundImageView, size: mainView.bounds.width) { result in
+            switch result {
+            case .success: self.mainView.backgroundImageView.hideSkeleton()
+            case .failure: break
+            }
+        }
     }
     
     private func createRenderFunc(requestId: Int, layers: String, size: Int) -> String {
@@ -158,7 +165,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         
         return current
     }
-
+    
 }
 
 // MARK: - StikerFaceMainViewControllerDelegate

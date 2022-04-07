@@ -119,6 +119,7 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         contentView.layer.borderWidth = 1.0
         contentView.layer.borderColor = UIColor.sfSeparatorLight.cgColor
         contentView.clipsToBounds = true
+        contentView.isSkeletonable = true
         
         contentView.addSubview(selectedBackgroundImageView)
         contentView.addSubview(layerBackgroundView)
@@ -129,6 +130,8 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         contentView.addSubview(buyButton)
         contentView.addSubview(checkmarkImageView)
         contentView.addSubview(noneLabel)
+        
+        contentView.showSkeleton()
     }
     
     required init?(coder: NSCoder) {
