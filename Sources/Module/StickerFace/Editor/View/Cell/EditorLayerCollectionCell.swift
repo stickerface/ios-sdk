@@ -27,16 +27,11 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         }
     }
     
-    let noneLabel: UILabel = {
-        let label = UILabel()
-        label.text = "None"
-        label.font = Palette.fontSemiBold.withSize(24)
-        label.textColor = .sfTextPrimary
-        label.backgroundColor = .white
-        label.isHidden = true
-        label.textAlignment = .center
+    let noneImageView: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(libraryNamed: "empty_layer")
         
-        return label
+        return view
     }()
     
     let layerImageView: UIImageView = {
@@ -129,8 +124,9 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         contentView.addSubview(subtitlePriceLabel)
         contentView.addSubview(buyButton)
         contentView.addSubview(checkmarkImageView)
-        contentView.addSubview(noneLabel)
+        contentView.addSubview(noneImageView)
         
+        contentView.showSkeleton()
         contentView.startSkeletonAnimation()
     }
     
@@ -143,7 +139,7 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         
         buyButton.isHidden = true
         priceLabel.isHidden = true
-        noneLabel.isHidden = true
+        noneImageView.isHidden = true
     }
     
     override func layoutSubviews() {
@@ -200,7 +196,9 @@ class EditorLayerCollectionCell: UICollectionViewCell {
     private func layersLayout() {
         layerImageView.layer.cornerRadius = 0.0
         
-        noneLabel.pin.all()
+        noneImageView.pin
+            .center()
+            .size(40)
         
         layerImageView.pin.all()
         

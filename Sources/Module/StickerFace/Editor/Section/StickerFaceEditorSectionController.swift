@@ -178,7 +178,7 @@ class StickerFaceEditorSectionController: ListSectionController {
         }
         
         cell.titleLabel.text = "Honeysuckle"
-        cell.noneLabel.isHidden = layer != "0"
+        cell.noneImageView.isHidden = layer != "0"
         
         cell.setSelected(sectionModel.selectedLayer == layer)
         
