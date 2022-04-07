@@ -131,7 +131,7 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         contentView.addSubview(checkmarkImageView)
         contentView.addSubview(noneLabel)
         
-        contentView.showSkeleton()
+        contentView.startSkeletonAnimation()
     }
     
     required init?(coder: NSCoder) {
