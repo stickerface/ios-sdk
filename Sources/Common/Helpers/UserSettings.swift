@@ -19,12 +19,13 @@ import Foundation
     }
                 
     
-    public static var ton: Int? {
+    public static var tonBalance: Double? {
         get {
-            return defaults.integer(forKey: #function)
+            let tonString = defaults.string(forKey: #function)
+            return tonString == nil ? nil : Double(tonString!)
         }
         set {
-            defaults.set(newValue, forKey: #function)
+            defaults.set(newValue?.description, forKey: #function)
         }
     }
     

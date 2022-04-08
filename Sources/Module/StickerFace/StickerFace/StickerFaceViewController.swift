@@ -50,6 +50,9 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         mainView.hangerButton.addTarget(self, action: #selector(avatarButtonTapped), for: .touchUpInside)
         mainView.backButton.addTarget(self, action: #selector(avatarButtonTapped), for: .touchUpInside)
         
+        let balanceGesture = UITapGestureRecognizer(target: self, action: #selector(balanceViewTapped))
+        mainView.tonBalanceView.addGestureRecognizer(balanceGesture)
+        
         mainView.editorViewController.layers = layers
         mainView.mainViewController.updateLayers(layers)
         
@@ -64,6 +67,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         mainView.mainViewController.didMove(toParentViewController: self)
         
         updateChild()
+        updateBalanceView()
         
         mainView.renderWebView.navigationDelegate = self
         
@@ -125,7 +129,24 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         }
     }
     
+    @objc private func balanceViewTapped() {
+        let ton = UserSettings.tonBalance
+        
+        UserSettings.tonBalance = ton == nil ? 7.5 : nil
+        updateBalanceView()
+    }
+    
     // MARK: Private methods
+    
+    private func updateBalanceView() {
+        let tonBalance = UserSettings.tonBalance
+        
+        if let tonBalance = tonBalance {
+            mainView.tonBalanceView.balanceType = .connected(ton: tonBalance)
+        } else {
+            mainView.tonBalanceView.balanceType = .disconnected
+        }
+    }
     
     private func updateChild() {
         mainView.editorViewController.view.alpha = type == .editor ? 1 : 0

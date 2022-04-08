@@ -1,14 +1,31 @@
 import UIKit
 
 // TODO: Translate
-// TODO: add state for connected wallet
-// TODO: add color to palette colors
 class TonBalanceView: UIView {
 
+    enum BalanceType {
+        case disconnected
+        case connected(ton: Double)
+    }
+    
+    var balanceType: BalanceType = .disconnected {
+        didSet {
+            switch balanceType {
+            case .disconnected:
+                titleLabel.text = "Tonkeeper"
+                subtitleLabel.text = "Connect"
+                
+            case .connected(let ton):
+                titleLabel.text = "Balance"
+                subtitleLabel.text = "\(ton) TON"
+            }
+        }
+    }
+    
     let imageView: UIImageView = {
         let view = UIImageView()
-        view.image = UIImage(libraryNamed: "tonkeeper_1")?.withRenderingMode(.alwaysTemplate)
-        view.tintColor = UIColor(hex: 0x45AEF5)
+        view.image = UIImage(libraryNamed: "tonkeeper_1")
+        view.tintColor = .sfAccentBrand
         
         return view
     }()
@@ -24,7 +41,7 @@ class TonBalanceView: UIView {
     let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Tonkeeper"
-        label.textColor = UIColor(hex: 0x838A96)
+        label.textColor = .sfTextSecondary
         label.font = Palette.fontMedium.withSize(10)
         label.textAlignment = .left
         
@@ -34,7 +51,7 @@ class TonBalanceView: UIView {
     let subtitleLabel: UILabel = {
         let label = UILabel()
         label.text = "Connect"
-        label.textColor = UIColor(hex: 0x151C29)
+        label.textColor = .sfTextPrimary
         label.font = Palette.fontBold.withSize(12)
         label.textAlignment = .left
         
