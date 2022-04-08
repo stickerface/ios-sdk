@@ -132,7 +132,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     @objc private func balanceViewTapped() {
         let ton = UserSettings.tonBalance
         
-        UserSettings.tonBalance = ton == nil ? 7.5 : nil
+        UserSettings.tonBalance = ton == nil ? 50 : nil
         updateBalanceView()
     }
     
@@ -214,16 +214,36 @@ extension StickerFaceViewController: StickerFaceEditorViewControllerDelegate {
         renderAvatar()
     }
     
-    func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didSelectPaid layers: String) {
-        let modal = ModalBuyController(type: .nft)
-        modal.buyView.layoutIfNeeded()
-        
-        ImageLoader.setAvatar(with: layers,
-                              for: modal.buyView.imageView,
-                              side: mainView.bounds.width,
-                              cornerRadius: 197/2)
+    func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didSelectPaid layer: String, layers withLayer: String, with price: Int, layerType: LayerType) {
+        let modal = ModalNewLayerController(type: layerType)
+        let balance = UserSettings.tonBalance
+        modal.updateView(layer: layer, layers: withLayer, balance: balance, price: price)
+        modal.delegate = self
         
         present(modal, animated: true)
+    }
+}
+
+// MARK: - ModalNewLayerDelegate
+extension StickerFaceViewController: ModalNewLayerDelegate {
+    func modalNewLayerController(_ controller: ModalNewLayerController, didBuy layer: String, layerType: LayerType, allLayers: String) {
+        
+        if layerType == .NFT {
+            var wardrobe = UserSettings.wardrobe
+            wardrobe.append(layer)
+            UserSettings.wardrobe = wardrobe
+        }
+        
+        layers = allLayers
+        mainView.mainViewController.updateLayers(layers)
+        editorDelegate?.updateLayers(allLayers)
+        renderAvatar()
+        
+        controller.dismiss(animated: true)
+    }
+    
+    func modalNewLayerController(_ controller: ModalNewLayerController, didSave allLayers: String) {
+        
     }
 }
 

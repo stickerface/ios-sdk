@@ -147,11 +147,11 @@ class StickerFaceEditorSectionController: ListSectionController {
         
         // TODO: need 'if' closure for NFT
         if sectionModel.editorSubsection.name == "background" {
-            cell.cellType = .background
+            cell.layerType = .background
         } else if sectionModel.editorSubsection.name == "clothing" {
-            cell.cellType = .NFT
+            cell.layerType = .NFT
         } else {
-            cell.cellType = .layers
+            cell.layerType = .layers
         }
         
         let imageSide = 172
@@ -171,12 +171,7 @@ class StickerFaceEditorSectionController: ListSectionController {
             cell.buyButton.isHidden = true
             cell.priceLabel.text = "Free"
         }
-        
-        if cell.cellType == .NFT {
-            cell.buyButton.isHidden = false
-            cell.setPrice(2)
-        }
-        
+                
         cell.titleLabel.text = "Honeysuckle"
         cell.noneImageView.isHidden = layer != "0"
         

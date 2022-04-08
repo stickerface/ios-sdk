@@ -4,23 +4,17 @@ import SkeletonView
 
 class EditorLayerCollectionCell: UICollectionViewCell {
     
-    enum CellType {
-        case layers
-        case background
-        case NFT
-    }
-    
-    var cellType: CellType = .layers {
+    var layerType: LayerType = .layers {
         didSet {
-            contentView.layer.borderWidth = cellType == .background ? 0 : 1
-            titleLabel.isHidden = cellType == .layers ? true : false
-            priceLabel.isHidden = cellType == .layers ? true : false
-            subtitlePriceLabel.isHidden = cellType == .layers ? true : false
-            buyButton.isHidden = cellType == .layers ? true : false
-            selectedBackgroundImageView.isHidden = cellType == .background ? false : true
-            layerBackgroundView.isHidden = cellType == .layers ? true : false
+            contentView.layer.borderWidth = layerType == .background ? 0 : 1
+            titleLabel.isHidden = layerType == .layers ? true : false
+            priceLabel.isHidden = layerType == .layers ? true : false
+            subtitlePriceLabel.isHidden = layerType == .layers ? true : false
+            buyButton.isHidden = layerType == .layers ? true : false
+            selectedBackgroundImageView.isHidden = layerType == .background ? false : true
+            layerBackgroundView.isHidden = layerType == .layers ? true : false
             
-            if cellType == .background {
+            if layerType == .background {
                 buyButton.semanticContentAttribute = .forceRightToLeft
                 buyButton.imageEdgeInsets = UIEdgeInsets(top: 0.0, left: 5.0, bottom: 0.0, right: 0.0)
             }
@@ -151,7 +145,7 @@ class EditorLayerCollectionCell: UICollectionViewCell {
     // MARK: Public methods
     
     func setSelected(_ isSelected: Bool) {
-        switch cellType {
+        switch layerType {
         case .layers:
             checkmarkImageView.isHidden = !isSelected
             contentView.layer.borderColor = isSelected ?
@@ -168,7 +162,7 @@ class EditorLayerCollectionCell: UICollectionViewCell {
     }
     
     func setPrice(_ price: Int) {
-        switch cellType {
+        switch layerType {
         case .layers, .NFT:
             priceLabel.isHidden = false
             priceLabel.text = "\(price) TON"
@@ -181,7 +175,7 @@ class EditorLayerCollectionCell: UICollectionViewCell {
     // MARK: Private methods
         
     private func setNeededLayout() {
-        switch cellType {
+        switch layerType {
         case .layers:
             layersLayout()
             

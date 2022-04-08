@@ -38,4 +38,13 @@ import Foundation
             defaults.set(newValue.rawValue, forKey: #function)
         }
     }
+    
+    public static var wardrobe: [String] {
+        get {
+            return defaults.stringArray(forKey: #function) ?? []
+        }
+        set {
+            defaults.set(newValue, forKey: #function)
+        }
+    }
 }

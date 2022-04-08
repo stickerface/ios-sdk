@@ -1,8 +1,6 @@
 import UIKit
 
-class ModalBuyView: UIView {
-
-    let type: ModalBuyController.BuyType
+class ModalNewLayerView: UIView {
     
     let containerView: UIView = {
         let view = UIView()
@@ -15,7 +13,7 @@ class ModalBuyView: UIView {
         let label = UILabel()
         label.textColor = .sfTextPrimary
         label.font = Palette.fontBold.withSize(20)
-        label.text = "Connect crypto wallet"
+        label.text = "Title"
         label.textAlignment = .center
         
         return label
@@ -24,9 +22,9 @@ class ModalBuyView: UIView {
     // TODO: add attributed label
     let subtitleLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .sfTextSecondary
+        label.textColor = .sfTextPrimary
         label.font = Palette.fontMedium.withSize(16)
-        label.text = "To buy a NFT connect\nthe Tonkepeer"
+        label.text = "Subtitle"
         label.textAlignment = .center
         label.numberOfLines = 0
         
@@ -45,7 +43,7 @@ class ModalBuyView: UIView {
         let label = UILabel()
         label.textColor = .sfTextSecondary
         label.font = Palette.fontMedium.withSize(14)
-        label.text = "Checkered shirt"
+        label.text = "Layer Name"
         label.textAlignment = .center
         label.numberOfLines = 0
         
@@ -56,7 +54,7 @@ class ModalBuyView: UIView {
         let label = UILabel()
         label.textColor = .sfTextPrimary
         label.font = Palette.fontBold.withSize(16)
-        label.text = "2,5 TON"
+        label.text = "Layer price"
         label.textAlignment = .center
         
         return label
@@ -66,7 +64,7 @@ class ModalBuyView: UIView {
         let label = UILabel()
         label.textColor = .sfTextSecondary
         label.font = Palette.fontMedium.withSize(14)
-        label.text = "$5"
+        label.text = "price in $"
         label.textAlignment = .center
         
         return label
@@ -75,11 +73,11 @@ class ModalBuyView: UIView {
     let buyButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("connectWalletConnectTitle".libraryLocalized, for: .normal)
+        button.setImage(UIImage(libraryNamed: "tonkeeper_1"), for: .normal)
         button.titleLabel?.font = Palette.fontBold.withSize(16.0)
         button.setTitleColor(.sfDefaultWhite, for: .normal)
         button.backgroundColor = .sfAccentBrand
         button.layer.cornerRadius = 14.0
-        button.setImage(UIImage(libraryNamed: "tonkeeper_1"), for: .normal)
         button.tintColor = .white
         
         return button
@@ -92,9 +90,8 @@ class ModalBuyView: UIView {
         return view
     }()
     
-    init(type: ModalBuyController.BuyType) {
-        self.type = type
-        super.init(frame: .zero)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         
         backgroundColor = .white
         layer.cornerRadius = 23
