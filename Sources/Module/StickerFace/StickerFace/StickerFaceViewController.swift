@@ -84,9 +84,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     // MARK: Private Actions
     
     @objc private func avatarButtonTapped(_ sender: AvatarButton) {
-        // TODO: нужно запоминать пол
         // TODO: Что должно происходить при смене пола?
-        // TODO: Сделать модалки для гардероба и настроек
         switch sender.imageType {
         case .settings:
             let viewController = ModalSettingsController()
@@ -94,9 +92,11 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
             present(viewController, animated: true)
             
         case .male:
+            UserSettings.gender = .female
             sender.setImageType(.female)
             
         case .female:
+            UserSettings.gender = .male
             sender.setImageType(.male)
             
         case .edit:
@@ -132,11 +132,12 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         mainView.mainViewController.view.alpha = type == .main ? 1 : 0
     }
     
-    // TODO: выставлять пол из дефолтс
     private func setupView(with type: PageType) {
+        let genderType: AvatarButton.ImageType = UserSettings.gender == .male ? .male : .female
+        
         mainView.backButton.isHidden = true
         mainView.editButton.isHidden = type == .editor
-        mainView.rightTopButton.setImageType(type == .editor ? .male : .settings)
+        mainView.rightTopButton.setImageType(type == .editor ? genderType : .settings)
         mainView.editorViewController.shouldHideSaveButton(type != .editor)
     }
     

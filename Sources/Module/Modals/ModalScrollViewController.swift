@@ -2,12 +2,6 @@ import UIKit
 
 class ModalScrollViewController: UIViewController {
 
-    var skipBottomInset: Bool {
-        get {
-            return false
-        }
-    }
-
     open var contentHeight: CGFloat = 100 {
         didSet {
             if oldValue != contentHeight {

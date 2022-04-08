@@ -68,42 +68,6 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         mainView.saveButton.isHidden = true
     }
     
-    @objc func buyLayers() {
-        //        guard let productInput = productInput,
-        //              let modal = presentedViewController as? ModalConfirmationController else {
-        //            return
-        //        }
-        //
-        //        modal.loaderView.show()
-        //        provider.buyProduct(productId: productInput.productId, price: productInput.price) { [weak self] result in
-        //            switch result {
-        //            case .success:
-        ////                Analytics.shared.register(event: SettingsAnalyticsEvent.stickerFaceBuy(value: true))
-        //
-        //                if let coins = UserSettings.coins {
-        //                    UserSettings.coins = coins - productInput.price
-        //                    self?.mainView.coinsButton.setTitle(String(coins - productInput.price), for: .normal)
-        //                }
-        //
-        //                self?.close()
-        //                self?.updatePrices([productInput.productId])
-        //
-        //                if let newPaidLayers = self?.newPaidLayers {
-        //                    self?.layers = newPaidLayers
-        //                    self?.updateSelectedLayers()
-        //
-        //                    let vc = InviteViewController(type: .newPurchase(newLayers: newPaidLayers))
-        //                    self?.present(vc, animated: true)
-        //                }
-        //
-        //            case .failure(let error):
-        //                if let error = error as? ImModelError {
-        //                    modal.loaderView.showError(error.message())
-        //                }
-        //            }
-        //        }
-    }
-    
     @objc private func changeSelectedTab(_ gestureRecognizer: UISwipeGestureRecognizer) {
         guard let selectedIndex = headers.firstIndex(where: { $0.isSelected }) else {
             return
