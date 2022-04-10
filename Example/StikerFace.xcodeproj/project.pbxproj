@@ -142,7 +142,7 @@
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
-						DevelopmentTeam = 55XJBULUL2;
+						DevelopmentTeam = MVWCJ9RFAX;
 						LastSwiftMigration = 0900;
 					};
 				};
@@ -367,7 +367,7 @@
 			baseConfigurationReference = FF755744011FDB7817DB9DF6 /* Pods-StikerFace_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 55XJBULUL2;
+				DEVELOPMENT_TEAM = MVWCJ9RFAX;
 				INFOPLIST_FILE = StikerFace/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -384,7 +384,7 @@
 			baseConfigurationReference = BAD75E0522B58D43EF95C6D7 /* Pods-StikerFace_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 55XJBULUL2;
+				DEVELOPMENT_TEAM = MVWCJ9RFAX;
 				INFOPLIST_FILE = StikerFace/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
