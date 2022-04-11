@@ -1,7 +1,7 @@
 import Foundation
 import CoreText
 
-public class StikerFaceFonts {
+public class StickerFaceFonts {
     
     public static let resourceBundle = Bundle.resourceBundle
     

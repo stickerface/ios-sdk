@@ -13,7 +13,7 @@ protocol StickerFaceEditorViewControllerDelegate: AnyObject {
     func stickerFaceEditorViewControllerShouldContinue(_ controller: StickerFaceEditorViewController)
 }
 
-protocol StikerFaceEditorDelegate: AnyObject {
+protocol StickerFaceEditorDelegate: AnyObject {
     func updateLayers(_ layers: String)
     func layersWithoutBackground(_ layers: String) -> (background: String, layers: String)
 }
@@ -411,8 +411,8 @@ extension StickerFaceEditorViewController: UIPageViewControllerDataSource, UIPag
     }
 }
 
-// MARK: - StikerFaceEditorDelegate
-extension StickerFaceEditorViewController: StikerFaceEditorDelegate {
+// MARK: - StickerFaceEditorDelegate
+extension StickerFaceEditorViewController: StickerFaceEditorDelegate {
     func updateLayers(_ layers: String) {
         self.layers = layers
         updateSelectedLayers()

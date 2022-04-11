@@ -1,6 +1,6 @@
 import UIKit
 
-class StikerFaceMainView: RootView {
+class StickerFaceMainView: RootView {
     
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()

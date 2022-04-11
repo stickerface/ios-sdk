@@ -1,15 +1,15 @@
 import UIKit
 import IGListKit
 
-protocol StikerFaceMainViewControllerDelegate: AnyObject {
-    func stikerFaceMainViewController(didSelect sticker: UIImage?)
+protocol StickerFaceMainViewControllerDelegate: AnyObject {
+    func stickerFaceMainViewController(didSelect sticker: UIImage?)
 }
 
-class StikerFaceMainViewController: ViewController<StikerFaceMainView> {
+class StickerFaceMainViewController: ViewController<StickerFaceMainView> {
 
     var layers = ""
     
-    weak var delegate: StikerFaceMainViewControllerDelegate?
+    weak var delegate: StickerFaceMainViewControllerDelegate?
     
     private lazy var adapter: ListAdapter = {
         return ListAdapter(updater: ListAdapterUpdater(), viewController: self, workingRangeSize: 0)
@@ -40,7 +40,7 @@ class StikerFaceMainViewController: ViewController<StikerFaceMainView> {
 }
 
 // MARK: - ListAdapterDataSource
-extension StikerFaceMainViewController: ListAdapterDataSource {
+extension StickerFaceMainViewController: ListAdapterDataSource {
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
         return [
             StickerFaceMainStore(),
@@ -73,9 +73,9 @@ extension StikerFaceMainViewController: ListAdapterDataSource {
     }
 }
 
-extension StikerFaceMainViewController: StickersSectionControllerDelegate {
+extension StickerFaceMainViewController: StickersSectionControllerDelegate {
     func stickersSectionController(didSelect sticker: UIImage?) {
-        delegate?.stikerFaceMainViewController(didSelect: sticker)
+        delegate?.stickerFaceMainViewController(didSelect: sticker)
     }
 }
 

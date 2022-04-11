@@ -1,11 +1,3 @@
-//
-//  AppDelegate.swift
-//  StikerFace
-//
-//  Created by Xaker69 on 03/14/2022.
-//  Copyright (c) 2022 Xaker69. All rights reserved.
-//
-
 import UIKit
 
 @UIApplicationMain

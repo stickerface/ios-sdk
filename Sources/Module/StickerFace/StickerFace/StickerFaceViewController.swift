@@ -11,7 +11,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     
     // MARK: Properties
     
-    weak var editorDelegate: StikerFaceEditorDelegate?
+    weak var editorDelegate: StickerFaceEditorDelegate?
     
     private var layers: String
     private var requestId = 0
@@ -190,9 +190,9 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     
 }
 
-// MARK: - StikerFaceMainViewControllerDelegate
-extension StickerFaceViewController: StikerFaceMainViewControllerDelegate {
-    func stikerFaceMainViewController(didSelect sticker: UIImage?) {
+// MARK: - StickerFaceMainViewControllerDelegate
+extension StickerFaceViewController: StickerFaceMainViewControllerDelegate {
+    func stickerFaceMainViewController(didSelect sticker: UIImage?) {
         let viewController = ModalShareController(shareImage: sticker)
         viewController.view.layoutIfNeeded()
         

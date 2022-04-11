@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "607FACCF1AFB9204008FA782"
-               BuildableName = "StikerFace_Example.app"
-               BlueprintName = "StikerFace_Example"
-               ReferencedContainer = "container:StikerFace.xcodeproj">
+               BuildableName = "StickerFaceExample.app"
+               BlueprintName = "StickerFaceExample"
+               ReferencedContainer = "container:StickerFaceExample.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -31,7 +31,7 @@
                BlueprintIdentifier = "607FACE41AFB9204008FA782"
                BuildableName = "StikerFace_Tests.xctest"
                BlueprintName = "StikerFace_Tests"
-               ReferencedContainer = "container:StikerFace.xcodeproj">
+               ReferencedContainer = "container:StickerFaceExample.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -45,9 +45,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "607FACCF1AFB9204008FA782"
-            BuildableName = "StikerFace_Example.app"
-            BlueprintName = "StikerFace_Example"
-            ReferencedContainer = "container:StikerFace.xcodeproj">
+            BuildableName = "StickerFaceExample.app"
+            BlueprintName = "StickerFaceExample"
+            ReferencedContainer = "container:StickerFaceExample.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <Testables>
@@ -58,7 +58,7 @@
                BlueprintIdentifier = "607FACE41AFB9204008FA782"
                BuildableName = "StikerFace_Tests.xctest"
                BlueprintName = "StikerFace_Tests"
-               ReferencedContainer = "container:StikerFace.xcodeproj">
+               ReferencedContainer = "container:StickerFaceExample.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -78,9 +78,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "607FACCF1AFB9204008FA782"
-            BuildableName = "StikerFace_Example.app"
-            BlueprintName = "StikerFace_Example"
-            ReferencedContainer = "container:StikerFace.xcodeproj">
+            BuildableName = "StickerFaceExample.app"
+            BlueprintName = "StickerFaceExample"
+            ReferencedContainer = "container:StickerFaceExample.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -95,9 +95,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "607FACCF1AFB9204008FA782"
-            BuildableName = "StikerFace_Example.app"
-            BlueprintName = "StikerFace_Example"
-            ReferencedContainer = "container:StikerFace.xcodeproj">
+            BuildableName = "StickerFaceExample.app"
+            BlueprintName = "StickerFaceExample"
+            ReferencedContainer = "container:StickerFaceExample.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

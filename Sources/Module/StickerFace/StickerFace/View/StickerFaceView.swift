@@ -4,7 +4,7 @@ import WebKit
 class StickerFaceView: RootView {
 
     let editorViewController = StickerFaceEditorViewController()
-    let mainViewController = StikerFaceMainViewController()
+    let mainViewController = StickerFaceMainViewController()
     
     let renderWebView: WKWebView = {
         let webView = WKWebView()

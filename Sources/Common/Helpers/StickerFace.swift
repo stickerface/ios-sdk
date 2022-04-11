@@ -1,14 +1,14 @@
 import UIKit
 
-public class StikerFace {
+public class StickerFace {
 
-    public static let shared = StikerFace()
+    public static let shared = StickerFace()
 
     public init() {
-        StikerFaceFonts.setup()
+        StickerFaceFonts.setup()
     }
     
-    public func openStikerFace() {
+    public func openStickerFace() {
         let viewController = Utils.getRootViewController()
         let navigationController = UINavigationController()
         navigationController.interactivePopGestureRecognizer?.isEnabled = true

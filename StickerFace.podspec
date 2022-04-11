@@ -1,5 +1,5 @@
 #
-# Be sure to run `pod lib lint StikerFace.podspec' to ensure this is a
+# Be sure to run `pod lib lint StickerFace.podspec' to ensure this is a
 # valid spec before submitting.
 #
 # Any lines starting with a # are optional, but their use is encouraged
@@ -7,7 +7,7 @@
 #
 
 Pod::Spec.new do |s|
-  s.name = 'StikerFace'
+  s.name = 'StickerFace'
   s.version = '0.1.2'
   s.summary = 'StickerFace for your app'
   
@@ -37,7 +37,7 @@ Pod::Spec.new do |s|
    ]
   
     s.resource_bundles = {
-      'StikerFace' => ['Sources/Resource/**/*.*'],
+      'StickerFaceSDK' => ['Sources/Resource/**/*.*'],
     }
   
   s.frameworks = 'UIKit', 'WebKit'

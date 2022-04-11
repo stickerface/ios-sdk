@@ -1,15 +1,15 @@
 import UIKit
-import StikerFace
+import StickerFace
 import SnapKit
 
 class ViewController: UIViewController {
 
-    let sdk = StikerFace.shared
+    let sdk = StickerFace.shared
     
     let openButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitleColor(.white, for: .normal)
-        button.setTitle("StikerFace", for: .normal)
+        button.setTitle("StickerFace", for: .normal)
         button.backgroundColor = UIColor(red: 0.271, green: 0.682, blue: 0.961, alpha: 1)
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
         button.layer.cornerRadius = 14
@@ -29,7 +29,7 @@ class ViewController: UIViewController {
     }
     
     @objc private func openButtonTapped() {
-        sdk.openStikerFace()
+        sdk.openStickerFace()
     }
     
     private func setupConstraints() {
