@@ -2,14 +2,14 @@ import UIKit
 
 class ModalShareController: ModalScrollViewController {
     
-    let shareView = ModalShareView()
+    let mainView = ModalShareView()
     let shareImage: UIImage?
     
     init(shareImage: UIImage?) {
         self.shareImage = shareImage
         super.init()
         
-        shareView.imageView.image = shareImage
+        mainView.imageView.image = shareImage
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -19,7 +19,7 @@ class ModalShareController: ModalScrollViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        scrollView.addSubview(shareView)
+        scrollView.addSubview(mainView)
         
         setupArrangedViews()
     }
@@ -78,18 +78,18 @@ class ModalShareController: ModalScrollViewController {
         view.titleLabel.text = title
         view.action = action
         
-        shareView.shareStackView.addArrangedSubview(view)
+        mainView.shareStackView.addArrangedSubview(view)
     }
     
     private func layout() {
-        shareView.pin
+        mainView.pin
             .below(of: hideIndicatorView).marginTop(12.0)
             .left()
             .width(contentWidth)
         
-        shareView.layoutIfNeeded()
+        mainView.layoutIfNeeded()
         
-        contentHeight = shareView.containerView.bounds.height
+        contentHeight = mainView.containerView.bounds.height
     }
     
 }

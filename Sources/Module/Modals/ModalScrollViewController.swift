@@ -69,9 +69,7 @@ class ModalScrollViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
 
         modalPresentationStyle = .overFullScreen
-        if #available(iOS 13.0, *) {
-            isModalInPresentation = false
-        }
+        isModalInPresentation = false
         transitioningDelegate = self
         modalPresentationCapturesStatusBarAppearance = true
     }

@@ -3,7 +3,7 @@ import PinLayout
 
 class ModalSettingsController: ModalScrollViewController {
     
-    let settingsView = ModalSettingsView()
+    let mainView = ModalSettingsView()
     let loaderView = LoaderView()
     
     var models = [ModalSettingsCellModel]()
@@ -13,10 +13,10 @@ class ModalSettingsController: ModalScrollViewController {
         
         setupModels()
         
-        settingsView.tableView.delegate = self
-        settingsView.tableView.dataSource = self
+        mainView.tableView.delegate = self
+        mainView.tableView.dataSource = self
         
-        scrollView.addSubview(settingsView)
+        scrollView.addSubview(mainView)
         view.addSubview(loaderView)
     }
     
@@ -68,11 +68,11 @@ class ModalSettingsController: ModalScrollViewController {
     }
     
     private func layout() {
-        settingsView.pin.below(of: hideIndicatorView).marginTop(12.0).left().width(contentWidth)
+        mainView.pin.below(of: hideIndicatorView).marginTop(12.0).left().width(contentWidth)
 
-        settingsView.layoutIfNeeded()
+        mainView.layoutIfNeeded()
         
-        contentHeight = settingsView.containerView.bounds.height
+        contentHeight = mainView.containerView.bounds.height
     }
     
 }

@@ -1,7 +1,7 @@
 import UIKit
 
 class ModalWardrobeView: RootView {
-
+    
     let containerView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
@@ -13,14 +13,27 @@ class ModalWardrobeView: RootView {
         let label = UILabel()
         label.text = "Wardrobe"
         label.font = Palette.fontBold.withSize(20)
-        label.textColor = .sfAccentSecondary
+        label.textColor = .sfTextPrimary
         label.textAlignment = .center
         
         return label
     }()
     
-    let emptyView: ModalWardrobeEmptyView = {
-        let view = ModalWardrobeEmptyView()
+    let subtitleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "All your purchases is here"
+        label.font = Palette.fontMedium.withSize(16)
+        label.textColor = .sfTextPrimary
+        label.textAlignment = .center
+        
+        return label
+    }()
+    
+    let collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        view.alwaysBounceVertical = true
+        view.showsVerticalScrollIndicator = false
         
         return view
     }()
@@ -40,7 +53,8 @@ class ModalWardrobeView: RootView {
         addSubview(bottomView)
         
         containerView.addSubview(titleLabel)
-        containerView.addSubview(emptyView)
+        containerView.addSubview(subtitleLabel)
+        containerView.addSubview(collectionView)
     }
     
     override func layoutSubviews() {
@@ -50,6 +64,17 @@ class ModalWardrobeView: RootView {
     }
     
     private func layout() {
+        let collectionHeight: CGFloat
+        
+        if UserSettings.wardrobe.isEmpty {
+            collectionHeight = 90.0 + 136.0 + 146.0 + 34.0
+        } else {
+            let linesCount = (CGFloat(UserSettings.wardrobe.count) / 2.0).rounded(.up)
+            let contentHeight = linesCount * 188.0 + (linesCount - 1) * 12 + 50
+            let maxHeight = UIScreen.main.bounds.height - Utils.safeArea().top - 24.0 - 104.0
+            collectionHeight = min(contentHeight, maxHeight)
+        }
+        
         containerView.pin
             .left()
             .right()
@@ -61,21 +86,25 @@ class ModalWardrobeView: RootView {
             .right()
             .sizeToFit(.width)
         
-        emptyView.pin
-            .top(to: titleLabel.edge.bottom)
-            .height(428.0)
+        subtitleLabel.pin
+            .top(to: titleLabel.edge.bottom).marginTop(8.0)
             .left()
             .right()
+            .sizeToFit(.width)
+        
+        collectionView.pin
+            .top(to: titleLabel.edge.bottom).marginTop(56.0)
+            .left()
+            .right()
+            .height(collectionHeight)
         
         bottomView.pin
-            .top(to: emptyView.edge.bottom)
+            .top(to: collectionView.edge.bottom)
             .left()
             .right()
             .height(UIScreen.main.bounds.height)
         
-        containerView.pin
-            .height(emptyView.frame.maxY + Utils.safeArea().bottom)
-        
+        containerView.pin.height(collectionView.frame.maxY)
         pin.height(bottomView.frame.maxY)
     }
     
