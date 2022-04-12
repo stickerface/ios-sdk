@@ -92,7 +92,7 @@ class SFCamera: NSObject {
     func configureVideoOutput() {
         let movieFileOutput = AVCaptureVideoDataOutput()
         
-        if self.session.canAddOutput(movieFileOutput) {
+        if session.canAddOutput(movieFileOutput) {
             self.session.addOutput(movieFileOutput)
             if let connection = movieFileOutput.connection(with: .video) {
                 if connection.isVideoStabilizationSupported {
@@ -107,7 +107,7 @@ class SFCamera: NSObject {
     func configurePhotoOutput() {
         let photoFileOutput = AVCapturePhotoOutput()
         
-        if self.session.canAddOutput(photoFileOutput) {
+        if session.canAddOutput(photoFileOutput) {
             self.session.addOutput(photoFileOutput)
             self.photoFileOutput = photoFileOutput
         }
@@ -119,7 +119,7 @@ class SFCamera: NSObject {
         
         var size = CGSize.zero
         
-        if (viewRatio > apertureRatio) {
+        if viewRatio > apertureRatio {
             size.width = frameSize.width
             size.height = apertureSize.width * (frameSize.width / apertureSize.height)
         } else {
@@ -129,13 +129,13 @@ class SFCamera: NSObject {
         
         var videoBox = CGRect(origin: .zero, size: size)
         
-        if (size.width < frameSize.width) {
+        if size.width < frameSize.width {
             videoBox.origin.x = (frameSize.width - size.width) / 2.0
         } else {
             videoBox.origin.x = (size.width - frameSize.width) / 2.0
         }
         
-        if (size.height < frameSize.height) {
+        if size.height < frameSize.height {
             videoBox.origin.y = (frameSize.height - size.height) / 2.0
         } else {
             videoBox.origin.y = (size.height - frameSize.height) / 2.0

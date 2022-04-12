@@ -7,12 +7,12 @@ class EditorLayerCollectionCell: UICollectionViewCell {
     var layerType: LayerType = .layers {
         didSet {
             contentView.layer.borderWidth = layerType == .background ? 0 : 1
-            titleLabel.isHidden = layerType == .layers ? true : false
-            priceLabel.isHidden = layerType == .layers ? true : false
-            subtitlePriceLabel.isHidden = layerType == .layers ? true : false
-            buyButton.isHidden = layerType == .layers ? true : false
-            selectedBackgroundImageView.isHidden = layerType == .background ? false : true
-            layerBackgroundView.isHidden = layerType == .layers ? true : false
+            titleLabel.isHidden = layerType == .layers
+            priceLabel.isHidden = layerType == .layers
+            subtitlePriceLabel.isHidden = layerType == .layers
+            buyButton.isHidden = layerType == .layers
+            selectedBackgroundImageView.isHidden = layerType == .background
+            layerBackgroundView.isHidden = layerType == .layers
             
             if layerType == .background {
                 buyButton.semanticContentAttribute = .forceRightToLeft
