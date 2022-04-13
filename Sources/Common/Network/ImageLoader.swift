@@ -108,31 +108,6 @@ class ImageLoader: NSObject {
 
         return nil
     }
-    
-    @discardableResult
-    static func testBack(with layers: String, for imageView: UIImageView, size: CGFloat = 600, placeholderStyle: PlaceholderStyle = .dark, completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) {
-        
-        let options: KingfisherOptionsInfo = [
-            .loadDiskFileSynchronously,
-            .transition(.fade(0.2)),
-        ]
-
-        if placeholderStyle == .dark {
-            imageView.tintColor = UIColor.black.withAlphaComponent(0.06)
-        } else if placeholderStyle == .light {
-            imageView.tintColor = UIColor.white.withAlphaComponent(0.24)
-        }
-
-        let placeholder = UIImage(libraryNamed: "placeholder_sticker_200")?.withRenderingMode(.alwaysTemplate)
-        let url = "http://sticker.face.cat/api/png/" + layers + "?size=" + String(describing: size * UIScreen.main.scale)
-        
-        shared.loadImage(url: url as NSString) { image in
-            imageView.image = image.blurredImage(with: CIContext(), radius: 20, atRect: imageView.bounds)
-        }
-                      
-//        return imgView.kf.setImage(with: url, placeholder: placeholder, options: options, completionHandler: completionHandler)
-    }
-
 }
 
 extension UIImage {

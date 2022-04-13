@@ -119,7 +119,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                 
                 self?.prices = editor.prices
                 
-                #warning("hardcode")
+                // TODO: убрать говнокод
                 self?.prices["271"] = 2
                 
                 self?.objects = editor.sections.flatMap({ $0.subsections }).map({ EditorSubsectionSectionModel(editorSubsection: $0, prices: self!.prices) })
