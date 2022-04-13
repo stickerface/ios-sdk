@@ -164,7 +164,9 @@ class EditorLayerCollectionCell: UICollectionViewCell {
             selectedBackgroundImageView.image = isSelected ? layerImageView.image : nil
             
         case .NFT:
-            break
+            contentView.layer.borderColor = isSelected ?
+            UIColor.sfAccentBrand.cgColor :
+            UIColor.sfSeparatorLight.cgColor
         }
         
     }

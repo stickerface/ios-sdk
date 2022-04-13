@@ -366,7 +366,9 @@ extension StickerFaceEditorViewController: StickerFaceEditorPageDelegate {
     }
     
     func stickerFaceEditorPageController(_ controller: StickerFaceEditorPageController, didSelect layer: String, section: Int) {
-        if let price = prices["\(layer)"] {
+        let isPaid = UserSettings.wardrobe.contains(layer)
+        
+        if let price = prices["\(layer)"], !isPaid {
             let newPaidLayers = replaceCurrentLayer(with: layer, section: section)
             let type: LayerType = objects[section].editorSubsection.name == "background" ? .background : .NFT
             
