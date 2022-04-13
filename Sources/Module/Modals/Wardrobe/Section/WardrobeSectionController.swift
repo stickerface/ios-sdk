@@ -53,8 +53,8 @@ class WardrobeSectionController: ListSectionController {
         cell.noneImageView.isHidden = true
         
         cell.setSelected(sectionModel.selectedLayer == layer)
+        cell.setPrice(0, isPaid: true)
         
-        cell.setNeedsLayout()
         return cell
     }
     

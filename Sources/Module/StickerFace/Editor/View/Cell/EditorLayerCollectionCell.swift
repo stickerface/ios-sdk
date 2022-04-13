@@ -9,7 +9,7 @@ class EditorLayerCollectionCell: UICollectionViewCell {
             contentView.layer.borderWidth = layerType == .background ? 0 : 1
             titleLabel.isHidden = layerType == .layers
             priceLabel.isHidden = layerType == .layers
-            subtitlePriceLabel.isHidden = layerType == .layers
+            priceSubtitleLabel.isHidden = layerType == .layers
             buyButton.isHidden = layerType == .layers
             selectedBackgroundImageView.isHidden = layerType == .background
             layerBackgroundView.isHidden = layerType == .layers
@@ -49,12 +49,12 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         let label = UILabel()
         label.textColor = .sfTextPrimary
         label.font = Palette.fontBold.withSize(16)
-        label.textAlignment = .center
+        label.textAlignment = .left
         
         return label
     }()
     
-    let subtitlePriceLabel: UILabel = {
+    let priceSubtitleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .sfTextSecondary
         label.font = Palette.fontMedium.withSize(14)
@@ -62,6 +62,14 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         label.text = "$9,8"
         
         return label
+    }()
+    
+    let priceStackView: UIStackView = {
+        let view = UIStackView()
+        view.axis = .vertical
+        view.distribution = .fillProportionally
+        
+        return view
     }()
         
     let buyButton: UIButton = {
@@ -114,8 +122,7 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         contentView.addSubview(layerBackgroundView)
         contentView.addSubview(layerImageView)
         contentView.addSubview(titleLabel)
-        contentView.addSubview(priceLabel)
-        contentView.addSubview(subtitlePriceLabel)
+        contentView.addSubview(priceStackView)
         contentView.addSubview(buyButton)
         contentView.addSubview(checkmarkImageView)
         contentView.addSubview(noneImageView)
@@ -132,8 +139,9 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         super.prepareForReuse()
         
         buyButton.isHidden = true
-        priceLabel.isHidden = true
         noneImageView.isHidden = true
+        checkmarkImageView.isHidden = true
+        priceStackView.removeArrangedSubview(priceSubtitleLabel)
     }
     
     override func layoutSubviews() {
@@ -161,15 +169,39 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         
     }
     
-    func setPrice(_ price: Int) {
+    // TODO: wardrobe state for background
+    func setPrice(_ price: Int?, isPaid: Bool) {
         switch layerType {
-        case .layers, .NFT:
-            priceLabel.isHidden = false
-            priceLabel.text = "\(price) TON"
+        case .NFT:
+            priceStackView.addArrangedSubview(priceLabel)
+            
+            if let price = price {
+                if isPaid {
+                    priceLabel.text = "Paid"
+                    checkmarkImageView.isHidden = false
+                    priceSubtitleLabel.isHidden = true
+                    buyButton.isHidden = true
+                } else {
+                    priceLabel.text = "\(price) TON"
+                    priceSubtitleLabel.text = "$\(price)"
+                    priceSubtitleLabel.isHidden = false
+                    checkmarkImageView.isHidden = true
+                    buyButton.isHidden = false
+                    priceStackView.addArrangedSubview(priceSubtitleLabel)
+                }
+            } else {
+                priceLabel.text = "Free"
+                buyButton.isHidden = true
+            }
+            
         case .background:
-            priceLabel.isHidden = true
-            buyButton.setTitle("\(price) TON", for: .normal)
+            buyButton.setTitle("\(price ?? 0) TON", for: .normal)
+            
+        case .layers:
+            break
         }
+        
+        layoutIfNeeded()
     }
     
     // MARK: Private methods
@@ -258,19 +290,19 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         
         buyButton.pin
             .right(12.0)
-            .top(to: titleLabel.edge.bottom).marginTop(29.0)
             .size(24.0)
-            .bottom()
+            .bottom(12.0)
         
-        priceLabel.pin
-            .top(to: titleLabel.edge.bottom).marginTop(13.0)
-            .left(12.0)
-            .sizeToFit(.widthFlexible)
+        checkmarkImageView.pin
+            .right(12.0)
+            .size(18.0)
+            .bottom(12.0)
         
-        subtitlePriceLabel.pin
-            .top(to: priceLabel.edge.bottom)
+        priceStackView.pin
+            .bottom(12.0)
             .left(12.0)
-            .sizeToFit(.widthFlexible)
+            .right(36.0)
+            .height(CGFloat(priceStackView.arrangedSubviews.count) * 20.0)
     }
     
 }

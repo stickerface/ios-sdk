@@ -164,14 +164,10 @@ class StickerFaceEditorSectionController: ListSectionController {
             }
         }
         
-        if let price = sectionModel.prices["\(layer)"], price != 0 {
-            cell.buyButton.isHidden = false
-            cell.setPrice(price)
-        } else {
-            cell.buyButton.isHidden = true
-            cell.priceLabel.text = "Free"
-        }
-                
+        let isPaid = UserSettings.wardrobe.contains(layer)
+        
+        cell.setPrice(sectionModel.prices["\(layer)"], isPaid: isPaid)
+                        
         cell.titleLabel.text = "Honeysuckle"
         cell.noneImageView.isHidden = layer != "0"
         
