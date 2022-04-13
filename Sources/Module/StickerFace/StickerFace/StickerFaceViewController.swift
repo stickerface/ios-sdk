@@ -3,7 +3,7 @@ import WebKit
 import SkeletonView
 
 class StickerFaceViewController: ViewController<StickerFaceView> {
-
+    
     enum PageType {
         case editor
         case main
@@ -11,7 +11,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     
     // MARK: Properties
     
-    weak var editorDelegate: StikerFaceEditorDelegate?
+    weak var editorDelegate: StickerFaceEditorDelegate?
     
     private var layers: String
     private var requestId = 0
@@ -50,9 +50,13 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         mainView.hangerButton.addTarget(self, action: #selector(avatarButtonTapped), for: .touchUpInside)
         mainView.backButton.addTarget(self, action: #selector(avatarButtonTapped), for: .touchUpInside)
         
+        let balanceGesture = UITapGestureRecognizer(target: self, action: #selector(balanceViewTapped))
+        mainView.tonBalanceView.addGestureRecognizer(balanceGesture)
+        
         mainView.editorViewController.layers = layers
         mainView.mainViewController.updateLayers(layers)
         
+        mainView.mainViewController.delegate = self
         mainView.editorViewController.delegate = self
         editorDelegate = mainView.editorViewController
         
@@ -63,31 +67,40 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         mainView.mainViewController.didMove(toParentViewController: self)
         
         updateChild()
+        updateBalanceView()
         
         mainView.renderWebView.navigationDelegate = self
         
         do {
             let handler = AvatarRenderResponseHandler()
             handler.delegate = self
-        
+            
             mainView.renderWebView.configuration.userContentController.add(handler, name: handler.name)
         }
+    }
+        
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        mainView.backgroundImageView.showSkeleton()
     }
     
     // MARK: Private Actions
     
     @objc private func avatarButtonTapped(_ sender: AvatarButton) {
-        // TODO: нужно запоминать пол
         // TODO: Что должно происходить при смене пола?
-        // TODO: Сделать модалки для гардероба и настроек
         switch sender.imageType {
         case .settings:
-            break
+            let viewController = ModalSettingsController()
+            viewController.view.layoutIfNeeded()
+            present(viewController, animated: true)
             
         case .male:
+            UserSettings.gender = .female
             sender.setImageType(.female)
             
         case .female:
+            UserSettings.gender = .male
             sender.setImageType(.male)
             
         case .edit:
@@ -98,7 +111,9 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
             type = .editor
             
         case .hanger:
-            break
+            let viewController = ModalWardrobeController()
+            viewController.view.layoutIfNeeded()
+            present(viewController, animated: true)
             
         case .close:
             mainView.editButton.isHidden = false
@@ -114,18 +129,36 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         }
     }
     
+    @objc private func balanceViewTapped() {
+        let ton = UserSettings.tonBalance
+        
+        UserSettings.tonBalance = ton == nil ? 50 : nil
+        updateBalanceView()
+    }
+    
     // MARK: Private methods
+    
+    private func updateBalanceView() {
+        let tonBalance = UserSettings.tonBalance
+        
+        if let tonBalance = tonBalance {
+            mainView.tonBalanceView.balanceType = .connected(ton: tonBalance)
+        } else {
+            mainView.tonBalanceView.balanceType = .disconnected
+        }
+    }
     
     private func updateChild() {
         mainView.editorViewController.view.alpha = type == .editor ? 1 : 0
         mainView.mainViewController.view.alpha = type == .main ? 1 : 0
     }
     
-    // TODO: выставлять пол из дефолтс
     private func setupView(with type: PageType) {
+        let genderType: AvatarButton.ImageType = UserSettings.gender == .male ? .male : .female
+        
         mainView.backButton.isHidden = true
         mainView.editButton.isHidden = type == .editor
-        mainView.rightTopButton.setImageType(type == .editor ? .male : .settings)
+        mainView.rightTopButton.setImageType(type == .editor ? genderType : .settings)
         mainView.editorViewController.shouldHideSaveButton(type != .editor)
     }
     
@@ -136,11 +169,12 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         
         mainView.renderWebView.evaluateJavaScript(renderFunc)
         
-        ImageLoader.setAvatar(with: tuple?.background,
-                              for: mainView.backgroundImageView,
-                              placeholderImage: mainView.backgroundImageView.image ?? UIImage(),
-                              side: mainView.bounds.width,
-                              cornerRadius: 0)
+        ImageLoader.setImage(layers: tuple?.background ?? "", imgView: mainView.backgroundImageView, size: mainView.bounds.width) { result in
+            switch result {
+            case .success: self.mainView.backgroundImageView.hideSkeleton()
+            case .failure: break
+            }
+        }
     }
     
     private func createRenderFunc(requestId: Int, layers: String, size: Int) -> String {
@@ -153,7 +187,17 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         
         return current
     }
+    
+}
 
+// MARK: - StickerFaceMainViewControllerDelegate
+extension StickerFaceViewController: StickerFaceMainViewControllerDelegate {
+    func stickerFaceMainViewController(didSelect sticker: UIImage?) {
+        let viewController = ModalShareController(shareImage: sticker)
+        viewController.view.layoutIfNeeded()
+        
+        present(viewController, animated: true)
+    }
 }
 
 // MARK: - StickerFaceEditorViewControllerDelegate
@@ -168,6 +212,38 @@ extension StickerFaceViewController: StickerFaceEditorViewControllerDelegate {
         self.layers = layers
         mainView.mainViewController.updateLayers(layers)
         renderAvatar()
+    }
+    
+    func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didSelectPaid layer: String, layers withLayer: String, with price: Int, layerType: LayerType) {
+        let modal = ModalNewLayerController(type: layerType)
+        let balance = UserSettings.tonBalance
+        modal.updateView(layer: layer, layers: withLayer, balance: balance, price: price)
+        modal.delegate = self
+        
+        present(modal, animated: true)
+    }
+}
+
+// MARK: - ModalNewLayerDelegate
+extension StickerFaceViewController: ModalNewLayerDelegate {
+    func modalNewLayerController(_ controller: ModalNewLayerController, didBuy layer: String, layerType: LayerType, allLayers: String) {
+        
+        if layerType == .NFT {
+            var wardrobe = UserSettings.wardrobe
+            wardrobe.append(layer)
+            UserSettings.wardrobe = wardrobe
+        }
+        
+        layers = allLayers
+        mainView.mainViewController.updateLayers(layers)
+        editorDelegate?.updateLayers(allLayers)
+        renderAvatar()
+        
+        controller.dismiss(animated: true)
+    }
+    
+    func modalNewLayerController(_ controller: ModalNewLayerController, didSave allLayers: String) {
+        
     }
 }
 

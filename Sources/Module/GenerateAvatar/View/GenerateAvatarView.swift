@@ -2,6 +2,14 @@ import UIKit
 
 class GenerateAvatarView: RootView {
     
+    let camera: SFCamera = {
+        let camera = SFCamera()
+        camera.previewLayer.alpha = 0
+        camera.previewLayer.clipsToBounds = true
+        
+        return camera
+    }()
+    
     let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .sfTextPrimary
@@ -85,6 +93,7 @@ class GenerateAvatarView: RootView {
         addSubview(titleLabel)
         addSubview(subtitleLabel)
         addSubview(avatarPlaceholderView)
+        addSubview(camera.previewLayer)
         addSubview(onboardingAvatarVideoView)
         addSubview(linesRoundRotateAnimationView)
         addSubview(continueButton)
@@ -93,6 +102,13 @@ class GenerateAvatarView: RootView {
         addSubview(avatarImageView)
         
         setupConstraints()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        camera.previewLayer.frame = avatarImageView.frame
+        camera.previewLayer.layer.cornerRadius = avatarImageView.frame.width / 2
     }
 
     private func setupConstraints() {

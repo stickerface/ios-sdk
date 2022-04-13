@@ -1,12 +1,20 @@
 import UIKit
 import IGListKit
 
+enum LayerType {
+    case layers
+    case background
+    case NFT
+}
+
 protocol StickerFaceEditorViewControllerDelegate: AnyObject {
     func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didUpdate layers: String)
+    func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didSelectPaid layer: String, layers withLayer: String, with price: Int, layerType: LayerType)
     func stickerFaceEditorViewControllerShouldContinue(_ controller: StickerFaceEditorViewController)
 }
 
-protocol StikerFaceEditorDelegate: AnyObject {
+protocol StickerFaceEditorDelegate: AnyObject {
+    func updateLayers(_ layers: String)
     func layersWithoutBackground(_ layers: String) -> (background: String, layers: String)
 }
 
@@ -27,7 +35,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     private var objects: [EditorSubsectionSectionModel] = []
     private var viewControllers: [UIViewController]? = []
     //    private var productInput: ProductInput?
-    private var newPaidLayers: String?
+//    private var newPaidLayers: String?
     
     private lazy var headerAdapter: ListAdapter = {
         return ListAdapter(updater: ListAdapterUpdater(), viewController: self, workingRangeSize: 0)
@@ -65,42 +73,6 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     @objc private func saveButtonTapped() {
         delegate?.stickerFaceEditorViewControllerShouldContinue(self)
         mainView.saveButton.isHidden = true
-    }
-    
-    @objc func buyLayers() {
-        //        guard let productInput = productInput,
-        //              let modal = presentedViewController as? ModalConfirmationController else {
-        //            return
-        //        }
-        //
-        //        modal.loaderView.show()
-        //        provider.buyProduct(productId: productInput.productId, price: productInput.price) { [weak self] result in
-        //            switch result {
-        //            case .success:
-        ////                Analytics.shared.register(event: SettingsAnalyticsEvent.stickerFaceBuy(value: true))
-        //
-        //                if let coins = UserSettings.coins {
-        //                    UserSettings.coins = coins - productInput.price
-        //                    self?.mainView.coinsButton.setTitle(String(coins - productInput.price), for: .normal)
-        //                }
-        //
-        //                self?.close()
-        //                self?.updatePrices([productInput.productId])
-        //
-        //                if let newPaidLayers = self?.newPaidLayers {
-        //                    self?.layers = newPaidLayers
-        //                    self?.updateSelectedLayers()
-        //
-        //                    let vc = InviteViewController(type: .newPurchase(newLayers: newPaidLayers))
-        //                    self?.present(vc, animated: true)
-        //                }
-        //
-        //            case .failure(let error):
-        //                if let error = error as? ImModelError {
-        //                    modal.loaderView.showError(error.message())
-        //                }
-        //            }
-        //        }
     }
     
     @objc private func changeSelectedTab(_ gestureRecognizer: UISwipeGestureRecognizer) {
@@ -146,7 +118,11 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                 self?.headerAdapter.performUpdates(animated: true)
                 
                 self?.prices = editor.prices
-                self?.objects = editor.sections.flatMap({ $0.subsections }).map({ EditorSubsectionSectionModel(editorSubsection: $0, prices: editor.prices) })
+                
+                #warning("hardcode")
+                self?.prices["271"] = 2
+                
+                self?.objects = editor.sections.flatMap({ $0.subsections }).map({ EditorSubsectionSectionModel(editorSubsection: $0, prices: self!.prices) })
                 self?.viewControllers = self?.objects.enumerated().map { index, object in
                     let controller = StickerFaceEditorPageController(sectionModel: object)
                     controller.delegate = self
@@ -390,22 +366,16 @@ extension StickerFaceEditorViewController: StickerFaceEditorPageDelegate {
     }
     
     func stickerFaceEditorPageController(_ controller: StickerFaceEditorPageController, didSelect layer: String, section: Int) {
-        //        if let price = prices["\(layer)"], let coins = UserSettings.coins {
-        //
-        //            newPaidLayers = replaceCurrentLayer(with: layer, section: section)
-        //            productInput = ProductInput(productId: "\(layer)", price: price)
-        //
-        //            if coins < price {
-        //                showConfirmNotEnoughCoins()
-        //            } else if let newPaidLayers = newPaidLayers {
-        //                showConfirmBuyingLayers(price: price, layers: newPaidLayers)
-        //            }
-        //
-        //        } else {
-        layers = replaceCurrentLayer(with: layer, section: section)
-        delegate?.stickerFaceEditorViewController(self, didUpdate: layers)
-        updateSelectedLayers()
-        //        }
+        if let price = prices["\(layer)"] {
+            let newPaidLayers = replaceCurrentLayer(with: layer, section: section)
+            let type: LayerType = objects[section].editorSubsection.name == "background" ? .background : .NFT
+            
+            delegate?.stickerFaceEditorViewController(self, didSelectPaid: layer, layers: newPaidLayers, with: price, layerType: type)
+        } else {
+            layers = replaceCurrentLayer(with: layer, section: section)
+            delegate?.stickerFaceEditorViewController(self, didUpdate: layers)
+            updateSelectedLayers()
+        }
     }
 }
 
@@ -441,8 +411,13 @@ extension StickerFaceEditorViewController: UIPageViewControllerDataSource, UIPag
     }
 }
 
-// MARK: - StikerFaceEditorDelegate
-extension StickerFaceEditorViewController: StikerFaceEditorDelegate {
+// MARK: - StickerFaceEditorDelegate
+extension StickerFaceEditorViewController: StickerFaceEditorDelegate {
+    func updateLayers(_ layers: String) {
+        self.layers = layers
+        updateSelectedLayers()
+    }
+    
     func layersWithoutBackground(_ layers: String) -> (background: String, layers: String) {
         var layers = layers
         var backgroundLayer = "0"

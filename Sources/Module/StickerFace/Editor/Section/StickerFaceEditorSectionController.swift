@@ -147,23 +147,19 @@ class StickerFaceEditorSectionController: ListSectionController {
         
         // TODO: need 'if' closure for NFT
         if sectionModel.editorSubsection.name == "background" {
-            cell.cellType = .background
+            cell.layerType = .background
         } else if sectionModel.editorSubsection.name == "clothing" {
-            cell.cellType = .NFT
+            cell.layerType = .NFT
         } else {
-            cell.cellType = .layers
+            cell.layerType = .layers
         }
         
         let imageSide = 172
         let url = "https://stickerface.io/api/section/png/\(layer)?size=\(imageSide)"
-        
-        if cell.layerImageView.image == nil {
-            cell.layerImageView.showSkeleton()
-        }
-        
+                
         ImageLoader.setImage(url: url, imgView: cell.layerImageView) { result in
             switch result {
-            case .success: cell.layerImageView.hideSkeleton()
+            case .success: cell.contentView.hideSkeleton()
             case .failure: break
             }
         }
@@ -175,14 +171,9 @@ class StickerFaceEditorSectionController: ListSectionController {
             cell.buyButton.isHidden = true
             cell.priceLabel.text = "Free"
         }
-        
-        if cell.cellType == .NFT {
-            cell.buyButton.isHidden = false
-            cell.setPrice(2)
-        }
-        
+                
         cell.titleLabel.text = "Honeysuckle"
-        cell.noneLabel.isHidden = layer != "0"
+        cell.noneImageView.isHidden = layer != "0"
         
         cell.setSelected(sectionModel.selectedLayer == layer)
         

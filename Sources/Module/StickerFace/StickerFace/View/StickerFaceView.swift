@@ -4,7 +4,7 @@ import WebKit
 class StickerFaceView: RootView {
 
     let editorViewController = StickerFaceEditorViewController()
-    let mainViewController = StikerFaceMainViewController()
+    let mainViewController = StickerFaceMainViewController()
     
     let renderWebView: WKWebView = {
         let webView = WKWebView()
@@ -23,10 +23,20 @@ class StickerFaceView: RootView {
     let backgroundImageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
+        view.isSkeletonable = true
         
         return view
     }()
-    
+        
+    let blurEffect: UIVisualEffectView = {
+        let blurEffect = UIBlurEffect(style: .systemThinMaterial)
+        let blurView = UIVisualEffectView(effect: blurEffect)
+        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        blurView.alpha = 0
+        
+        return blurView
+    }()
+        
     let tonBalanceView: TonBalanceView = {
         let view = TonBalanceView()
         view.layer.cornerRadius = 16
@@ -76,6 +86,8 @@ class StickerFaceView: RootView {
         addSubview(avatarView)
         addSubview(editorViewController.view)
         addSubview(mainViewController.view)
+        
+        backgroundImageView.addSubview(blurEffect)
         
         setupConstraints()
     }
@@ -130,6 +142,10 @@ class StickerFaceView: RootView {
         backgroundImageView.snp.makeConstraints { make in
             make.left.right.top.equalToSuperview()
             make.bottom.equalTo(avatarView.snp.bottom).offset(12.0)
+        }
+        
+        blurEffect.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
         
     }
