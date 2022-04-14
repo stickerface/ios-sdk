@@ -284,7 +284,6 @@ extension StickerFaceViewController: ModalWardrobeDelegate {
     }
     
     func modalWardrobeController(_ controller: ModalWardrobeController, needLayers forLayer: String) -> String {
-        
         return editorDelegate?.replaceCurrentLayers(with: forLayer) ?? ""
     }
 }
