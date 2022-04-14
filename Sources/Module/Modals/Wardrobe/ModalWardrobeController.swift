@@ -2,7 +2,8 @@ import UIKit
 import IGListKit
 
 protocol ModalWardrobeDelegate: AnyObject {
-    
+    func modalWardrobeController(_ controller: ModalWardrobeController, needLayers forLayer: String) -> String
+    func modalWardrobeController(_ controller: ModalWardrobeController, didSave layers: String)
 }
 
 class ModalWardrobeController: ModalScrollViewController {
@@ -19,8 +20,17 @@ class ModalWardrobeController: ModalScrollViewController {
     override init() {
         super.init()
         
-        mainView.subtitleLabel.isHidden = UserSettings.wardrobe.isEmpty
+        let wardrobe = UserSettings.wardrobe
+        let currentLayers = UserSettings.layers
+        var selectedLayer: String? = nil
+        
+        for layer in wardrobe {
+            selectedLayer = currentLayers?.contains(layer) == true ? layer : nil
+        }
+        
+        mainView.subtitleLabel.isHidden = wardrobe.isEmpty
         model = WardrobeSectionModel(layers: UserSettings.wardrobe)
+        model.selectedLayer = selectedLayer
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -76,6 +86,25 @@ extension ModalWardrobeController: ListAdapterDataSource {
 // MARK: - WardrobeSectionControllerDelegate
 extension ModalWardrobeController: WardrobeSectionControllerDelegate {
     func wardrobeSectionController(_ controller: WardrobeSectionController, didSelect layer: String) {
-        // TODO: did select wardrobe layer
+        let modal = ModalNewLayerController(type: .NFT)
+        let layers = delegate?.modalWardrobeController(self, needLayers: layer) ?? ""
+        modal.updateView(layer: layer, layers: layers, balance: nil, price: nil)
+        modal.delegate = self
+        
+        present(modal, animated: true)
     }
+}
+
+// MARK: - WardrobeSectionControllerDelegate
+extension ModalWardrobeController: ModalNewLayerDelegate {
+    func modalNewLayerController(_ controller: ModalNewLayerController, didBuy layer: String, layerType: LayerType, allLayers: String) { }
+    
+    func modalNewLayerController(_ controller: ModalNewLayerController, didSave layer: String, allLayers: String) {
+        model.selectedLayer = layer
+        delegate?.modalWardrobeController(self, didSave: allLayers)
+        controller.dismiss(animated: true)
+        dismiss(animated: true)
+    }
+    
+    
 }

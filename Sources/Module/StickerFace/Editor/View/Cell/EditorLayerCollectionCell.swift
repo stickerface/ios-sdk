@@ -11,7 +11,7 @@ class EditorLayerCollectionCell: UICollectionViewCell {
             priceLabel.isHidden = layerType == .layers
             priceSubtitleLabel.isHidden = layerType == .layers
             buyButton.isHidden = layerType == .layers
-            selectedBackgroundImageView.isHidden = layerType == .background
+            selectedBackgroundImageView.isHidden = layerType != .background
             layerBackgroundView.isHidden = layerType == .layers
             
             if layerType == .background {
@@ -197,7 +197,17 @@ class EditorLayerCollectionCell: UICollectionViewCell {
             }
             
         case .background:
-            buyButton.setTitle("\(price ?? 0) TON", for: .normal)
+            buyButton.setImage(nil, for: .normal)
+            if let price = price {
+                if isPaid {
+                    buyButton.setTitle("Paid", for: .normal)
+                } else {
+                    buyButton.setImage(UIImage(libraryNamed: "shoppingCartSmal"), for: .normal)
+                    buyButton.setTitle("\(price) TON", for: .normal)
+                }
+            } else {
+                buyButton.setTitle("Free", for: .normal)
+            }
             
         case .layers:
             break

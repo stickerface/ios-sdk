@@ -1,5 +1,5 @@
 PODS:
-  - Alamofire (5.5.0)
+  - Alamofire (5.6.0)
   - Atributika (4.10.1)
   - IGListDiffKit (4.0.0)
   - IGListKit (4.0.0):
@@ -39,7 +39,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Alamofire: 1c4fb5369c3fe93d2857c780d8bbe09f06f97e7c
+  Alamofire: 0c07058209f211e3d32824f8e0766d7c44ac83b3
   Atributika: 47e778507cfb3cd2c996278b0285221a62e97d71
   IGListDiffKit: 665d6cf43ce726e676013db9c7d6c4294259b6b2
   IGListKit: fd5a5d21935298f5849fa49d426843cff97b77c7
@@ -52,4 +52,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 617f3d429f85871b8b607b750041d702e054b4d9
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.11.2

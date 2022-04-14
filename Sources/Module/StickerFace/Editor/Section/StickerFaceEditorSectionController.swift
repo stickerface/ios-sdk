@@ -155,8 +155,14 @@ class StickerFaceEditorSectionController: ListSectionController {
         }
         
         let imageSide = 172
-        let url = "https://stickerface.io/api/section/png/\(layer)?size=\(imageSide)"
-                
+        let url: String
+        
+        if cell.layerType == .NFT {
+           url = "http://sticker.face.cat/api/png/\(layer)?size=\(imageSide)"
+        } else {
+            url = "https://stickerface.io/api/section/png/\(layer)?size=\(imageSide)"
+        }
+            
         ImageLoader.setImage(url: url, imgView: cell.layerImageView) { result in
             switch result {
             case .success: cell.contentView.hideSkeleton()
@@ -164,14 +170,13 @@ class StickerFaceEditorSectionController: ListSectionController {
             }
         }
         
-        let isPaid = UserSettings.wardrobe.contains(layer)
+        let isPaid = UserSettings.wardrobe.contains(layer) || UserSettings.paidBackgrounds.contains(layer)
         
         cell.setPrice(sectionModel.prices["\(layer)"], isPaid: isPaid)
-                        
+        cell.setSelected(sectionModel.selectedLayer == layer)
+        
         cell.titleLabel.text = "Honeysuckle"
         cell.noneImageView.isHidden = layer != "0"
-        
-        cell.setSelected(sectionModel.selectedLayer == layer)
         
         cell.setNeedsLayout()
         return cell

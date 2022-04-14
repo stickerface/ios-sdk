@@ -16,6 +16,7 @@ protocol StickerFaceEditorViewControllerDelegate: AnyObject {
 protocol StickerFaceEditorDelegate: AnyObject {
     func updateLayers(_ layers: String)
     func layersWithoutBackground(_ layers: String) -> (background: String, layers: String)
+    func replaceCurrentLayers(with layer: String) -> String
 }
 
 class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
@@ -366,7 +367,7 @@ extension StickerFaceEditorViewController: StickerFaceEditorPageDelegate {
     }
     
     func stickerFaceEditorPageController(_ controller: StickerFaceEditorPageController, didSelect layer: String, section: Int) {
-        let isPaid = UserSettings.wardrobe.contains(layer)
+        let isPaid = UserSettings.wardrobe.contains(layer) || UserSettings.paidBackgrounds.contains(layer)
         
         if let price = prices["\(layer)"], !isPaid {
             let newPaidLayers = replaceCurrentLayer(with: layer, section: section)
@@ -415,6 +416,18 @@ extension StickerFaceEditorViewController: UIPageViewControllerDataSource, UIPag
 
 // MARK: - StickerFaceEditorDelegate
 extension StickerFaceEditorViewController: StickerFaceEditorDelegate {
+    func replaceCurrentLayers(with layer: String) -> String {
+        let section = objects.firstIndex { sectionModel in
+            return sectionModel.editorSubsection.layers?.contains(layer) ?? false
+        }
+        
+        if let section = section {
+            return replaceCurrentLayer(with: layer, section: section)
+        }
+        
+        return ""
+    }
+    
     func updateLayers(_ layers: String) {
         self.layers = layers
         updateSelectedLayers()

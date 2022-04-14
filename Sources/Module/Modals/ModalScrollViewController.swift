@@ -87,6 +87,8 @@ class ModalScrollViewController: UIViewController {
 
         scrollView.addSubview(hideIndicatorView)
         scrollView.addSubview(hideHelper)
+        
+        view.layoutIfNeeded()
     }
 
     override func viewDidLayoutSubviews() {
