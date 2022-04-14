@@ -15,7 +15,7 @@ class ModalWardrobeController: ModalScrollViewController {
     
     private lazy var adapter: ListAdapter = {
         return ListAdapter(updater: ListAdapterUpdater(), viewController: self, workingRangeSize: 0)
-    }()
+    private lazy var adapter = ListAdapter(updater: ListAdapterUpdater(), viewController: self, workingRangeSize: 0)
     
     override init() {
         super.init()
