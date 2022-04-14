@@ -13,8 +13,12 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     
     weak var editorDelegate: StickerFaceEditorDelegate?
     
-    private var layers: String
     private var requestId = 0
+    private var layers: String {
+        didSet {
+            UserSettings.layers = layers
+        }
+    }
     
     private var type: PageType = .main {
         didSet {
@@ -69,6 +73,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         updateChild()
         updateBalanceView()
         
+        mainView.hangerButton.setCount(UserSettings.wardrobe.count)
         mainView.renderWebView.navigationDelegate = self
         
         do {
@@ -92,7 +97,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         switch sender.imageType {
         case .settings:
             let viewController = ModalSettingsController()
-            viewController.view.layoutIfNeeded()
+            
             present(viewController, animated: true)
             
         case .male:
@@ -112,7 +117,8 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
             
         case .hanger:
             let viewController = ModalWardrobeController()
-            viewController.view.layoutIfNeeded()
+            viewController.delegate = self
+            
             present(viewController, animated: true)
             
         case .close:
@@ -188,6 +194,12 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         return current
     }
     
+    private func updateCurrentLayers(_ layers: String) {
+        self.layers = layers
+        mainView.mainViewController.updateLayers(layers)
+        editorDelegate?.updateLayers(layers)
+        renderAvatar()
+    }
 }
 
 // MARK: - StickerFaceMainViewControllerDelegate
@@ -226,26 +238,32 @@ extension StickerFaceViewController: StickerFaceEditorViewControllerDelegate {
 
 // MARK: - ModalNewLayerDelegate
 extension StickerFaceViewController: ModalNewLayerDelegate {
+    func modalNewLayerController(_ controller: ModalNewLayerController, didSave layer: String, allLayers: String) {
+        
+    }
+    
     func modalNewLayerController(_ controller: ModalNewLayerController, didBuy layer: String, layerType: LayerType, allLayers: String) {
         
         if layerType == .NFT {
             var wardrobe = UserSettings.wardrobe
             wardrobe.append(layer)
+            mainView.hangerButton.setCount(wardrobe.count)
             UserSettings.wardrobe = wardrobe
         }
         
-        layers = allLayers
-        mainView.mainViewController.updateLayers(layers)
-        editorDelegate?.updateLayers(allLayers)
-        renderAvatar()
+        if layerType == .background {
+            var backgounds = UserSettings.paidBackgrounds
+            backgounds.append(layer)
+            UserSettings.paidBackgrounds = backgounds
+        }
+        
+        updateCurrentLayers(allLayers)
         
         controller.dismiss(animated: true)
     }
-    
-    func modalNewLayerController(_ controller: ModalNewLayerController, didSave allLayers: String) {
-        
-    }
 }
+
+
 
 // MARK: - AvatarRenderResponseHandlerDelegate
 extension StickerFaceViewController: AvatarRenderResponseHandlerDelegate {
@@ -257,6 +275,17 @@ extension StickerFaceViewController: AvatarRenderResponseHandlerDelegate {
         }
     }
     
+}
+
+// MARK: - ModalWardrobeDelegate
+extension StickerFaceViewController: ModalWardrobeDelegate {
+    func modalWardrobeController(_ controller: ModalWardrobeController, didSave layers: String) {
+        updateCurrentLayers(layers)
+    }
+    
+    func modalWardrobeController(_ controller: ModalWardrobeController, needLayers forLayer: String) -> String {
+        return editorDelegate?.replaceCurrentLayers(with: forLayer) ?? ""
+    }
 }
 
 // MARK: - WKScriptMessageHandler

@@ -47,4 +47,13 @@ import Foundation
             defaults.set(newValue, forKey: #function)
         }
     }
+    
+    public static var paidBackgrounds: [String] {
+        get {
+            return defaults.stringArray(forKey: #function) ?? []
+        }
+        set {
+            defaults.set(newValue, forKey: #function)
+        }
+    }
 }

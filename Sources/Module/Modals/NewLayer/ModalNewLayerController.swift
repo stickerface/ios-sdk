@@ -2,7 +2,7 @@ import UIKit
 
 protocol ModalNewLayerDelegate: AnyObject {
     func modalNewLayerController(_ controller: ModalNewLayerController, didBuy layer: String, layerType: LayerType, allLayers: String)
-    func modalNewLayerController(_ controller: ModalNewLayerController, didSave allLayers: String)
+    func modalNewLayerController(_ controller: ModalNewLayerController, didSave layer: String, allLayers: String)
 }
 
 class ModalNewLayerController: ModalScrollViewController {
@@ -56,14 +56,16 @@ class ModalNewLayerController: ModalScrollViewController {
             }
             
             if let balance = balance {
-                mainView.titleLabel.text = "Purchase"
-                mainView.subtitleLabel.text = type == .background ? "If you like a new background\nmake a purchase" : "One step to buy"
                 mainView.buyButton.setImage(nil, for: .normal)
                 
                 if balance >= Double(price) {
+                    mainView.titleLabel.text = "Purchase"
+                    mainView.subtitleLabel.text = type == .background ? "If you like a new background\nmake a purchase" : "One step to buy"
                     mainView.buyButton.setTitle("Buy NFT", for: .normal)
                     mainView.buyButton.addTarget(self, action: #selector(buyLayer), for: .touchUpInside)
                 } else {
+                    mainView.titleLabel.text = "Insufficient funds"
+                    mainView.subtitleLabel.text = "Please add minimum \(Double(price) - balance) TON to wallet for purchase"
                     mainView.buyButton.setTitle("Replenish the balance", for: .normal)
                 }
                 
@@ -94,7 +96,7 @@ class ModalNewLayerController: ModalScrollViewController {
     }
     
     @objc private func saveLayer() {
-        
+        delegate?.modalNewLayerController(self, didSave: selectedLayer, allLayers: allLayers)
     }
     
     // MARK: - Private methods

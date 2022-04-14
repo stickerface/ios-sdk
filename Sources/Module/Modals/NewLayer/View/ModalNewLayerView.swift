@@ -159,11 +159,19 @@ class ModalNewLayerView: UIView {
             .right()
             .sizeToFit(.width)
         
-        buyButton.pin
-            .top(to: priceSubtitleLabel.edge.bottom).marginTop(32.0)
-            .left(32.0)
-            .right(32.0)
-            .height(48.0)
+        if priceLabel.isHidden {
+            buyButton.pin
+                .top(to: imageNameLabel.edge.bottom).marginTop(32.0)
+                .left(32.0)
+                .right(32.0)
+                .height(48.0)
+        } else {
+            buyButton.pin
+                .top(to: priceSubtitleLabel.edge.bottom).marginTop(32.0)
+                .left(32.0)
+                .right(32.0)
+                .height(48.0)
+        }
                 
         bottomView.pin
             .top(to: buyButton.edge.bottom)

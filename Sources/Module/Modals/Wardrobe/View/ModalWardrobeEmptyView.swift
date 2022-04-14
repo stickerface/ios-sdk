@@ -34,7 +34,7 @@ class ModalWardrobeEmptyView: RootView {
     // TODO: решить что с размерами
     private func setupConstraints() {
         imageView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(146.0)
+            make.top.equalToSuperview().offset(90.0)
             make.centerX.equalToSuperview()
             make.size.equalTo(80.0)
         }

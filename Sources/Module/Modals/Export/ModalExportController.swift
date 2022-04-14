@@ -3,7 +3,7 @@ import TelegramStickersImport
 
 class ModalExportController: ModalScrollViewController {
     
-    let exportView = ModalExportView()
+    let mainView = ModalExportView()
     var layers = ""
     var isLoading = false
     let emojis = [
@@ -20,7 +20,7 @@ class ModalExportController: ModalScrollViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        scrollView.addSubview(exportView)
+        scrollView.addSubview(mainView)
         
         setupImages()
         setupArrangedViews()
@@ -85,29 +85,29 @@ class ModalExportController: ModalScrollViewController {
         view.titleLabel.text = title
         view.action = action
         
-        exportView.shareStackView.addArrangedSubview(view)
+        mainView.shareStackView.addArrangedSubview(view)
     }
     
     private func setupImages() {
         let firstLayers = "s3;" + layers
-        ImageLoader.setImage(layers: firstLayers, imgView: exportView.leftImageView, outlined: true, size: 248)
+        ImageLoader.setImage(layers: firstLayers, imgView: mainView.leftImageView, outlined: true, size: 248)
         
         let secondLayers = "s15;" + layers
-        ImageLoader.setImage(layers: secondLayers, imgView: exportView.centerImageView, outlined: true, size: 248)
+        ImageLoader.setImage(layers: secondLayers, imgView: mainView.centerImageView, outlined: true, size: 248)
         
         let thirdLayers = "s27;" + layers
-        ImageLoader.setImage(layers: thirdLayers, imgView: exportView.rightImageView, outlined: true, size: 248)
+        ImageLoader.setImage(layers: thirdLayers, imgView: mainView.rightImageView, outlined: true, size: 248)
     }
     
     private func layout() {
-        exportView.pin
+        mainView.pin
             .below(of: hideIndicatorView).marginTop(12.0)
             .left()
             .width(contentWidth)
         
-        exportView.layoutIfNeeded()
+        mainView.layoutIfNeeded()
         
-        contentHeight = exportView.containerView.bounds.height
+        contentHeight = mainView.containerView.bounds.height
     }
     
 }
