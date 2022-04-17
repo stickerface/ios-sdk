@@ -1,4 +1,5 @@
 import UIKit
+import Atributika
 
 protocol ModalNewLayerDelegate: AnyObject {
     func modalNewLayerController(_ controller: ModalNewLayerController, didBuy layer: String, layerType: LayerType, allLayers: String)
@@ -43,6 +44,16 @@ class ModalNewLayerController: ModalScrollViewController {
         selectedLayer = layer
         allLayers = layers
         
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineHeightMultiple = 1.23
+        paragraphStyle.alignment = .center
+        paragraphStyle.lineBreakMode = .byWordWrapping
+        
+        let subtitleStyle = Style()
+            .paragraphStyle(paragraphStyle)
+            .foregroundColor(UIColor.sfTextPrimary)
+            .font(Palette.fontMedium.withSize(16))
+        
         ImageLoader.setAvatar(with: layers, for: mainView.imageView,
                               side: 197, cornerRadius: 197/2)
         
@@ -59,25 +70,30 @@ class ModalNewLayerController: ModalScrollViewController {
                 mainView.buyButton.setImage(nil, for: .normal)
                 
                 if balance >= Double(price) {
-                    mainView.titleLabel.text = "newLayerPurchase".libraryLocalized
-                    mainView.subtitleLabel.text = type == .background ?
+                    let subtitle = type == .background ?
                     "newLayerBackPurchase".libraryLocalized :
                     "newLayerNFTPurchase".libraryLocalized
+                    
+                    mainView.titleLabel.text = "newLayerPurchase".libraryLocalized
+                    mainView.subtitleLabel.attributedText = subtitle.styleAll(subtitleStyle)
                     
                     mainView.buyButton.setTitle("newLayerBuyNFT".libraryLocalized, for: .normal)
                     mainView.buyButton.addTarget(self, action: #selector(buyLayer), for: .touchUpInside)
                 } else {
-                    let addCount = Double(price) - balance
+                    let style = Style("bold").font(Palette.fontBold.withSize(16))
+                    let addCount = (Double(price) - balance).description
                     mainView.titleLabel.text = "newLayerInsufficientFunds".libraryLocalized
-                    mainView.subtitleLabel.text = "newLayerAddMinimum".libraryLocalized(addCount)
+                    mainView.subtitleLabel.attributedText = "newLayerAddMinimum".libraryLocalized(addCount).style(tags: style).styleAll(subtitleStyle)
                     mainView.buyButton.setTitle("newLayerReplenish".libraryLocalized, for: .normal)
                 }
                 
             } else {
-                mainView.titleLabel.text = "newLayerConnectWallet".libraryLocalized
-                mainView.subtitleLabel.text = type == .background ?
+                let subtitle = type == .background ?
                 "newLyaerBackConnectTonkeeper".libraryLocalized :
                 "newLyaerNFTConnectTonkeeper".libraryLocalized
+                
+                mainView.titleLabel.text = "newLayerConnectWallet".libraryLocalized
+                mainView.subtitleLabel.attributedText = subtitle.styleAll(subtitleStyle)
                 mainView.buyButton.setTitle("connectWalletConnectTitle".libraryLocalized, for: .normal)
                 mainView.buyButton.setImage(UIImage(libraryNamed: "tonkeeper_1"), for: .normal)
             }
@@ -85,7 +101,7 @@ class ModalNewLayerController: ModalScrollViewController {
             mainView.priceLabel.isHidden = true
             mainView.priceSubtitleLabel.isHidden = true
             mainView.titleLabel.text = "newLayerFitting".libraryLocalized
-            mainView.subtitleLabel.text = "newLayerLookGood".libraryLocalized
+            mainView.subtitleLabel.attributedText = "newLayerLookGood".libraryLocalized.styleAll(subtitleStyle)
             mainView.buyButton.setTitle("newLayerDress".libraryLocalized, for: .normal)
             mainView.buyButton.setImage(nil, for: .normal)
             

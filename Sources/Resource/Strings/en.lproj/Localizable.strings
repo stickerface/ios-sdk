@@ -41,7 +41,7 @@
 "newLayerNFTPurchase" = "One step to buy";
 "newLayerBuyNFT" = "Buy NFT";
 "newLayerInsufficientFunds" = "Insufficient funds";
-"newLayerAddMinimum" = "Please add minimum %@ TON to wallet for purchase";
+"newLayerAddMinimum" = "Please add minimum <bold>%@ TON</bold>\nto wallet for purchase";
 "newLayerReplenish" = "Replenish the balance";
 "newLayerConnectWallet" = "Connect crypto wallet";
 "newLyaerBackConnectTonkeeper" = "To buy a background color\nconnect the Tonkepeer";
