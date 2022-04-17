@@ -48,7 +48,7 @@ class ModalNewLayerController: ModalScrollViewController {
         
         if let price = price {
             if price == 0 {
-                mainView.priceLabel.text = "Free"
+                mainView.priceLabel.text = "commonFree".libraryLocalized
                 mainView.priceSubtitleLabel.isHidden = true
             } else {
                 mainView.priceLabel.text = "\(price) TON"
@@ -59,28 +59,34 @@ class ModalNewLayerController: ModalScrollViewController {
                 mainView.buyButton.setImage(nil, for: .normal)
                 
                 if balance >= Double(price) {
-                    mainView.titleLabel.text = "Purchase"
-                    mainView.subtitleLabel.text = type == .background ? "If you like a new background\nmake a purchase" : "One step to buy"
-                    mainView.buyButton.setTitle("Buy NFT", for: .normal)
+                    mainView.titleLabel.text = "newLayerPurchase".libraryLocalized
+                    mainView.subtitleLabel.text = type == .background ?
+                    "newLayerBackPurchase".libraryLocalized :
+                    "newLayerNFTPurchase".libraryLocalized
+                    
+                    mainView.buyButton.setTitle("newLayerBuyNFT".libraryLocalized, for: .normal)
                     mainView.buyButton.addTarget(self, action: #selector(buyLayer), for: .touchUpInside)
                 } else {
-                    mainView.titleLabel.text = "Insufficient funds"
-                    mainView.subtitleLabel.text = "Please add minimum \(Double(price) - balance) TON to wallet for purchase"
-                    mainView.buyButton.setTitle("Replenish the balance", for: .normal)
+                    let addCount = Double(price) - balance
+                    mainView.titleLabel.text = "newLayerInsufficientFunds".libraryLocalized
+                    mainView.subtitleLabel.text = "newLayerAddMinimum".libraryLocalized(addCount)
+                    mainView.buyButton.setTitle("newLayerReplenish".libraryLocalized, for: .normal)
                 }
                 
             } else {
-                mainView.titleLabel.text = "Connect crypto wallet"
-                mainView.subtitleLabel.text = type == .background ? "To buy a background color\nconnect the Tonkepeer" : "To buy a NFT connect the Tonkepeer"
+                mainView.titleLabel.text = "newLayerConnectWallet".libraryLocalized
+                mainView.subtitleLabel.text = type == .background ?
+                "newLyaerBackConnectTonkeeper".libraryLocalized :
+                "newLyaerNFTConnectTonkeeper".libraryLocalized
                 mainView.buyButton.setTitle("connectWalletConnectTitle".libraryLocalized, for: .normal)
                 mainView.buyButton.setImage(UIImage(libraryNamed: "tonkeeper_1"), for: .normal)
             }
         } else {
             mainView.priceLabel.isHidden = true
             mainView.priceSubtitleLabel.isHidden = true
-            mainView.titleLabel.text = "Fitting"
-            mainView.subtitleLabel.text = "Seems to look good!"
-            mainView.buyButton.setTitle("Dress", for: .normal)
+            mainView.titleLabel.text = "newLayerFitting".libraryLocalized
+            mainView.subtitleLabel.text = "newLayerLookGood".libraryLocalized
+            mainView.buyButton.setTitle("newLayerDress".libraryLocalized, for: .normal)
             mainView.buyButton.setImage(nil, for: .normal)
             
             mainView.buyButton.addTarget(self, action: #selector(saveLayer), for: .touchUpInside)

@@ -11,7 +11,7 @@ class ModalExportView: RootView {
     
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Export"
+        label.text = "exportTitle".libraryLocalized
         label.font = Palette.fontBold.withSize(24)
         label.textColor = .sfTextPrimary
         label.textAlignment = .center
@@ -22,7 +22,7 @@ class ModalExportView: RootView {
     // TODO: attributed label
     let subtitleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Use all stickers in Telegram, WhatsApp or native keyboard"
+        label.text = "exportSubtitle".libraryLocalized
         label.font = Palette.fontMedium.withSize(16)
         label.textColor = .sfTextPrimary
         label.textAlignment = .center

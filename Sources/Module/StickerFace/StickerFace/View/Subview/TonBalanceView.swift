@@ -13,10 +13,10 @@ class TonBalanceView: UIView {
             switch balanceType {
             case .disconnected:
                 titleLabel.text = "Tonkeeper"
-                subtitleLabel.text = "Connect"
+                subtitleLabel.text = "commonConnect".libraryLocalized
                 
             case .connected(let ton):
-                titleLabel.text = "Balance"
+                titleLabel.text = "commonBalance".libraryLocalized
                 subtitleLabel.text = "\(ton) TON"
             }
         }
@@ -50,7 +50,7 @@ class TonBalanceView: UIView {
     
     let subtitleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Connect"
+        label.text = "commonConnect".libraryLocalized
         label.textColor = .sfTextPrimary
         label.font = Palette.fontBold.withSize(12)
         label.textAlignment = .left

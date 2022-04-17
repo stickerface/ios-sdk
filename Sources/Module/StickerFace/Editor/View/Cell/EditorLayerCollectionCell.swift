@@ -171,7 +171,6 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         
     }
     
-    // TODO: wardrobe state for background
     func setPrice(_ price: Int?, isPaid: Bool) {
         switch layerType {
         case .NFT:
@@ -179,7 +178,7 @@ class EditorLayerCollectionCell: UICollectionViewCell {
             
             if let price = price {
                 if isPaid {
-                    priceLabel.text = "Paid"
+                    priceLabel.text = "commonPaid".libraryLocalized
                     checkmarkImageView.isHidden = false
                     priceSubtitleLabel.isHidden = true
                     buyButton.isHidden = true
@@ -192,7 +191,7 @@ class EditorLayerCollectionCell: UICollectionViewCell {
                     priceStackView.addArrangedSubview(priceSubtitleLabel)
                 }
             } else {
-                priceLabel.text = "Free"
+                priceLabel.text = "commonFree".libraryLocalized
                 buyButton.isHidden = true
             }
             
@@ -200,13 +199,13 @@ class EditorLayerCollectionCell: UICollectionViewCell {
             buyButton.setImage(nil, for: .normal)
             if let price = price {
                 if isPaid {
-                    buyButton.setTitle("Paid", for: .normal)
+                    buyButton.setTitle("commonPaid".libraryLocalized, for: .normal)
                 } else {
                     buyButton.setImage(UIImage(libraryNamed: "shoppingCartSmal"), for: .normal)
                     buyButton.setTitle("\(price) TON", for: .normal)
                 }
             } else {
-                buyButton.setTitle("Free", for: .normal)
+                buyButton.setTitle("commonFree".libraryLocalized, for: .normal)
             }
             
         case .layers:

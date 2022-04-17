@@ -52,16 +52,16 @@ class ModalSettingsController: ModalScrollViewController {
     
     private func setupModels() {
         models = [
-            ModalSettingsCellModel(title: "Language",
+            ModalSettingsCellModel(title: "settingsLanguage".libraryLocalized,
                                image: UIImage(libraryNamed: "language"),
                                action: languageAction),
             ModalSettingsCellModel(title: "FAQ",
                                image: UIImage(libraryNamed: "FAQ"),
                                action: faqAction),
-            ModalSettingsCellModel(title: "Rate us",
+            ModalSettingsCellModel(title: "settingsRate".libraryLocalized,
                                image: UIImage(libraryNamed: "icon-24_outline"),
                                action: rateAction),
-            ModalSettingsCellModel(title: "About app",
+            ModalSettingsCellModel(title: "settingsAbout".libraryLocalized,
                                image: UIImage(libraryNamed: "info"),
                                action: aboutAction)
         ]

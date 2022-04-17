@@ -339,13 +339,13 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
         var text: String
         switch infoLabel {
         case .waitingCameraAccess:
-            text = "Waiting for access…"
+            text = "setupAvatarWaitingCameraAccess".libraryLocalized
         case .noFace:
-            text = "Take a selfie to make stickers"
+            text = "setupAvatarNoFace".libraryLocalized
         case .smallFace:
-            text = "Move the face closer"
+            text = "setupAvatarSmallFace".libraryLocalized
         case .takingPhoto:
-            text = "Stay focused! Taking a photo…"
+            text = "setupAvaterTakingPhoto".libraryLocalized
         case .nothing:
             text = ""
         }

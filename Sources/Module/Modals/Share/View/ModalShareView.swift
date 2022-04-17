@@ -11,7 +11,7 @@ class ModalShareView: RootView {
     
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Share"
+        label.text = "shareTitle".libraryLocalized
         label.font = Palette.fontBold.withSize(24)
         label.textColor = .sfTextPrimary
         label.textAlignment = .center
@@ -21,7 +21,7 @@ class ModalShareView: RootView {
     
     let subtitleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Send sticker to friends"
+        label.text = "shareSubtitle".libraryLocalized
         label.font = Palette.fontMedium.withSize(16)
         label.textColor = .sfTextPrimary
         label.textAlignment = .center

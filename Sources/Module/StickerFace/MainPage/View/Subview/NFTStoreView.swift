@@ -15,7 +15,7 @@ class NFTStoreView: UIView {
             .foregroundColor(UIColor.sfAccentSecondary)
             .paragraphStyle(paragraphStyle)
 
-        label.attributedText = "NFTs’ clothes\nand accessories".styleAll(style)
+        label.attributedText = "mainStoreTitle".libraryLocalized.styleAll(style)
         
         return label
     }()
@@ -26,7 +26,7 @@ class NFTStoreView: UIView {
         button.layer.cornerCurve = .continuous
         button.backgroundColor = .sfAccentBrand
         button.setTitleColor(.sfDefaultWhite, for: .normal)
-        button.setTitle("Go to store", for: .normal)
+        button.setTitle("mainStoreButton".libraryLocalized, for: .normal)
         button.titleLabel?.font = Palette.fontBold.withSize(12)
         button.contentEdgeInsets = UIEdgeInsets(top: 13, left: 19.5, bottom: 13, right: 19.5)
         
