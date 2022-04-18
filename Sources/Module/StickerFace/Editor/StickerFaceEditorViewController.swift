@@ -127,6 +127,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                 self?.viewControllers = self?.objects.enumerated().map { index, object in
                     let controller = StickerFaceEditorPageController(sectionModel: object)
                     controller.delegate = self
+                    controller.editorDelegate = self
                     controller.index = index
                     
                     return controller
@@ -233,7 +234,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
             
             if let viewController = viewControllers?[index] as? StickerFaceEditorPageController {
                 viewController.sectionModel = object
-                viewController.adapter.reloadData(completion: nil)
+                viewController.adapter.reloadData()
             }
         }
     }

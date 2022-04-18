@@ -263,7 +263,16 @@ extension StickerFaceViewController: ModalNewLayerDelegate {
     }
 }
 
-
+// MARK: - ModalWardrobeDelegate
+extension StickerFaceViewController: ModalWardrobeDelegate {
+    func modalWardrobeController(_ controller: ModalWardrobeController, didSave layers: String) {
+        updateCurrentLayers(layers)
+    }
+    
+    func modalWardrobeController(_ controller: ModalWardrobeController, needLayers forLayer: String) -> String {
+        return editorDelegate?.replaceCurrentLayers(with: forLayer) ?? ""
+    }
+}
 
 // MARK: - AvatarRenderResponseHandlerDelegate
 extension StickerFaceViewController: AvatarRenderResponseHandlerDelegate {
@@ -275,17 +284,6 @@ extension StickerFaceViewController: AvatarRenderResponseHandlerDelegate {
         }
     }
     
-}
-
-// MARK: - ModalWardrobeDelegate
-extension StickerFaceViewController: ModalWardrobeDelegate {
-    func modalWardrobeController(_ controller: ModalWardrobeController, didSave layers: String) {
-        updateCurrentLayers(layers)
-    }
-    
-    func modalWardrobeController(_ controller: ModalWardrobeController, needLayers forLayer: String) -> String {
-        return editorDelegate?.replaceCurrentLayers(with: forLayer) ?? ""
-    }
 }
 
 // MARK: - WKScriptMessageHandler

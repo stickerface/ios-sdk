@@ -7,6 +7,7 @@ class EditorSubsectionSectionModel {
     var prices: [String: Int]
     var selectedLayer: String?
     var selectedColor: String?
+    var layersImages: [String: UIImage]?
     
     init(editorSubsection: EditorSubsection, prices: [String:Int]) {
         self.editorSubsection = editorSubsection

@@ -5,6 +5,7 @@ import SkeletonView
 protocol StickerFaceEditorSectionControllerDelegate: AnyObject {
     func stickerFaceEditorSectionController(_ controller: StickerFaceEditorSectionController, didSelect layer: String, section: Int)
     func stickerFaceEditorSectionController(_ controller: StickerFaceEditorSectionController, willDisplay header: String, in section: Int)
+    func stickerFaceEditorSectionController(_ controller: StickerFaceEditorSectionController, needRedner forLayer: String)
 }
 
 class StickerFaceEditorSectionController: ListSectionController {
@@ -130,12 +131,6 @@ class StickerFaceEditorSectionController: ListSectionController {
     private func configure(cell: LayerColorSelectorEmbeddedCell) -> LayerColorSelectorEmbeddedCell {
         adapter.collectionView = cell.collectionView
         adapter.dataSource = self
-//        adapter.scrollViewDelegate = self
-        
-//        if let index = layerColors.firstIndex(where: { String($0.color.id) == sectionModel.selectedColor }) {
-//            cell.colorSelectionIndicatorView.tintColor = UIColor(hex: layerColors[index].color.hash)
-//            cell.collectionView.scrollToItem(at: IndexPath(item: 0, section: index), at: .left, animated: true)
-//        }
         
         return cell
     }
@@ -153,21 +148,12 @@ class StickerFaceEditorSectionController: ListSectionController {
         } else {
             cell.layerType = .layers
         }
-        
-        let imageSide = 172
-        let url: String
-        
-        if cell.layerType == .NFT {
-           url = "http://sticker.face.cat/api/png/\(layer)?size=\(imageSide)"
+                
+        if let image = sectionModel.layersImages?[layer] {
+            cell.contentView.hideSkeleton()
+            cell.layerImageView.image = image
         } else {
-            url = "https://stickerface.io/api/section/png/\(layer)?size=\(imageSide)"
-        }
-            
-        ImageLoader.setImage(url: url, imgView: cell.layerImageView) { result in
-            switch result {
-            case .success: cell.contentView.hideSkeleton()
-            case .failure: break
-            }
+            delegate?.stickerFaceEditorSectionController(self, needRedner: layer)
         }
         
         let isPaid = UserSettings.wardrobe.contains(layer) || UserSettings.paidBackgrounds.contains(layer)
@@ -238,15 +224,3 @@ extension StickerFaceEditorSectionController: ListDisplayDelegate {
     func listAdapter(_ listAdapter: ListAdapter, didEndDisplaying sectionController: ListSectionController, cell: UICollectionViewCell, at index: Int) {}
 
 }
-
-// MARK: - ScrollViewDelegate
-//extension StickerFaceEditorSectionController: UIScrollViewDelegate {
-//
-//    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-//        if let indexPath = centeredIndexPath(), layerColors.count > indexPath.section {
-//            let color = layerColors[indexPath.section].color
-//            delegate?.stickerFaceEditorSectionController(self, didSelect: String(color.id), section: section)
-//        }
-//    }
-//
-//}
