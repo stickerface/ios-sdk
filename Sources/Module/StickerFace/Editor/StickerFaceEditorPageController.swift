@@ -9,13 +9,18 @@ protocol StickerFaceEditorPageDelegate: AnyObject {
 
 class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView> {
 
+    struct LayerForRender: Equatable {
+        let section: String
+        let layer: String
+    }
+    
     weak var delegate: StickerFaceEditorPageDelegate?
     weak var editorDelegate: StickerFaceEditorDelegate?
     
     var sectionModel: EditorSubsectionSectionModel
     var index = 0
     var requestId = 0
-    var layersForRender = [String]()
+    var layersForRender = [LayerForRender]()
     var isRendering: Bool = false
     var isRenderRedy: Bool = false
     
@@ -61,16 +66,28 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
         
         isRendering = true
         let id = getNextRequestId()
-        let renderFunc = createRenderFunc(requestId: id, layers: layer, size: Int(AvatarView.Layout.avatarImageViewHeight) * 4)
+        let renderFunc = createRenderFunc(requestId: id, layers: layer.layer, size: Int(AvatarView.Layout.avatarImageViewHeight) * 4, section: layer.section)
         
         mainView.renderWebView.evaluateJavaScript(renderFunc)
     }
     
-    private func createRenderFunc(requestId: Int, layers: String, size: Int) -> String {
+    private func createRenderFunc(requestId: Int, layers: String, size: Int, section: String) -> String {
         var neededLayers = ""
-        if layers != "0", let layers = editorDelegate?.replaceCurrentLayers(with: layers) {
-            neededLayers = editorDelegate?.layersWithoutBackground(layers).layers ?? ""
+        let allLayers = editorDelegate?.replaceCurrentLayers(with: layers)
+        let layersWitoutBack = editorDelegate?.layersWithout(section: "background", layers: allLayers ?? "")
+        let layersWithoutClothing = editorDelegate?.layersWithout(section: "clothing", layers: layersWitoutBack?.layers ?? "")
+        
+        if layers == "0" || layers == "" {
+            neededLayers = layers
+        } else if section == "background" {
+            neededLayers = layersWitoutBack?.sectionLayer ?? ""
+        } else if section == "clothing" {
+            neededLayers = layersWithoutClothing?.sectionLayer ?? ""
+        } else {
+            neededLayers = layersWithoutClothing?.layers ?? ""
         }
+
+        neededLayers = neededLayers.replacingOccurrences(of: ";1;", with: ";")
         return "renderPNG(\"\(neededLayers)\", \(requestId), \(size), {partial:true})"
     }
     
@@ -107,9 +124,10 @@ extension StickerFaceEditorPageController: StickerFaceEditorSectionControllerDel
         adapter.reloadData()
     }
     
-    func stickerFaceEditorSectionController(_ controller: StickerFaceEditorSectionController, needRedner forLayer: String) {
-        if !layersForRender.contains(forLayer) {
-            layersForRender.append(forLayer)
+    func stickerFaceEditorSectionController(_ controller: StickerFaceEditorSectionController, needRedner forLayer: String, section: String) {
+        let layerForRender = LayerForRender(section: section, layer: forLayer)
+        if !layersForRender.contains(layerForRender) {
+            layersForRender.append(layerForRender)
             renderLayer()
         }
     }
@@ -129,9 +147,9 @@ extension StickerFaceEditorPageController: AvatarRenderResponseHandlerDelegate {
             let image = UIImage(data: data)
             layersForRender.remove(at: 0)
             if sectionModel.layersImages != nil {
-                sectionModel.layersImages?[layer] = image
+                sectionModel.layersImages?[layer.layer] = image
             } else {
-                sectionModel.layersImages = [layer: image ?? UIImage()]
+                sectionModel.layersImages = [layer.layer: image ?? UIImage()]
             }
             
             isRendering = false

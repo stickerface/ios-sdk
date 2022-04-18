@@ -169,13 +169,13 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     }
     
     private func renderAvatar() {
-        let tuple = editorDelegate?.layersWithoutBackground(layers)
+        let tuple = editorDelegate?.layersWithout(section: "background", layers: layers)
         let id = getNextRequestId()
         let renderFunc = createRenderFunc(requestId: id, layers: tuple?.layers ?? "", size: Int(AvatarView.Layout.avatarImageViewHeight) * 4)
         
         mainView.renderWebView.evaluateJavaScript(renderFunc)
         
-        ImageLoader.setImage(layers: tuple?.background ?? "", imgView: mainView.backgroundImageView, size: mainView.bounds.width) { result in
+        ImageLoader.setImage(layers: tuple?.sectionLayer ?? "", imgView: mainView.backgroundImageView, size: mainView.bounds.width) { result in
             switch result {
             case .success: self.mainView.backgroundImageView.hideSkeleton()
             case .failure: break

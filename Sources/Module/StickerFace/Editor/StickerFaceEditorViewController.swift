@@ -15,7 +15,7 @@ protocol StickerFaceEditorViewControllerDelegate: AnyObject {
 
 protocol StickerFaceEditorDelegate: AnyObject {
     func updateLayers(_ layers: String)
-    func layersWithoutBackground(_ layers: String) -> (background: String, layers: String)
+    func layersWithout(section: String, layers: String) -> (sectionLayer: String, layers: String)
     func replaceCurrentLayers(with layer: String) -> String
 }
 
@@ -434,29 +434,29 @@ extension StickerFaceEditorViewController: StickerFaceEditorDelegate {
         updateSelectedLayers()
     }
     
-    func layersWithoutBackground(_ layers: String) -> (background: String, layers: String) {
+    func layersWithout(section: String, layers: String) -> (sectionLayer: String, layers: String) {
         var layers = layers
-        var backgroundLayer = "0"
+        var sectionLayer = "0"
         
         if let range = layers.range(of: "/") {
             layers.removeSubrange(range.lowerBound..<layers.endIndex)
         }
         
         var layersArray = layers.components(separatedBy: ";")
-        let backgroundLayers = objects.first(where: { model in
-            model.editorSubsection.name == "background"
+        let sectionLayers = objects.first(where: { model in
+            model.editorSubsection.name == section
         })
         
-        if let backLayers = backgroundLayers {
-            backLayers.editorSubsection.layers?.forEach({ layer in
+        if let sectionLayers = sectionLayers {
+            sectionLayers.editorSubsection.layers?.forEach({ layer in
                 if let index = layersArray.firstIndex(where: { $0 == layer }) {
-                    backgroundLayer = layer
+                    sectionLayer = layer
                     layersArray.remove(at: index)
                 }
             })
         }
         
         let resultLayers = layersArray.joined(separator: ";")
-        return (background: backgroundLayer, layers: resultLayers)
+        return (sectionLayer: sectionLayer, layers: resultLayers)
     }
 }

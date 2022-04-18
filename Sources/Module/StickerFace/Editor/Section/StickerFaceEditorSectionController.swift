@@ -5,7 +5,7 @@ import SkeletonView
 protocol StickerFaceEditorSectionControllerDelegate: AnyObject {
     func stickerFaceEditorSectionController(_ controller: StickerFaceEditorSectionController, didSelect layer: String, section: Int)
     func stickerFaceEditorSectionController(_ controller: StickerFaceEditorSectionController, willDisplay header: String, in section: Int)
-    func stickerFaceEditorSectionController(_ controller: StickerFaceEditorSectionController, needRedner forLayer: String)
+    func stickerFaceEditorSectionController(_ controller: StickerFaceEditorSectionController, needRedner forLayer: String, section: String)
 }
 
 class StickerFaceEditorSectionController: ListSectionController {
@@ -153,7 +153,7 @@ class StickerFaceEditorSectionController: ListSectionController {
             cell.contentView.hideSkeleton()
             cell.layerImageView.image = image
         } else {
-            delegate?.stickerFaceEditorSectionController(self, needRedner: layer)
+            delegate?.stickerFaceEditorSectionController(self, needRedner: layer, section: sectionModel.editorSubsection.name)
         }
         
         let isPaid = UserSettings.wardrobe.contains(layer) || UserSettings.paidBackgrounds.contains(layer)
