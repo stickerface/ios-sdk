@@ -55,7 +55,7 @@ class ModalNewLayerController: ModalScrollViewController {
             .font(Palette.fontMedium.withSize(16))
         
         ImageLoader.setAvatar(with: layers, for: mainView.imageView,
-                              side: 197, cornerRadius: 197/2)
+                              side: 197.0, cornerRadius: 197/2)
         
         if let price = price {
             if price == 0 {
