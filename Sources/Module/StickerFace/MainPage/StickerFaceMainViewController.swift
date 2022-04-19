@@ -26,7 +26,7 @@ class StickerFaceMainViewController: ViewController<StickerFaceMainView> {
     
     func updateLayers(_ layers: String) {
         self.layers = layers
-        adapter.reloadData(completion: nil)
+        adapter.reloadData()
     }
     
     @objc private func exportButtonTapped() {

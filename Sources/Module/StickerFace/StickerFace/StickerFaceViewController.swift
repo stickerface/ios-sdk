@@ -58,7 +58,6 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         mainView.tonBalanceView.addGestureRecognizer(balanceGesture)
         
         mainView.editorViewController.layers = layers
-        mainView.mainViewController.updateLayers(layers)
         
         mainView.mainViewController.delegate = self
         mainView.editorViewController.delegate = self
@@ -214,6 +213,11 @@ extension StickerFaceViewController: StickerFaceMainViewControllerDelegate {
 
 // MARK: - StickerFaceEditorViewControllerDelegate
 extension StickerFaceViewController: StickerFaceEditorViewControllerDelegate {
+    func stickerFaceEditorViewControllerDidLoadLayers(_ controller: StickerFaceEditorViewController) {
+        let layersWitoutBack = editorDelegate?.layersWithout(section: "background", layers: layers).layers ?? ""
+        mainView.mainViewController.updateLayers(layersWitoutBack)
+    }
+    
     func stickerFaceEditorViewControllerShouldContinue(_ controller: StickerFaceEditorViewController) {
         type = .main
         mainView.editButton.isHidden = false
