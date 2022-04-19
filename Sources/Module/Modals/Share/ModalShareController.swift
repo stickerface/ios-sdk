@@ -67,7 +67,7 @@ class ModalShareController: ModalScrollViewController {
         addArrangedView(title: "WhatsApp",
                         image: UIImage(libraryNamed: "share_whatsapp"),
                         action: nil)
-        addArrangedView(title: "Other",
+        addArrangedView(title: "commonOther".libraryLocalized,
                         image: UIImage(libraryNamed: "share_other"),
                         action: otherShareAction)
     }

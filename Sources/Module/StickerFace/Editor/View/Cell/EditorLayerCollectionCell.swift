@@ -109,6 +109,14 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         return view
     }()
     
+    let skeletonView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        view.isSkeletonable = true
+        
+        return view
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
                 
@@ -116,7 +124,6 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         contentView.layer.borderWidth = 1.0
         contentView.layer.borderColor = UIColor.sfSeparatorLight.cgColor
         contentView.clipsToBounds = true
-        contentView.isSkeletonable = true
         
         contentView.addSubview(selectedBackgroundImageView)
         contentView.addSubview(layerBackgroundView)
@@ -126,9 +133,10 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         contentView.addSubview(buyButton)
         contentView.addSubview(checkmarkImageView)
         contentView.addSubview(noneImageView)
+        contentView.addSubview(skeletonView)
         
-        contentView.showGradientSkeleton()
-        contentView.startSkeletonAnimation()
+        skeletonView.showGradientSkeleton()
+        skeletonView.startSkeletonAnimation()
     }
     
     required init?(coder: NSCoder) {
@@ -139,6 +147,7 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         super.prepareForReuse()
         
         buyButton.isHidden = true
+        layerImageView.image = nil
         noneImageView.isHidden = true
         checkmarkImageView.isHidden = true
         priceStackView.removeArrangedSubview(priceSubtitleLabel)
@@ -171,7 +180,6 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         
     }
     
-    // TODO: wardrobe state for background
     func setPrice(_ price: Int?, isPaid: Bool) {
         switch layerType {
         case .NFT:
@@ -179,7 +187,7 @@ class EditorLayerCollectionCell: UICollectionViewCell {
             
             if let price = price {
                 if isPaid {
-                    priceLabel.text = "Paid"
+                    priceLabel.text = "commonPaid".libraryLocalized
                     checkmarkImageView.isHidden = false
                     priceSubtitleLabel.isHidden = true
                     buyButton.isHidden = true
@@ -192,7 +200,7 @@ class EditorLayerCollectionCell: UICollectionViewCell {
                     priceStackView.addArrangedSubview(priceSubtitleLabel)
                 }
             } else {
-                priceLabel.text = "Free"
+                priceLabel.text = "commonFree".libraryLocalized
                 buyButton.isHidden = true
             }
             
@@ -200,13 +208,13 @@ class EditorLayerCollectionCell: UICollectionViewCell {
             buyButton.setImage(nil, for: .normal)
             if let price = price {
                 if isPaid {
-                    buyButton.setTitle("Paid", for: .normal)
+                    buyButton.setTitle("commonPaid".libraryLocalized, for: .normal)
                 } else {
                     buyButton.setImage(UIImage(libraryNamed: "shoppingCartSmal"), for: .normal)
                     buyButton.setTitle("\(price) TON", for: .normal)
                 }
             } else {
-                buyButton.setTitle("Free", for: .normal)
+                buyButton.setTitle("commonFree".libraryLocalized, for: .normal)
             }
             
         case .layers:
@@ -233,6 +241,7 @@ class EditorLayerCollectionCell: UICollectionViewCell {
     
     private func layersLayout() {
         layerImageView.layer.cornerRadius = 0.0
+        skeletonView.pin.all()
         
         noneImageView.pin
             .center()
@@ -248,6 +257,7 @@ class EditorLayerCollectionCell: UICollectionViewCell {
     
     private func backgroundLayout() {
         layerImageView.layer.cornerRadius = 38.5
+        skeletonView.pin.all()
         
         selectedBackgroundImageView.pin
             .top()
@@ -288,6 +298,8 @@ class EditorLayerCollectionCell: UICollectionViewCell {
     }
     
     private func NFTLayout() {
+        skeletonView.pin.all()
+        
         layerImageView.pin
             .top(24.0)
             .left(24.0)

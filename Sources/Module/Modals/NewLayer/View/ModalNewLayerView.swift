@@ -1,4 +1,5 @@
 import UIKit
+import Atributika
 
 class ModalNewLayerView: UIView {
     
@@ -19,13 +20,8 @@ class ModalNewLayerView: UIView {
         return label
     }()
     
-    // TODO: add attributed label
-    let subtitleLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .sfTextPrimary
-        label.font = Palette.fontMedium.withSize(16)
-        label.text = "Subtitle"
-        label.textAlignment = .center
+    let subtitleLabel: AttributedLabel = {
+        let label = AttributedLabel()
         label.numberOfLines = 0
         
         return label

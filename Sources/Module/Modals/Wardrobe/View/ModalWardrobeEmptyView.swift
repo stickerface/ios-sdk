@@ -13,7 +13,7 @@ class ModalWardrobeEmptyView: RootView {
     // TODO: add attributed label
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "All NFTs’ purchases will\nbe stored here"
+        label.text = "wardrobeEmptyTitle".libraryLocalized
         label.font = Palette.fontMedium.withSize(14)
         label.textColor = .sfTextSecondary
         label.numberOfLines = 0

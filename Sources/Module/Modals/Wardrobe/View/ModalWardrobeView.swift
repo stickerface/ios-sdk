@@ -11,7 +11,7 @@ class ModalWardrobeView: RootView {
     
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Wardrobe"
+        label.text = "wardrobeTitle".libraryLocalized
         label.font = Palette.fontBold.withSize(20)
         label.textColor = .sfTextPrimary
         label.textAlignment = .center
@@ -21,7 +21,7 @@ class ModalWardrobeView: RootView {
     
     let subtitleLabel: UILabel = {
         let label = UILabel()
-        label.text = "All your purchases is here"
+        label.text = "wardrobeSubtitle".libraryLocalized
         label.font = Palette.fontMedium.withSize(16)
         label.textColor = .sfTextPrimary
         label.textAlignment = .center

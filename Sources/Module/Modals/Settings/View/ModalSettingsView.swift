@@ -14,7 +14,7 @@ class ModalSettingsView: RootView {
         label.font = Palette.fontBold.withSize(20)
         label.textColor = .sfAccentSecondary
         label.textAlignment = .center
-        label.text = "Settings"
+        label.text = "settingsTitle".libraryLocalized
         
         return label
     }()
@@ -61,7 +61,7 @@ class ModalSettingsView: RootView {
         label.font = Palette.fontBold.withSize(12)
         label.textColor = .sfAccentSecondary
         label.textAlignment = .left
-        label.text = "Connect to buy NFTs"
+        label.text = "settingsConnectToBuy".libraryLocalized
         
         return label
     }()
@@ -72,7 +72,7 @@ class ModalSettingsView: RootView {
         button.layer.cornerCurve = .continuous
         button.backgroundColor = .sfAccentBrand
         button.setTitleColor(.sfDefaultWhite, for: .normal)
-        button.setTitle("Connect", for: .normal)
+        button.setTitle("commonConnect".libraryLocalized, for: .normal)
         button.titleLabel?.font = Palette.fontBold.withSize(14)
         button.contentEdgeInsets = UIEdgeInsets(top: 8.0, left: 16.0, bottom: 8.0, right: 16.0)
         

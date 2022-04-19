@@ -58,7 +58,7 @@ extension StickerFaceMainStickersSectionController: ListSupplementaryViewSource 
     
     func viewForSupplementaryElement(ofKind elementKind: String, at index: Int) -> UICollectionReusableView {
         let view = collectionContext!.dequeue(ofKind: UICollectionElementKindSectionHeader, for: self, of: StickerFaceMainStickersHeaderView.self, at: index)
-        view.titleLabel.text = "Stickers"
+        view.titleLabel.text = "mainStickers".libraryLocalized
         
         return view
     }

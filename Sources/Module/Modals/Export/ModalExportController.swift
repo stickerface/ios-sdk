@@ -38,7 +38,7 @@ class ModalExportController: ModalScrollViewController {
         guard let self = self, !self.isLoading else { return }
         
         self.isLoading = true
-        let stickerSet = StickerSet(software: "Example Software", type: .image)
+        let stickerSet = StickerSet(software: "StickerFace", type: .image)
         let tmpImageView = UIImageView()
         let path = "http://sticker.face.cat/api/png/"
         
@@ -74,7 +74,7 @@ class ModalExportController: ModalScrollViewController {
         addArrangedView(title: "WhatsApp",
                         image: UIImage(libraryNamed: "share_whatsapp"),
                         action: nil)
-        addArrangedView(title: "Keyboard",
+        addArrangedView(title: "commonKeyboard".libraryLocalized,
                         image: UIImage(libraryNamed: "export_keyboard"),
                         action: keyboardExportAction)
     }

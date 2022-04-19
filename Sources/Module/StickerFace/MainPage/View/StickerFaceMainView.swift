@@ -13,7 +13,7 @@ class StickerFaceMainView: RootView {
     
     let exportButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Export stickers", for: .normal)
+        button.setTitle("mainExport".libraryLocalized, for: .normal)
         button.setTitleColor(.sfDefaultWhite, for: .normal)
         button.titleLabel?.font = Palette.fontBold.withSize(16.0)
         button.backgroundColor = .sfAccentBrand

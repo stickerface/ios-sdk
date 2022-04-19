@@ -1,6 +1,14 @@
 import UIKit
+import WebKit
 
 class StickerFaceEditorPageView: RootView {
+    
+    let renderWebView: WKWebView = {
+        let webView = WKWebView()
+        webView.alpha = 0
+        
+        return webView
+    }()
     
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -16,6 +24,7 @@ class StickerFaceEditorPageView: RootView {
         
         backgroundColor = .white
 
+        addSubview(renderWebView)
         addSubview(collectionView)
         
         setupConstraints()
@@ -24,6 +33,11 @@ class StickerFaceEditorPageView: RootView {
     private func setupConstraints() {
         collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+        }
+        renderWebView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.width.equalTo(166.0)
+            make.height.equalTo(188.0)
         }
     }
     
