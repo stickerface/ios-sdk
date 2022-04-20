@@ -367,7 +367,10 @@ extension StickerFaceEditorViewController: StickerFaceEditorDelegate {
             var layers = replaceCurrentLayer(with: layer, section: section)
             
             if let color = color {
+                let tmpLayers = self.layers
+                self.layers = layers
                 layers = replaceCurrentLayer(with: color, section: section)
+                self.layers = tmpLayers
             }
             
             return layers

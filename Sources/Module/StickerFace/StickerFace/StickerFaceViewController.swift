@@ -203,6 +203,21 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
 
 // MARK: - StickerFaceMainViewControllerDelegate
 extension StickerFaceViewController: StickerFaceMainViewControllerDelegate {
+    func stickerFaceMainViewController(needAllLayers withLayers: [(layer: String, color: String?)]) -> String {
+        var allLayers = ""
+        let tmpLayers = mainView.editorViewController.layers
+        
+        // TODO: - может метод сделать где параметр будет все лееры и не парется с создаванием промежуточных лееров?
+        for layer in withLayers {
+            allLayers = editorDelegate?.replaceCurrentLayers(with: layer.layer, with: layer.color) ?? ""
+            mainView.editorViewController.layers = allLayers
+        }
+        
+        mainView.editorViewController.layers = tmpLayers
+        
+        return editorDelegate?.layersWithout(section: "background", layers: allLayers).layers ?? ""
+    }
+    
     func stickerFaceMainViewController(didSelect sticker: UIImage?) {
         let viewController = ModalShareController(shareImage: sticker)
         viewController.view.layoutIfNeeded()
@@ -273,7 +288,7 @@ extension StickerFaceViewController: ModalWardrobeDelegate {
     }
     
     func modalWardrobeController(_ controller: ModalWardrobeController, needLayers forLayer: String) -> String {
-        return editorDelegate?.replaceCurrentLayers(with: forLayer) ?? ""
+        return editorDelegate?.replaceCurrentLayers(with: forLayer, with: nil) ?? ""
     }
 }
 

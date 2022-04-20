@@ -3,6 +3,7 @@ import IGListKit
 
 protocol StickerFaceMainViewControllerDelegate: AnyObject {
     func stickerFaceMainViewController(didSelect sticker: UIImage?)
+    func stickerFaceMainViewController(needAllLayers withLayers: [(layer: String, color: String?)]) -> String
 }
 
 class StickerFaceMainViewController: ViewController<StickerFaceMainView> {
@@ -52,7 +53,10 @@ extension StickerFaceMainViewController: ListAdapterDataSource {
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
         switch object {
         case is StickerFaceMainStore:
-            return StickerFaceMainStoreSectionController()
+            let section = StickerFaceMainStoreSectionController()
+            section.delegate = self
+            
+            return section
             
         case is StickerFaceMainMint:
             return StickerFaceMainMintSectionController()
@@ -73,9 +77,16 @@ extension StickerFaceMainViewController: ListAdapterDataSource {
     }
 }
 
+// MARK: - StickersSectionControllerDelegate
 extension StickerFaceMainViewController: StickersSectionControllerDelegate {
     func stickersSectionController(didSelect sticker: UIImage?) {
         delegate?.stickerFaceMainViewController(didSelect: sticker)
     }
 }
 
+// MARK: - StickerFaceMainStoreSectionDelegate
+extension StickerFaceMainViewController: StickerFaceMainStoreSectionDelegate {
+    func stickerFaceMainStoreSection(needAllLayers withLayers: [(layer: String, color: String?)]) -> String {
+        return delegate?.stickerFaceMainViewController(needAllLayers: withLayers) ?? ""
+    }
+}
