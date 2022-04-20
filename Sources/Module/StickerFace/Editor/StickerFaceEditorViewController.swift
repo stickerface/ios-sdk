@@ -17,7 +17,7 @@ protocol StickerFaceEditorViewControllerDelegate: AnyObject {
 protocol StickerFaceEditorDelegate: AnyObject {
     func updateLayers(_ layers: String)
     func layersWithout(section: String, layers: String) -> (sectionLayer: String, layers: String)
-    func replaceCurrentLayers(with layer: String) -> String
+    func replaceCurrentLayers(with layer: String, with color: String?) -> String
 }
 
 class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
@@ -316,6 +316,7 @@ extension StickerFaceEditorViewController: StickerFaceEditorPageDelegate {
             
             delegate?.stickerFaceEditorViewController(self, didSelectPaid: layer, layers: newPaidLayers, with: price, layerType: type)
         } else {
+            print("===", layer)
             layers = replaceCurrentLayer(with: layer, section: section)
             delegate?.stickerFaceEditorViewController(self, didUpdate: layers)
             updateSelectedLayers()
@@ -357,13 +358,19 @@ extension StickerFaceEditorViewController: UIPageViewControllerDataSource, UIPag
 
 // MARK: - StickerFaceEditorDelegate
 extension StickerFaceEditorViewController: StickerFaceEditorDelegate {
-    func replaceCurrentLayers(with layer: String) -> String {
+    func replaceCurrentLayers(with layer: String, with color: String?) -> String {
         let section = objects.firstIndex { sectionModel in
             return sectionModel.editorSubsection.layers?.contains(layer) ?? false
         }
         
         if let section = section {
-            return replaceCurrentLayer(with: layer, section: section)
+            var layers = replaceCurrentLayer(with: layer, section: section)
+            
+            if let color = color {
+                layers = replaceCurrentLayer(with: color, section: section)
+            }
+            
+            return layers
         }
         
         return ""

@@ -247,7 +247,6 @@ extension StickerFaceViewController: ModalNewLayerDelegate {
     }
     
     func modalNewLayerController(_ controller: ModalNewLayerController, didBuy layer: String, layerType: LayerType, allLayers: String) {
-        
         if layerType == .NFT {
             var wardrobe = UserSettings.wardrobe
             wardrobe.append(layer)
