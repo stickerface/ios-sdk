@@ -27,7 +27,10 @@ class StickerFaceMainStoreSectionController: ListSectionController {
         
         let frontReplaceLayers = [(layer: "291", color: "3214"), (layer: "146", color: nil)]
         let frontLayers = delegate?.stickerFaceMainStoreSection(needAllLayers: frontReplaceLayers)
-        ImageLoader.setAvatar(with: frontLayers, for: cell.nftStoreView.frontAvatarImageView, side: 150, cornerRadius: 0)
+        
+        if frontLayers != "" {
+            ImageLoader.setAvatar(with: frontLayers, for: cell.nftStoreView.frontAvatarImageView, side: 150, cornerRadius: 0)
+        }
         
         let backReplaceLayers = [
             (layer: "310", color: "3210"),
@@ -35,7 +38,10 @@ class StickerFaceMainStoreSectionController: ListSectionController {
             (layer: "238", color: nil)
         ]
         let backLayers = delegate?.stickerFaceMainStoreSection(needAllLayers: backReplaceLayers)
-        ImageLoader.setAvatar(with: backLayers, for: cell.nftStoreView.backAvatarImageView, side: 150, cornerRadius: 0)
+        
+        if backLayers != "" {
+            ImageLoader.setAvatar(with: backLayers, for: cell.nftStoreView.backAvatarImageView, side: 150, cornerRadius: 0)
+        }
         
         return cell
     }

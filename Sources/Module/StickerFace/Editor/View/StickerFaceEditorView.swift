@@ -38,7 +38,6 @@ class StickerFaceEditorView: RootView {
         button.titleLabel?.font = Palette.fontBold.withSize(16.0)
         button.backgroundColor = .sfAccentBrand
         button.layer.cornerRadius = 12.0
-        button.isHidden = true
         
         return button
     }()

@@ -43,7 +43,7 @@ class ModalExportController: ModalScrollViewController {
         let path = "http://sticker.face.cat/api/png/"
         
         for i in 0...28 {
-            let url = path + "s\(i + 1);\(self.layers)?outline=true"
+            let url = path + "s\(i + 1);\(self.layers)"
             ImageLoader.shared.loadImage(url: url as NSString) { image in
                 if let stickerData = Sticker.StickerData(image: image) {
                     try? stickerSet.addSticker(

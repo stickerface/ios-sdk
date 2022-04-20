@@ -35,17 +35,20 @@ class NFTStoreView: UIView {
     
     let backAvatarImageView: UIImageView = {
         let view = UIImageView()
-        view.image = UIImage(libraryNamed: "store_preview1")
+        view.image = UIImage(libraryNamed: "placeholder_sticker_200")
         view.contentMode = .scaleAspectFill
+        view.clipsToBounds = true
+        view.tintColor = .black.withAlphaComponent(0.06)
         
         return view
     }()
     
     let frontAvatarImageView: UIImageView = {
         let view = UIImageView()
-        view.image = UIImage(libraryNamed: "store_preview2")
+        view.image = UIImage(libraryNamed: "placeholder_sticker_200")
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
+        view.tintColor = .black.withAlphaComponent(0.06)
         
         return view
     }()

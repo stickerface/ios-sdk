@@ -9,9 +9,9 @@ enum LayerType {
 
 protocol StickerFaceEditorViewControllerDelegate: AnyObject {
     func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didUpdate layers: String)
+    func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didSave layers: String)
     func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didSelectPaid layer: String, layers withLayer: String, with price: Int, layerType: LayerType)
     func stickerFaceEditorViewControllerDidLoadLayers(_ controller: StickerFaceEditorViewController)
-    func stickerFaceEditorViewControllerShouldContinue(_ controller: StickerFaceEditorViewController)
 }
 
 protocol StickerFaceEditorDelegate: AnyObject {
@@ -28,6 +28,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     
     weak var delegate: StickerFaceEditorViewControllerDelegate?
     
+    var currentLayers: String = ""
     var layers: String = ""
     
     private var loadingState = LoadingState.loading
@@ -63,18 +64,13 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         
         loadEditor()
     }
-    
-    // MARK: Public mehtods
-    
-    func shouldHideSaveButton(_ isHidden: Bool) {
-        mainView.saveButton.isHidden = isHidden
-    }
-    
+        
     // MARK: Private actions
     
     @objc private func saveButtonTapped() {
-        delegate?.stickerFaceEditorViewControllerShouldContinue(self)
-        mainView.saveButton.isHidden = true
+        layers = currentLayers
+        delegate?.stickerFaceEditorViewController(self, didSave: currentLayers)
+        mainView.saveButton.setTitle("Save", for: .normal)
     }
     
     @objc private func changeSelectedTab(_ gestureRecognizer: UISwipeGestureRecognizer) {
@@ -164,7 +160,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     }
     
     private func replaceCurrentLayer(with replacementLayer: String, section: Int) -> String {
-        var layers = layers
+        var layers = currentLayers
         
         if let range = layers.range(of: "/") {
             layers.removeSubrange(range.lowerBound..<layers.endIndex)
@@ -193,8 +189,8 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         return layers
     }
     
-    private func updateSelectedLayers() {
-        var layers = layers
+    func updateSelectedLayers() {
+        var layers = currentLayers
         
         if let range = layers.range(of: "/") {
             layers.removeSubrange(range.lowerBound..<layers.endIndex)
@@ -316,9 +312,8 @@ extension StickerFaceEditorViewController: StickerFaceEditorPageDelegate {
             
             delegate?.stickerFaceEditorViewController(self, didSelectPaid: layer, layers: newPaidLayers, with: price, layerType: type)
         } else {
-            print("===", layer)
-            layers = replaceCurrentLayer(with: layer, section: section)
-            delegate?.stickerFaceEditorViewController(self, didUpdate: layers)
+            currentLayers = replaceCurrentLayer(with: layer, section: section)
+            delegate?.stickerFaceEditorViewController(self, didUpdate: currentLayers)
             updateSelectedLayers()
         }
     }
@@ -367,10 +362,10 @@ extension StickerFaceEditorViewController: StickerFaceEditorDelegate {
             var layers = replaceCurrentLayer(with: layer, section: section)
             
             if let color = color {
-                let tmpLayers = self.layers
-                self.layers = layers
+                let tmpLayers = self.currentLayers
+                self.currentLayers = layers
                 layers = replaceCurrentLayer(with: color, section: section)
-                self.layers = tmpLayers
+                self.currentLayers = tmpLayers
             }
             
             return layers
@@ -380,7 +375,7 @@ extension StickerFaceEditorViewController: StickerFaceEditorDelegate {
     }
     
     func updateLayers(_ layers: String) {
-        self.layers = layers
+        self.currentLayers = layers
         updateSelectedLayers()
     }
     
