@@ -304,18 +304,18 @@ extension StickerFaceEditorViewController: StickerFaceEditorPageDelegate {
     }
     
     func stickerFaceEditorPageController(_ controller: StickerFaceEditorPageController, didSelect layer: String, section: Int) {
-        let isPaid = UserSettings.wardrobe.contains(layer) || UserSettings.paidBackgrounds.contains(layer)
-        
-        if let price = prices["\(layer)"], !isPaid {
-            let newPaidLayers = replaceCurrentLayer(with: layer, section: section)
-            let type: LayerType = objects[section].editorSubsection.name == "background" ? .background : .NFT
-            
-            delegate?.stickerFaceEditorViewController(self, didSelectPaid: layer, layers: newPaidLayers, with: price, layerType: type)
-        } else {
+//        let isPaid = UserSettings.wardrobe.contains(layer) || UserSettings.paidBackgrounds.contains(layer)
+//
+//        if let price = prices["\(layer)"], !isPaid {
+//            let newPaidLayers = replaceCurrentLayer(with: layer, section: section)
+//            let type: LayerType = objects[section].editorSubsection.name == "background" ? .background : .NFT
+//
+//            delegate?.stickerFaceEditorViewController(self, didSelectPaid: layer, layers: newPaidLayers, with: price, layerType: type)
+//        } else {
             currentLayers = replaceCurrentLayer(with: layer, section: section)
             delegate?.stickerFaceEditorViewController(self, didUpdate: currentLayers)
             updateSelectedLayers()
-        }
+//        }
     }
 }
 

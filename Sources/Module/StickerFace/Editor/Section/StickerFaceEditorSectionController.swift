@@ -80,7 +80,7 @@ class StickerFaceEditorSectionController: ListSectionController {
     override func sizeForItem(at index: Int) -> CGSize {
         // size for background layers
         if sectionModel.editorSubsection.name == "background" {
-            return CGSize(width: 100.0, height: 144.0)
+            return CGSize(width: 100.0, height: 100.0)
         }
         
         // size for titels
@@ -140,11 +140,8 @@ class StickerFaceEditorSectionController: ListSectionController {
             return cell
         }
         
-        // TODO: need 'if' closure for NFT
         if sectionModel.editorSubsection.name == "background" {
             cell.layerType = .background
-        } else if sectionModel.editorSubsection.name == "clothing" {
-            cell.layerType = .NFT
         } else {
             cell.layerType = .layers
         }
@@ -156,12 +153,8 @@ class StickerFaceEditorSectionController: ListSectionController {
             delegate?.stickerFaceEditorSectionController(self, needRedner: layer, section: sectionModel.editorSubsection.name)
         }
         
-        let isPaid = UserSettings.wardrobe.contains(layer) || UserSettings.paidBackgrounds.contains(layer)
-        
-        cell.setPrice(sectionModel.prices["\(layer)"], isPaid: isPaid)
         cell.setSelected(sectionModel.selectedLayer == layer)
         
-        cell.titleLabel.text = "Honeysuckle"
         cell.noneImageView.isHidden = layer != "0"
         
         cell.setNeedsLayout()

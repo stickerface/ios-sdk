@@ -10,9 +10,10 @@ class EditorLayerCollectionCell: UICollectionViewCell {
             titleLabel.isHidden = layerType == .layers
             priceLabel.isHidden = layerType == .layers
             priceSubtitleLabel.isHidden = layerType == .layers
-            buyButton.isHidden = layerType == .layers
+            buyButton.isHidden = true
             selectedBackgroundImageView.isHidden = layerType != .background
             layerBackgroundView.isHidden = layerType == .layers
+            blurView.isHidden = layerType != .background
             
             if layerType == .background {
                 buyButton.semanticContentAttribute = .forceRightToLeft
@@ -117,6 +118,14 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         return view
     }()
     
+    let blurView: UIVisualEffectView = {
+        let blurEffect = UIBlurEffect(style: .light)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
+        return blurEffectView
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
                 
@@ -134,6 +143,8 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         contentView.addSubview(checkmarkImageView)
         contentView.addSubview(noneImageView)
         contentView.addSubview(skeletonView)
+        
+        selectedBackgroundImageView.addSubview(blurView)
         
         skeletonView.showGradientSkeleton()
         skeletonView.startSkeletonAnimation()
@@ -171,6 +182,7 @@ class EditorLayerCollectionCell: UICollectionViewCell {
             
         case .background:
             selectedBackgroundImageView.image = isSelected ? layerImageView.image : nil
+            blurView.isHidden = !isSelected
             
         case .NFT:
             contentView.layer.borderColor = isSelected ?
@@ -264,6 +276,8 @@ class EditorLayerCollectionCell: UICollectionViewCell {
             .hCenter()
             .size(100.0)
         
+        blurView.pin.all()
+        
         layerBackgroundView.pin
             .top(4.5)
             .hCenter()
@@ -279,21 +293,21 @@ class EditorLayerCollectionCell: UICollectionViewCell {
             .right()
             .top(to: layerBackgroundView.edge.bottom).marginTop(8.3)
             .sizeToFit(.width)
-        
-        if buyButton.isHidden {
-            priceLabel.pin
-                .left()
-                .right()
-                .top(to: titleLabel.edge.bottom).marginTop(4.0)
-                .sizeToFit(.width)
-        } else {
-            buyButton.pin
-                .left()
-                .right()
-                .height(20.0)
+
+//        if buyButton.isHidden {
+//            priceLabel.pin
+//                .left()
+//                .right()
 //                .top(to: titleLabel.edge.bottom).marginTop(4.0)
-                .bottom()
-        }
+//                .sizeToFit(.width)
+//        } else {
+//            buyButton.pin
+//                .left()
+//                .right()
+//                .height(20.0)
+////                .top(to: titleLabel.edge.bottom).marginTop(4.0)
+//                .bottom()
+//        }
         
     }
     
