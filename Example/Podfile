@@ -4,6 +4,6 @@ platform :ios, '13.0'
 
 target 'StickerFaceExample' do
 
-  pod 'StickerFace', :path => '../'
+  pod 'StickerFaceSDK', :path => '../'
   
 end

@@ -215,7 +215,7 @@
 				"${BUILT_PRODUCTS_DIR}/PinLayout/PinLayout.framework",
 				"${BUILT_PRODUCTS_DIR}/SkeletonView/SkeletonView.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
-				"${BUILT_PRODUCTS_DIR}/StickerFace/StickerFace.framework",
+				"${BUILT_PRODUCTS_DIR}/StickerFaceSDK/StickerFaceSDK.framework",
 				"${BUILT_PRODUCTS_DIR}/TelegramStickersImport/TelegramStickersImport.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -228,7 +228,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PinLayout.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SkeletonView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/StickerFace.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/StickerFaceSDK.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TelegramStickersImport.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
