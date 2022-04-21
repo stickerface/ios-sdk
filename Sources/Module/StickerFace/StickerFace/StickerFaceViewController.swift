@@ -122,15 +122,15 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
             present(viewController, animated: true)
             
         case .close:
-            mainView.editButton.isHidden = false
+//            mainView.editButton.isHidden = false
             mainView.rightTopButton.setImageType(.settings)
             type = .main
             
         case .back:
-            mainView.tonBalanceView.isHidden = false
+//            mainView.tonBalanceView.isHidden = false
             mainView.backButton.isHidden = true
             mainView.editButton.isHidden = false
-            mainView.rightTopButton.setImageType(.settings)
+            mainView.rightTopButton.isHidden = true
             type = .main
             
             self.layers = mainView.editorViewController.layers
@@ -214,7 +214,7 @@ extension StickerFaceViewController: StickerFaceMainViewControllerDelegate {
         
         // TODO: - может метод сделать где параметр будет все лееры и не парется с создаванием промежуточных лееров?
         for layer in withLayers {
-            allLayers = editorDelegate?.replaceCurrentLayers(with: layer.layer, with: layer.color) ?? ""
+            allLayers = editorDelegate?.replaceCurrentLayers(with: layer.layer, with: layer.color, isCurrent: false) ?? ""
             mainView.editorViewController.currentLayers = allLayers
         }
         
@@ -246,11 +246,10 @@ extension StickerFaceViewController: StickerFaceEditorViewControllerDelegate {
     func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didSave layers: String) {
         let layersWitoutBack = editorDelegate?.layersWithout(section: "background", layers: layers).layers ?? ""
         mainView.mainViewController.updateLayers(layersWitoutBack)
-        mainView.tonBalanceView.isHidden = false
+//        mainView.tonBalanceView.isHidden = false
         mainView.backButton.isHidden = true
         mainView.editButton.isHidden = false
-        mainView.editButton.isHidden = false
-        mainView.rightTopButton.setImageType(.settings)
+        mainView.rightTopButton.isHidden = true
         type = .main
     }
     
@@ -297,7 +296,7 @@ extension StickerFaceViewController: ModalWardrobeDelegate {
     }
     
     func modalWardrobeController(_ controller: ModalWardrobeController, needLayers forLayer: String) -> String {
-        return editorDelegate?.replaceCurrentLayers(with: forLayer, with: nil) ?? ""
+        return editorDelegate?.replaceCurrentLayers(with: forLayer, with: nil, isCurrent: true) ?? ""
     }
 }
 

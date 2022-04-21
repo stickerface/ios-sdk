@@ -17,7 +17,7 @@ protocol StickerFaceEditorViewControllerDelegate: AnyObject {
 protocol StickerFaceEditorDelegate: AnyObject {
     func updateLayers(_ layers: String)
     func layersWithout(section: String, layers: String) -> (sectionLayer: String, layers: String)
-    func replaceCurrentLayers(with layer: String, with color: String?) -> String
+    func replaceCurrentLayers(with layer: String, with color: String?, isCurrent: Bool) -> String
 }
 
 class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
@@ -70,7 +70,21 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     @objc private func saveButtonTapped() {
         layers = currentLayers
         delegate?.stickerFaceEditorViewController(self, didSave: currentLayers)
+        
+        headers.enumerated().forEach { $0.element.isSelected = $0.offset == 0 }
+        objects.forEach { $0.layersImages = nil }
+        
         mainView.saveButton.setTitle("Save", for: .normal)
+        
+        self.headerAdapter.reloadData()
+        self.adapter.reloadData()
+        
+        self.mainView.headerCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: true)
+        
+        if let vc = self.viewControllers?[0] as? StickerFaceEditorPageController {
+            vc.mainView.collectionView.scrollToTop(animated: false)
+            self.mainView.pageViewController.setViewControllers([vc], direction: .forward, animated: false)
+        }
     }
     
     @objc private func changeSelectedTab(_ gestureRecognizer: UISwipeGestureRecognizer) {
@@ -159,8 +173,8 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         }
     }
     
-    private func replaceCurrentLayer(with replacementLayer: String, section: Int) -> String {
-        var layers = currentLayers
+    private func replaceCurrentLayer(with replacementLayer: String, section: Int, isCurrent: Bool) -> String {
+        var layers = isCurrent ? currentLayers : layers
         
         if let range = layers.range(of: "/") {
             layers.removeSubrange(range.lowerBound..<layers.endIndex)
@@ -312,9 +326,9 @@ extension StickerFaceEditorViewController: StickerFaceEditorPageDelegate {
 //
 //            delegate?.stickerFaceEditorViewController(self, didSelectPaid: layer, layers: newPaidLayers, with: price, layerType: type)
 //        } else {
-            currentLayers = replaceCurrentLayer(with: layer, section: section)
-            delegate?.stickerFaceEditorViewController(self, didUpdate: currentLayers)
-            updateSelectedLayers()
+        currentLayers = replaceCurrentLayer(with: layer, section: section, isCurrent: true)
+        delegate?.stickerFaceEditorViewController(self, didUpdate: currentLayers)
+        updateSelectedLayers()
 //        }
     }
 }
@@ -353,19 +367,25 @@ extension StickerFaceEditorViewController: UIPageViewControllerDataSource, UIPag
 
 // MARK: - StickerFaceEditorDelegate
 extension StickerFaceEditorViewController: StickerFaceEditorDelegate {
-    func replaceCurrentLayers(with layer: String, with color: String?) -> String {
+    func replaceCurrentLayers(with layer: String, with color: String?, isCurrent: Bool) -> String {
         let section = objects.firstIndex { sectionModel in
             return sectionModel.editorSubsection.layers?.contains(layer) ?? false
         }
         
         if let section = section {
-            var layers = replaceCurrentLayer(with: layer, section: section)
+            var layers = replaceCurrentLayer(with: layer, section: section, isCurrent: isCurrent)
             
             if let color = color {
                 let tmpLayers = self.currentLayers
-                self.currentLayers = layers
-                layers = replaceCurrentLayer(with: color, section: section)
-                self.currentLayers = tmpLayers
+                if isCurrent {
+                    self.currentLayers = layers
+                    layers = replaceCurrentLayer(with: color, section: section, isCurrent: isCurrent)
+                    self.currentLayers = tmpLayers
+                } else {
+                    self.layers = layers
+                    layers = replaceCurrentLayer(with: color, section: section, isCurrent: isCurrent)
+                    self.layers = tmpLayers
+                }
             }
             
             return layers
