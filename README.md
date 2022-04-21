@@ -1,9 +1,9 @@
-# StickerFace
+# StickerFaceSDK
 
 <!-- [![CI Status](https://img.shields.io/travis/Xaker69/StickerFace.svg?style=flat)](https://travis-ci.org/Xaker69/StickerFace) -->
-[![Version](https://img.shields.io/cocoapods/v/StickerFace.svg?style=flat)](https://cocoapods.org/pods/StickerFace)
-[![License](https://img.shields.io/cocoapods/l/StickerFace.svg?style=flat)](https://cocoapods.org/pods/StickerFace)
-[![Platform](https://img.shields.io/cocoapods/p/StickerFace.svg?style=flat)](https://cocoapods.org/pods/StickerFace)
+[![Version](https://img.shields.io/cocoapods/v/StickerFaceSDK.svg?style=flat)](https://cocoapods.org/pods/StickerFaceSDK)
+[![License](https://img.shields.io/cocoapods/l/StickerFaceSDK.svg?style=flat)](https://cocoapods.org/pods/StickerFaceSDK)
+[![Platform](https://img.shields.io/cocoapods/p/StickerFaceSDK.svg?style=flat)](https://cocoapods.org/pods/StickerFaceSDK)
 
 ## Example
 
@@ -17,7 +17,7 @@ StickerFace is available through [CocoaPods](https://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod 'StickerFace'
+pod 'StickerFaceSDK'
 ```
 
 ## Author
