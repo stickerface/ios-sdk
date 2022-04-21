@@ -35,16 +35,20 @@ class NFTStoreView: UIView {
     
     let backAvatarImageView: UIImageView = {
         let view = UIImageView()
-        view.image = UIImage(libraryNamed: "store_preview1")
-        view.contentMode = .scaleAspectFit
+        view.image = UIImage(libraryNamed: "placeholder_sticker_200")
+        view.contentMode = .scaleAspectFill
+        view.clipsToBounds = true
+        view.tintColor = .black.withAlphaComponent(0.06)
         
         return view
     }()
     
     let frontAvatarImageView: UIImageView = {
         let view = UIImageView()
-        view.image = UIImage(libraryNamed: "store_preview2")
-        view.contentMode = .scaleAspectFit
+        view.image = UIImage(libraryNamed: "placeholder_sticker_200")
+        view.contentMode = .scaleAspectFill
+        view.clipsToBounds = true
+        view.tintColor = .black.withAlphaComponent(0.06)
         
         return view
     }()
@@ -82,15 +86,17 @@ class NFTStoreView: UIView {
         }
         
         backAvatarImageView.snp.makeConstraints { make in
-            make.right.equalToSuperview().offset(-14.0)
+            make.right.equalToSuperview().offset(-10.0)
             make.bottom.equalToSuperview()
+            make.width.equalTo(80.0)
+            make.height.equalTo(113.0)
         }
         
         frontAvatarImageView.snp.makeConstraints { make in
-            make.right.equalToSuperview().offset(-61.0)
+            make.right.equalToSuperview().offset(-48.0)
             make.bottom.equalToSuperview()
+            make.width.equalTo(100.0)
+            make.height.equalTo(130.0)
         }
     }
-
-    
 }

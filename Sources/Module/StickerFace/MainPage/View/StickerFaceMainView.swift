@@ -21,6 +21,24 @@ class StickerFaceMainView: RootView {
         
         return button
     }()
+    
+    let gradientLayer: CAGradientLayer = {
+        let layer = CAGradientLayer()
+        let color1 = UIColor.white.cgColor
+        let color2 = UIColor.white.cgColor
+        let color3 = UIColor.white.withAlphaComponent(0).cgColor
+
+        layer.colors = [color1, color2, color3]
+        layer.locations = [0.0, 0.13, 1.0]
+        
+        return layer
+    }()
+    
+    let gradientView: UIView = {
+        let view = UIView()
+        
+        return view
+    }()
         
     override func setup() {
         backgroundColor = .white
@@ -31,14 +49,29 @@ class StickerFaceMainView: RootView {
         layer.cornerCurve = .continuous
         
         addSubview(collectionView)
+        addSubview(gradientView)
         addSubview(exportButton)
         
+        gradientView.layer.insertSublayer(gradientLayer, at: 0)
+        
         setupConstraints()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        gradientLayer.frame = gradientView.bounds
     }
     
     private func setupConstraints() {
         collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+        }
+        
+        gradientView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.left.right.equalToSuperview()
+            make.height.equalTo(40.0)
         }
         
         exportButton.snp.makeConstraints { make in

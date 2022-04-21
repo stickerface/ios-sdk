@@ -8,6 +8,7 @@ class StickerFaceMainStoreCell: UICollectionViewCell {
     
     let nftStoreView: NFTStoreView = {
         let view = NFTStoreView()
+        view.clipsToBounds = true
         
         return view
     }()

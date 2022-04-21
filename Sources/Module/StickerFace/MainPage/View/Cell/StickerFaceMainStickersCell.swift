@@ -4,7 +4,9 @@ class StickerFaceMainStickersCell: UICollectionViewCell {
     
     let imageView: UIImageView = {
         let view = UIImageView()
+        view.image = UIImage(libraryNamed: "placeholder_sticker_200")
         view.backgroundColor = .clear
+        view.tintColor = UIColor.black.withAlphaComponent(0.06)
         
         return view
     }()

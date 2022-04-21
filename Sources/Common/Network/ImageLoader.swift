@@ -50,7 +50,7 @@ class ImageLoader: NSObject {
             preconditionFailure("Unknown avatar type")
         }
         
-        let placeholder = placeholderImage ?? UIImage(libraryNamed: "placeholder_sticker_200")?.withRenderingMode(.alwaysTemplate)
+        let placeholder = placeholderImage ?? UIImage(libraryNamed: "placeholder_sticker_200")
         let processor = RoundCornerImageProcessor(cornerRadius: cornerRadius * UIScreen.main.scale,
                                                   targetSize: CGSize(side: side * UIScreen.main.scale),
                                                   backgroundColor: .clear)

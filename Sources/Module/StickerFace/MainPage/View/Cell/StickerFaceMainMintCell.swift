@@ -9,6 +9,7 @@ class StickerFaceMainMintCell: UICollectionViewCell {
     let iamgeView: UIImageView = {
         let view = UIImageView()
         view.image = UIImage(libraryNamed: "temporary_mint")
+        view.contentMode = .scaleAspectFit
         
         return view
     }()
@@ -25,10 +26,12 @@ class StickerFaceMainMintCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // TODO: оффсеты не по дизайну (сделаны для того чтобы картинка была как в дизайне)
     private func setupConstraints() {
         iamgeView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(18.0)
-            make.left.right.equalToSuperview().inset(16.0)
+            make.top.equalToSuperview().offset(16.0)
+            make.left.right.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-16.0)
         }
     }
     

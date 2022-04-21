@@ -9,14 +9,15 @@ enum LayerType {
 
 protocol StickerFaceEditorViewControllerDelegate: AnyObject {
     func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didUpdate layers: String)
+    func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didSave layers: String)
     func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didSelectPaid layer: String, layers withLayer: String, with price: Int, layerType: LayerType)
-    func stickerFaceEditorViewControllerShouldContinue(_ controller: StickerFaceEditorViewController)
+    func stickerFaceEditorViewControllerDidLoadLayers(_ controller: StickerFaceEditorViewController)
 }
 
 protocol StickerFaceEditorDelegate: AnyObject {
     func updateLayers(_ layers: String)
     func layersWithout(section: String, layers: String) -> (sectionLayer: String, layers: String)
-    func replaceCurrentLayers(with layer: String) -> String
+    func replaceCurrentLayers(with layer: String, with color: String?) -> String
 }
 
 class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
@@ -27,6 +28,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     
     weak var delegate: StickerFaceEditorViewControllerDelegate?
     
+    var currentLayers: String = ""
     var layers: String = ""
     
     private var loadingState = LoadingState.loading
@@ -62,18 +64,13 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         
         loadEditor()
     }
-    
-    // MARK: Public mehtods
-    
-    func shouldHideSaveButton(_ isHidden: Bool) {
-        mainView.saveButton.isHidden = isHidden
-    }
-    
+        
     // MARK: Private actions
     
     @objc private func saveButtonTapped() {
-        delegate?.stickerFaceEditorViewControllerShouldContinue(self)
-        mainView.saveButton.isHidden = true
+        layers = currentLayers
+        delegate?.stickerFaceEditorViewController(self, didSave: currentLayers)
+        mainView.saveButton.setTitle("Save", for: .normal)
     }
     
     @objc private func changeSelectedTab(_ gestureRecognizer: UISwipeGestureRecognizer) {
@@ -114,17 +111,19 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         provider.loadEditor { [weak self] result in
             switch result {
             case .success(let editor):
-                self?.headers = editor.sections.flatMap({ $0.subsections }).map({ EditorHeaderSectionModel(title: $0.name) })
-                self?.headers.first?.isSelected = true
-                self?.headerAdapter.performUpdates(animated: true)
+                guard let self = self else { return }
                 
-                self?.prices = editor.prices
+                self.headers = editor.sections.flatMap({ $0.subsections }).map({ EditorHeaderSectionModel(title: $0.name) })
+                self.headers.first?.isSelected = true
+                self.headerAdapter.performUpdates(animated: true)
+                
+                self.prices = editor.prices
                 
                 // TODO: убрать говнокод
-                self?.prices["271"] = 2
+                self.prices["271"] = 2
                 
-                self?.objects = editor.sections.flatMap({ $0.subsections }).map({ EditorSubsectionSectionModel(editorSubsection: $0, prices: self!.prices) })
-                self?.viewControllers = self?.objects.enumerated().map { index, object in
+                self.objects = editor.sections.flatMap({ $0.subsections }).map({ EditorSubsectionSectionModel(editorSubsection: $0, prices: self.prices) })
+                self.viewControllers = self.objects.enumerated().map { index, object in
                     let controller = StickerFaceEditorPageController(sectionModel: object)
                     controller.delegate = self
                     controller.editorDelegate = self
@@ -132,39 +131,22 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                     
                     return controller
                 }
-                self?.updateSelectedLayers()
-                self?.loadingState = .loaded
+                self.updateSelectedLayers()
+                self.loadingState = .loaded
                 
-                if let viewController = self?.viewControllers?[0] {
-                    self?.mainView.pageViewController.setViewControllers([viewController], direction: .reverse, animated: true)
+                if let viewController = self.viewControllers?[0] {
+                    self.mainView.pageViewController.setViewControllers([viewController], direction: .reverse, animated: true)
                 }
                 
-                self?.updateUserProducts()
-                
+                self.delegate?.stickerFaceEditorViewControllerDidLoadLayers(self)
+            
             case .failure(let error):
-                //                if let error = error as? ImModelError {
-                //                    self?.mainView.loaderView.showError(error.message())
-                //                }
                 self?.mainView.loaderView.showError(error.localizedDescription)
                 self?.loadingState = .failed
             }
         }
     }
-    
-    private func updateUserProducts() {
-        //        provider.getUserProducts { [weak self] result in
-        //            switch result {
-        //            case .success(let productIds):
-        //                self?.updatePrices(productIds)
-        //
-        //            case .failure(let error):
-        //                if let error = error as? ImModelError {
-        //                    self?.mainView.loaderView.showError(error.message())
-        //                }
-        //            }
-        //        }
-    }
-    
+        
     private func updatePrices(_ layers: [String]) {
         layers.forEach { prices.removeValue(forKey: $0) }
         objects.enumerated().forEach { index, object in
@@ -178,7 +160,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     }
     
     private func replaceCurrentLayer(with replacementLayer: String, section: Int) -> String {
-        var layers = layers
+        var layers = currentLayers
         
         if let range = layers.range(of: "/") {
             layers.removeSubrange(range.lowerBound..<layers.endIndex)
@@ -207,8 +189,8 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         return layers
     }
     
-    private func updateSelectedLayers() {
-        var layers = layers
+    func updateSelectedLayers() {
+        var layers = currentLayers
         
         if let range = layers.range(of: "/") {
             layers.removeSubrange(range.lowerBound..<layers.endIndex)
@@ -237,52 +219,6 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                 viewController.adapter.reloadData()
             }
         }
-    }
-    
-    private func showConfirmBuyingLayers(price: Int, layers: String) {
-        //        let modal = ModalConfirmationController(type: .buyProduct(price: price, layers: layers))
-        //
-        //        let actionBuyLayers = ProfileTableViewCell(icon: UIImage(libraryNamed: "check_48"), label: "modalChoosePurchasesAgree".libraryLocalized)
-        //        actionBuyLayers.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(buyLayers)))
-        //
-        //        let actionClose = ProfileTableViewCell(icon: UIImage(libraryNamed: "close_28"), label: "modalChoosePurchasesCancel".libraryLocalized)
-        //        actionClose.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(closeConfirmBuyingLayers)))
-        //
-        //        modal.actionsStackView.addArrangedSubview(actionBuyLayers)
-        //        modal.actionsStackView.addArrangedSubview(actionClose)
-        //
-        //        modal.actionsStackView.arrangedSubviews.enumerated().forEach { view in
-        //            if view.offset != modal.actionsStackView.arrangedSubviews.count - 1 {
-        //                (view.element as? ProfileTableViewCell)?.separator.isHidden = false
-        //            }
-        //        }
-        //
-        //        present(modal, animated: true)
-    }
-    
-    private func showConfirmNotEnoughCoins() {
-        //        let modal = ModalConfirmationController(type: .notEnoughCoins)
-        //
-        //        let actionBuyLayers = ProfileTableViewCell(icon: UIImage(libraryNamed: "check_48"), label: "modalChooseBuyCoinsAgree".libraryLocalized)
-        //        actionBuyLayers.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(openCoinsShop)))
-        //
-        //        let actionClose = ProfileTableViewCell(icon: UIImage(libraryNamed: "close_28"), label: "modalChoosePurchasesCancel".libraryLocalized)
-        //        actionClose.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(close)))
-        //
-        //        modal.actionsStackView.addArrangedSubview(actionBuyLayers)
-        //        modal.actionsStackView.addArrangedSubview(actionClose)
-        //
-        //        modal.actionsStackView.arrangedSubviews.enumerated().forEach { view in
-        //            if view.offset != modal.actionsStackView.arrangedSubviews.count - 1 {
-        //                (view.element as? ProfileTableViewCell)?.separator.isHidden = false
-        //            }
-        //        }
-        //
-        //        present(modal, animated: true)
-    }
-    
-    @objc private func closeConfirmBuyingLayers() {
-        //        Analytics.shared.register(event: SettingsAnalyticsEvent.stickerFaceBuy(value: false))
     }
     
 }
@@ -376,8 +312,8 @@ extension StickerFaceEditorViewController: StickerFaceEditorPageDelegate {
             
             delegate?.stickerFaceEditorViewController(self, didSelectPaid: layer, layers: newPaidLayers, with: price, layerType: type)
         } else {
-            layers = replaceCurrentLayer(with: layer, section: section)
-            delegate?.stickerFaceEditorViewController(self, didUpdate: layers)
+            currentLayers = replaceCurrentLayer(with: layer, section: section)
+            delegate?.stickerFaceEditorViewController(self, didUpdate: currentLayers)
             updateSelectedLayers()
         }
     }
@@ -417,20 +353,29 @@ extension StickerFaceEditorViewController: UIPageViewControllerDataSource, UIPag
 
 // MARK: - StickerFaceEditorDelegate
 extension StickerFaceEditorViewController: StickerFaceEditorDelegate {
-    func replaceCurrentLayers(with layer: String) -> String {
+    func replaceCurrentLayers(with layer: String, with color: String?) -> String {
         let section = objects.firstIndex { sectionModel in
             return sectionModel.editorSubsection.layers?.contains(layer) ?? false
         }
         
         if let section = section {
-            return replaceCurrentLayer(with: layer, section: section)
+            var layers = replaceCurrentLayer(with: layer, section: section)
+            
+            if let color = color {
+                let tmpLayers = self.currentLayers
+                self.currentLayers = layers
+                layers = replaceCurrentLayer(with: color, section: section)
+                self.currentLayers = tmpLayers
+            }
+            
+            return layers
         }
         
         return ""
     }
     
     func updateLayers(_ layers: String) {
-        self.layers = layers
+        self.currentLayers = layers
         updateSelectedLayers()
     }
     

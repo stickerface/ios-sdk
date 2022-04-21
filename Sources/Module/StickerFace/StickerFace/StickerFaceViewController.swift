@@ -57,8 +57,8 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         let balanceGesture = UITapGestureRecognizer(target: self, action: #selector(balanceViewTapped))
         mainView.tonBalanceView.addGestureRecognizer(balanceGesture)
         
+        mainView.editorViewController.currentLayers = layers
         mainView.editorViewController.layers = layers
-        mainView.mainViewController.updateLayers(layers)
         
         mainView.mainViewController.delegate = self
         mainView.editorViewController.delegate = self
@@ -132,6 +132,11 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
             mainView.editButton.isHidden = false
             mainView.rightTopButton.setImageType(.settings)
             type = .main
+            
+            self.layers = mainView.editorViewController.layers
+            mainView.editorViewController.currentLayers = layers
+            mainView.editorViewController.updateSelectedLayers()
+            renderAvatar()
         }
     }
     
@@ -165,7 +170,6 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         mainView.backButton.isHidden = true
         mainView.editButton.isHidden = type == .editor
         mainView.rightTopButton.setImageType(type == .editor ? genderType : .settings)
-        mainView.editorViewController.shouldHideSaveButton(type != .editor)
     }
     
     private func renderAvatar() {
@@ -204,6 +208,21 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
 
 // MARK: - StickerFaceMainViewControllerDelegate
 extension StickerFaceViewController: StickerFaceMainViewControllerDelegate {
+    func stickerFaceMainViewController(needAllLayers withLayers: [(layer: String, color: String?)]) -> String {
+        var allLayers = ""
+        let tmpLayers = mainView.editorViewController.currentLayers
+        
+        // TODO: - может метод сделать где параметр будет все лееры и не парется с создаванием промежуточных лееров?
+        for layer in withLayers {
+            allLayers = editorDelegate?.replaceCurrentLayers(with: layer.layer, with: layer.color) ?? ""
+            mainView.editorViewController.currentLayers = allLayers
+        }
+        
+        mainView.editorViewController.currentLayers = tmpLayers
+        
+        return editorDelegate?.layersWithout(section: "background", layers: allLayers).layers ?? ""
+    }
+    
     func stickerFaceMainViewController(didSelect sticker: UIImage?) {
         let viewController = ModalShareController(shareImage: sticker)
         viewController.view.layoutIfNeeded()
@@ -214,16 +233,25 @@ extension StickerFaceViewController: StickerFaceMainViewControllerDelegate {
 
 // MARK: - StickerFaceEditorViewControllerDelegate
 extension StickerFaceViewController: StickerFaceEditorViewControllerDelegate {
-    func stickerFaceEditorViewControllerShouldContinue(_ controller: StickerFaceEditorViewController) {
-        type = .main
-        mainView.editButton.isHidden = false
-        mainView.rightTopButton.setImageType(.settings)
+    func stickerFaceEditorViewControllerDidLoadLayers(_ controller: StickerFaceEditorViewController) {
+        let layersWitoutBack = editorDelegate?.layersWithout(section: "background", layers: layers).layers ?? ""
+        mainView.mainViewController.updateLayers(layersWitoutBack)
     }
     
     func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didUpdate layers: String) {
         self.layers = layers
-        mainView.mainViewController.updateLayers(layers)
         renderAvatar()
+    }
+    
+    func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didSave layers: String) {
+        let layersWitoutBack = editorDelegate?.layersWithout(section: "background", layers: layers).layers ?? ""
+        mainView.mainViewController.updateLayers(layersWitoutBack)
+        mainView.tonBalanceView.isHidden = false
+        mainView.backButton.isHidden = true
+        mainView.editButton.isHidden = false
+        mainView.editButton.isHidden = false
+        mainView.rightTopButton.setImageType(.settings)
+        type = .main
     }
     
     func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didSelectPaid layer: String, layers withLayer: String, with price: Int, layerType: LayerType) {
@@ -243,7 +271,6 @@ extension StickerFaceViewController: ModalNewLayerDelegate {
     }
     
     func modalNewLayerController(_ controller: ModalNewLayerController, didBuy layer: String, layerType: LayerType, allLayers: String) {
-        
         if layerType == .NFT {
             var wardrobe = UserSettings.wardrobe
             wardrobe.append(layer)
@@ -270,7 +297,7 @@ extension StickerFaceViewController: ModalWardrobeDelegate {
     }
     
     func modalWardrobeController(_ controller: ModalWardrobeController, needLayers forLayer: String) -> String {
-        return editorDelegate?.replaceCurrentLayers(with: forLayer) ?? ""
+        return editorDelegate?.replaceCurrentLayers(with: forLayer, with: nil) ?? ""
     }
 }
 
