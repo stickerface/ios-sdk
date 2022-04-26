@@ -122,7 +122,17 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                 // TODO: убрать говнокод
                 self.prices["271"] = 2
                 
-                self.objects = editor.sections.flatMap({ $0.subsections }).map({ EditorSubsectionSectionModel(editorSubsection: $0, prices: self.prices) })
+                self.objects = editor.sections.flatMap({ $0.subsections }).map({ subsection in
+                    let newSubsection = EditorSubsection(
+                        name: subsection.name,
+                        layers: subsection.layers,
+                        colors: subsection.colors?.reversed()
+                    )
+                    let model = EditorSubsectionSectionModel(editorSubsection: newSubsection, prices: self.prices)
+                    model.selectedLayer = "0"
+                    
+                    return model
+                })
                 self.viewControllers = self.objects.enumerated().map { index, object in
                     let controller = StickerFaceEditorPageController(sectionModel: object)
                     controller.delegate = self
@@ -205,7 +215,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         
         objects.enumerated().forEach { index, object in
             if let editorLayers = object.editorSubsection.layers,
-               let layer = editorLayers.first(where: { layersArray.contains($0) }), layer != "0" {
+               let layer = editorLayers.first(where: { layersArray.contains($0) }) {
                 object.selectedLayer = layer
             }
             
