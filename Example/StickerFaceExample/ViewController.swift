@@ -1,5 +1,5 @@
 import UIKit
-import StickerFace
+import StickerFaceSDK
 import SnapKit
 
 class ViewController: UIViewController {

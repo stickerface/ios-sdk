@@ -87,7 +87,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        mainView.backgroundImageView.showSkeleton()
+        mainView.backgroundImageView.showSkeleton(usingColor: .clouds)
     }
     
     // MARK: Private Actions

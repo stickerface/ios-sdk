@@ -34,6 +34,7 @@ class ModalWardrobeView: RootView {
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.alwaysBounceVertical = true
         view.showsVerticalScrollIndicator = false
+        view.backgroundColor = .clear
         
         return view
     }()
