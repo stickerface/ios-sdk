@@ -2,6 +2,10 @@ import UIKit
 
 class ConnectWalletViewController: ViewController<ConnectWalletView> {
 
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .darkContent
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 

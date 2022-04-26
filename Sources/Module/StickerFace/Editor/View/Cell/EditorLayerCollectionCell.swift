@@ -145,8 +145,8 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         contentView.addSubview(skeletonView)
         
         selectedBackgroundImageView.addSubview(blurView)
-        
-        skeletonView.showGradientSkeleton()
+
+        skeletonView.showGradientSkeleton(usingGradient: SkeletonGradient(baseColor: .clouds))
         skeletonView.startSkeletonAnimation()
     }
     

@@ -35,6 +35,10 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
         }
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .darkContent
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

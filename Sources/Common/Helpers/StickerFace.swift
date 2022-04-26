@@ -10,11 +10,12 @@ public class StickerFace {
     
     public func openStickerFace() {
         let viewController = Utils.getRootViewController()
-        let navigationController = UINavigationController()
+        let navigationController = RootNavigationController()
         navigationController.interactivePopGestureRecognizer?.isEnabled = true
         navigationController.setNavigationBarHidden(true, animated: false)
         navigationController.setViewControllers([OnboardingViewController()], animated: false)
         navigationController.modalPresentationStyle = .fullScreen
+        navigationController.navigationBar.barStyle = .black
         
         viewController?.present(navigationController, animated: true)
     }
