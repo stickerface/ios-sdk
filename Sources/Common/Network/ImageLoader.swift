@@ -29,7 +29,7 @@ class ImageLoader: NSObject {
         } else if placeholderStyle == .light {
             imgView.tintColor = UIColor.white.withAlphaComponent(0.24)
         }
-
+        
         let placeholder = UIImage(libraryNamed: "placeholder_sticker_200")?.withRenderingMode(.alwaysTemplate)
         let url = URL(string: "http://sticker.face.cat/api/png/" + layers + "?size=" + String(describing: size * UIScreen.main.scale) + "&outline=\(outlined)")
         
