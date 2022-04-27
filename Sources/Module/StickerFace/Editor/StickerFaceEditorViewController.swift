@@ -140,8 +140,22 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                 self.headerAdapter.performUpdates(animated: true)
                 
                 self.prices = editor.prices
-                                
-                self.objects = editor.sections.flatMap({ $0.subsections }).map({ EditorSubsectionSectionModel(editorSubsection: $0, prices: self.prices) })
+                
+                // TODO: убрать говнокод
+                self.prices["271"] = 2
+                
+                self.objects = editor.sections.flatMap({ $0.subsections }).map({ subsection in
+                    let newSubsection = EditorSubsection(
+                        name: subsection.name,
+                        layers: subsection.layers,
+                        colors: subsection.colors?.reversed()
+                    )
+                    let model = EditorSubsectionSectionModel(editorSubsection: newSubsection, prices: self.prices)
+                    model.selectedLayer = "0"
+                    
+                    return model
+                })
+
                 self.viewControllers = self.objects.enumerated().map { index, object in
                     let controller = StickerFaceEditorPageController(sectionModel: object)
                     controller.delegate = self
@@ -224,7 +238,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         
         objects.enumerated().forEach { index, object in
             if let editorLayers = object.editorSubsection.layers,
-               let layer = editorLayers.first(where: { layersArray.contains($0) }), layer != "0" {
+               let layer = editorLayers.first(where: { layersArray.contains($0) }) {
                 object.selectedLayer = layer
             }
             
@@ -299,10 +313,6 @@ extension StickerFaceEditorViewController: StickerFaceEditorPageDelegate {
             emptyView.caption = "commonNothingWasFound".libraryLocalized
             emptyView.buttonText = String()
             
-            //            emptyView.buttonOnClick = {
-            //                Utils.getRootNavigationController()?.present(ModalInvite(), animated: true)
-            //            }
-            
             return HolderView(view: emptyView)
         case .failed:
             let errorView = PlaceholderView(userId: 9)
@@ -323,18 +333,9 @@ extension StickerFaceEditorViewController: StickerFaceEditorPageDelegate {
     }
     
     func stickerFaceEditorPageController(_ controller: StickerFaceEditorPageController, didSelect layer: String, section: Int) {
-//        let isPaid = UserSettings.wardrobe.contains(layer) || UserSettings.paidBackgrounds.contains(layer)
-//
-//        if let price = prices["\(layer)"], !isPaid {
-//            let newPaidLayers = replaceCurrentLayer(with: layer, section: section)
-//            let type: LayerType = objects[section].editorSubsection.name == "background" ? .background : .NFT
-//
-//            delegate?.stickerFaceEditorViewController(self, didSelectPaid: layer, layers: newPaidLayers, with: price, layerType: type)
-//        } else {
         currentLayers = replaceCurrentLayer(with: layer, section: section, isCurrent: true)
         delegate?.stickerFaceEditorViewController(self, didUpdate: currentLayers)
         updateSelectedLayers()
-//        }
     }
 }
 
