@@ -56,4 +56,13 @@ import Foundation
             defaults.set(newValue, forKey: #function)
         }
     }
+    
+    public static var isOnboardingShown: Bool {
+        get {
+            return defaults.bool(forKey: #function)
+        }
+        set {
+            defaults.set(newValue, forKey: #function)
+        }
+    }
 }
