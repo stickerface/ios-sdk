@@ -58,15 +58,15 @@ class ModalShareController: ModalScrollViewController {
     // MARK: Private methods
     
     private func setupArrangedViews() {
-        addArrangedView(title: "Telegram",
-                        image: UIImage(libraryNamed: "telegram"),
-                        action: telegramShareAction)
-        addArrangedView(title: "Facebook",
-                        image: UIImage(libraryNamed: "share_fb"),
-                        action: nil)
-        addArrangedView(title: "WhatsApp",
-                        image: UIImage(libraryNamed: "share_whatsapp"),
-                        action: nil)
+//        addArrangedView(title: "Telegram",
+//                        image: UIImage(libraryNamed: "telegram"),
+//                        action: telegramShareAction)
+//        addArrangedView(title: "Facebook",
+//                        image: UIImage(libraryNamed: "share_fb"),
+//                        action: nil)
+//        addArrangedView(title: "WhatsApp",
+//                        image: UIImage(libraryNamed: "share_whatsapp"),
+//                        action: nil)
         addArrangedView(title: "commonOther".libraryLocalized,
                         image: UIImage(libraryNamed: "share_other"),
                         action: otherShareAction)

@@ -87,7 +87,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        mainView.backgroundImageView.showSkeleton(usingColor: .clouds)
+//        mainView.backgroundImageView.showSkeleton(usingColor: .clouds)
     }
     
     // MARK: Private Actions
@@ -179,12 +179,15 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         
         mainView.renderWebView.evaluateJavaScript(renderFunc)
         
-        ImageLoader.setImage(layers: tuple?.sectionLayer ?? "", imgView: mainView.backgroundImageView, size: mainView.bounds.width) { result in
-            switch result {
-            case .success: self.mainView.backgroundImageView.hideSkeleton()
-            case .failure: break
-            }
-        }
+        let layer = tuple?.sectionLayer ?? ""
+        let url = "https://stickerface.io/api/section/png/\(layer)?size=\(mainView.bounds.width)"
+        
+//        ImageLoader.setImage(url: url, imgView: mainView.backgroundImageView) { result in
+//            switch result {
+//            case .success: self.mainView.backgroundImageView.hideSkeleton()
+//            case .failure: break
+//            }
+//        }
     }
     
     private func createRenderFunc(requestId: Int, layers: String, size: Int) -> String {

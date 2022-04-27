@@ -366,7 +366,7 @@
 			baseConfigurationReference = A33D40510EFB9414A5B7C822 /* Pods-StickerFaceExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 14;
 				DEVELOPMENT_TEAM = MVWCJ9RFAX;
 				INFOPLIST_FILE = StickerFaceExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -384,7 +384,7 @@
 			baseConfigurationReference = 1D5998D2035661C5396B07C9 /* Pods-StickerFaceExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 14;
 				DEVELOPMENT_TEAM = MVWCJ9RFAX;
 				INFOPLIST_FILE = StickerFaceExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;

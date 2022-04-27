@@ -71,12 +71,12 @@ class ModalExportController: ModalScrollViewController {
         addArrangedView(title: "Telegram",
                         image: UIImage(libraryNamed: "telegram"),
                         action: telegramExportAction)
-        addArrangedView(title: "WhatsApp",
-                        image: UIImage(libraryNamed: "share_whatsapp"),
-                        action: nil)
-        addArrangedView(title: "commonKeyboard".libraryLocalized,
-                        image: UIImage(libraryNamed: "export_keyboard"),
-                        action: keyboardExportAction)
+//        addArrangedView(title: "WhatsApp",
+//                        image: UIImage(libraryNamed: "share_whatsapp"),
+//                        action: nil)
+//        addArrangedView(title: "commonKeyboard".libraryLocalized,
+//                        image: UIImage(libraryNamed: "export_keyboard"),
+//                        action: keyboardExportAction)
     }
     
     private func addArrangedView(title: String, image: UIImage?, action: Action?) {
