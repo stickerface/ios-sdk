@@ -127,15 +127,20 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
             case .success(let editor):
                 guard let self = self else { return }
                 
-                self.headers = editor.sections.flatMap({ $0.subsections }).map({ EditorHeaderSectionModel(title: $0.name) })
+                self.headers = editor.sections.flatMap({ $0.subsections }).compactMap({ subsection in
+                    
+                    if subsection.name != "background", subsection.name != "clothing", subsection.name != "glasses", subsection.name != "tattoos", subsection.name != "accessories" {
+                        let model = EditorHeaderSectionModel(title: subsection.name)
+                        return model
+                    }
+                    
+                    return nil
+                })
                 self.headers.first?.isSelected = true
                 self.headerAdapter.performUpdates(animated: true)
                 
                 self.prices = editor.prices
-                
-                // TODO: убрать говнокод
-                self.prices["271"] = 2
-                
+                                
                 self.objects = editor.sections.flatMap({ $0.subsections }).map({ EditorSubsectionSectionModel(editorSubsection: $0, prices: self.prices) })
                 self.viewControllers = self.objects.enumerated().map { index, object in
                     let controller = StickerFaceEditorPageController(sectionModel: object)
