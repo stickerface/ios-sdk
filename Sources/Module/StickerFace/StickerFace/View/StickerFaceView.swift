@@ -28,11 +28,10 @@ class StickerFaceView: RootView {
         return view
     }()
         
-    let blurEffect: UIVisualEffectView = {
-        let blurEffect = UIBlurEffect(style: .systemThinMaterial)
-        let blurView = UIVisualEffectView(effect: blurEffect)
-        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        blurView.alpha = 0
+    let blurView: VisualEffectView = {
+        let blurView = VisualEffectView()
+        blurView.blurRadius = 2.0
+        blurView.backgroundColor = UIColor.white.withAlphaComponent(0.05)
         
         return blurView
     }()
@@ -87,7 +86,7 @@ class StickerFaceView: RootView {
         addSubview(editorViewController.view)
         addSubview(mainViewController.view)
         
-        backgroundImageView.addSubview(blurEffect)
+        backgroundImageView.addSubview(blurView)
         
         setupConstraints()
     }
@@ -144,7 +143,7 @@ class StickerFaceView: RootView {
             make.bottom.equalTo(avatarView.snp.bottom).offset(12.0)
         }
         
-        blurEffect.snp.makeConstraints { make in
+        blurView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
