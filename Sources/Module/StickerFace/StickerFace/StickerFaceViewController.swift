@@ -199,8 +199,10 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     }
     
     private func updateCurrentLayers(_ layers: String) {
+        let layersWitoutBack = editorDelegate?.layersWithout(section: "background", layers: layers).layers ?? ""
+        
         self.layers = layers
-        mainView.mainViewController.updateLayers(layers)
+        mainView.mainViewController.updateLayers(layersWitoutBack)
         editorDelegate?.updateLayers(layers)
         renderAvatar()
     }
