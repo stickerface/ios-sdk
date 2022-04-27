@@ -44,7 +44,6 @@ class StickerFaceMainViewController: ViewController<StickerFaceMainView> {
 extension StickerFaceMainViewController: ListAdapterDataSource {
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
         return [
-            StickerFaceMainStore(),
             StickerFaceMainMint(),
             StickerFaceMainSticker(layers: layers)
         ]
