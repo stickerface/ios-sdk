@@ -28,8 +28,13 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     
     weak var delegate: StickerFaceEditorViewControllerDelegate?
     
-    var currentLayers: String = ""
     var layers: String = ""
+    var currentLayers: String = "" {
+        didSet {
+            mainView.saveButton.isUserInteractionEnabled = currentLayers != layers
+            mainView.saveButton.backgroundColor = currentLayers == layers ? .sfDisabled : .sfAccentBrand
+        }
+    }
     
     private var loadingState = LoadingState.loading
     private let provider = StickerFaceEditorProvider()
@@ -70,6 +75,13 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     @objc private func saveButtonTapped() {
         layers = currentLayers
         delegate?.stickerFaceEditorViewController(self, didSave: currentLayers)
+        
+        headers.enumerated().forEach { $0.element.isSelected = $0.offset == 0 }
+        objects.forEach { $0.layersImages = nil }
+        
+        mainView.saveButton.isUserInteractionEnabled = false
+        mainView.saveButton.backgroundColor = .sfDisabled
+        
         mainView.saveButton.setTitle("Save", for: .normal)
     }
     
