@@ -79,6 +79,9 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         headers.enumerated().forEach { $0.element.isSelected = $0.offset == 0 }
         objects.forEach { $0.layersImages = nil }
         
+        mainView.saveButton.isUserInteractionEnabled = false
+        mainView.saveButton.backgroundColor = .sfDisabled
+        
         mainView.saveButton.setTitle("Save", for: .normal)
         
         self.headerAdapter.reloadData()
