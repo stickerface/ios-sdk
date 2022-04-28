@@ -179,8 +179,8 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         
         mainView.renderWebView.evaluateJavaScript(renderFunc)
         
-        let layer = tuple?.sectionLayer ?? ""
-        let url = "https://stickerface.io/api/section/png/\(layer)?size=\(mainView.bounds.width)"
+//        let layer = tuple?.sectionLayer ?? ""
+//        let url = "https://stickerface.io/api/section/png/\(layer)?size=\(mainView.bounds.width)"
         
 //        ImageLoader.setImage(url: url, imgView: mainView.backgroundImageView) { result in
 //            switch result {
