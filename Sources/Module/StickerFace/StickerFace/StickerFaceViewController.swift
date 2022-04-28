@@ -165,11 +165,12 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     }
     
     private func setupView(with type: PageType) {
-        let genderType: AvatarButton.ImageType = UserSettings.gender == .male ? .male : .female
+//        let genderType: AvatarButton.ImageType = UserSettings.gender == .male ? .male : .female
         
         mainView.backButton.isHidden = true
         mainView.editButton.isHidden = type == .editor
-        mainView.rightTopButton.setImageType(type == .editor ? genderType : .settings)
+        mainView.rightTopButton.isHidden = true
+//        mainView.rightTopButton.setImageType(type == .editor ? genderType : .settings)
     }
     
     private func renderAvatar() {
