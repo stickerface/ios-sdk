@@ -37,7 +37,7 @@ Pod::Spec.new do |s|
    ]
   
     s.resource_bundles = {
-      'StickerFaceSDK' => ['Sources/Resource/**/*.*'],
+      'StickerFace' => ['Sources/Resource/**/*.*'],
     }
   
   s.frameworks = 'UIKit', 'WebKit'
