@@ -28,8 +28,13 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     
     weak var delegate: StickerFaceEditorViewControllerDelegate?
     
-    var currentLayers: String = ""
     var layers: String = ""
+    var currentLayers: String = "" {
+        didSet {
+            mainView.saveButton.isUserInteractionEnabled = currentLayers != layers
+            mainView.saveButton.backgroundColor = currentLayers == layers ? .sfDisabled : .sfAccentBrand
+        }
+    }
     
     private var loadingState = LoadingState.loading
     private let provider = StickerFaceEditorProvider()
