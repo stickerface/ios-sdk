@@ -79,10 +79,17 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         headers.enumerated().forEach { $0.element.isSelected = $0.offset == 0 }
         objects.forEach { $0.layersImages = nil }
         
-        mainView.saveButton.isUserInteractionEnabled = false
-        mainView.saveButton.backgroundColor = .sfDisabled
-        
         mainView.saveButton.setTitle("Save", for: .normal)
+        
+        self.headerAdapter.reloadData()
+        self.adapter.reloadData()
+        
+        self.mainView.headerCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: true)
+        
+        if let vc = self.viewControllers?[0] as? StickerFaceEditorPageController {
+            vc.mainView.collectionView.scrollToTop(animated: false)
+            self.mainView.pageViewController.setViewControllers([vc], direction: .forward, animated: false)
+        }
     }
     
     @objc private func changeSelectedTab(_ gestureRecognizer: UISwipeGestureRecognizer) {
