@@ -84,14 +84,14 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         
         mainView.saveButton.setTitle("Save", for: .normal)
         
-        self.headerAdapter.reloadData()
-        self.adapter.reloadData()
+        headerAdapter.reloadData()
+        adapter.reloadData()
         
-        self.mainView.headerCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: true)
+        mainView.headerCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: true)
         
-        if let vc = self.viewControllers?[0] as? StickerFaceEditorPageController {
+        if let vc = viewControllers?[0] as? StickerFaceEditorPageController {
             vc.mainView.collectionView.scrollToTop(animated: false)
-            self.mainView.pageViewController.setViewControllers([vc], direction: .forward, animated: false)
+            mainView.pageViewController.setViewControllers([vc], direction: .forward, animated: false)
         }
     }
     
