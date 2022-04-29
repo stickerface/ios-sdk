@@ -52,7 +52,7 @@
 
 // Export
 "exportTitle" = "Export";
-"exportSubtitle" = "Use all stickers in Telegram, WhatsApp or native keyboard";
+"exportSubtitle" = "Use all stickers in Telegram, WhatsApp\nor native keyboard";
 
 // Settings
 "settingsTitle" = "Settings";

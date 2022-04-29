@@ -135,7 +135,7 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         contentView.addSubview(noneImageView)
         contentView.addSubview(skeletonView)
         
-        skeletonView.showGradientSkeleton()
+        skeletonView.showGradientSkeleton(usingGradient: SkeletonGradient(baseColor: .clouds))
         skeletonView.startSkeletonAnimation()
     }
     

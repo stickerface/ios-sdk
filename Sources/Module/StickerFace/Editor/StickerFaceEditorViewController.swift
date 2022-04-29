@@ -28,8 +28,13 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     
     weak var delegate: StickerFaceEditorViewControllerDelegate?
     
-    var currentLayers: String = ""
     var layers: String = ""
+    var currentLayers: String = "" {
+        didSet {
+            mainView.saveButton.isUserInteractionEnabled = currentLayers != layers
+            mainView.saveButton.backgroundColor = currentLayers == layers ? .sfDisabled : .sfAccentBrand
+        }
+    }
     
     private var loadingState = LoadingState.loading
     private let provider = StickerFaceEditorProvider()
@@ -70,7 +75,24 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     @objc private func saveButtonTapped() {
         layers = currentLayers
         delegate?.stickerFaceEditorViewController(self, didSave: currentLayers)
+        
+        headers.enumerated().forEach { $0.element.isSelected = $0.offset == 0 }
+        objects.forEach { $0.layersImages = nil }
+        
+        mainView.saveButton.isUserInteractionEnabled = false
+        mainView.saveButton.backgroundColor = .sfDisabled
+        
         mainView.saveButton.setTitle("Save", for: .normal)
+        
+        headerAdapter.reloadData()
+        adapter.reloadData()
+        
+        mainView.headerCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: true)
+        
+        if let vc = viewControllers?[0] as? StickerFaceEditorPageController {
+            vc.mainView.collectionView.scrollToTop(animated: false)
+            mainView.pageViewController.setViewControllers([vc], direction: .forward, animated: false)
+        }
     }
     
     @objc private func changeSelectedTab(_ gestureRecognizer: UISwipeGestureRecognizer) {
@@ -122,7 +144,17 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                 // TODO: убрать говнокод
                 self.prices["271"] = 2
                 
-                self.objects = editor.sections.flatMap({ $0.subsections }).map({ EditorSubsectionSectionModel(editorSubsection: $0, prices: self.prices) })
+                self.objects = editor.sections.flatMap({ $0.subsections }).map({ subsection in
+                    let newSubsection = EditorSubsection(
+                        name: subsection.name,
+                        layers: subsection.layers,
+                        colors: subsection.colors?.reversed()
+                    )
+                    let model = EditorSubsectionSectionModel(editorSubsection: newSubsection, prices: self.prices)
+                    model.selectedLayer = "0"
+                    
+                    return model
+                })
                 self.viewControllers = self.objects.enumerated().map { index, object in
                     let controller = StickerFaceEditorPageController(sectionModel: object)
                     controller.delegate = self
@@ -205,7 +237,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         
         objects.enumerated().forEach { index, object in
             if let editorLayers = object.editorSubsection.layers,
-               let layer = editorLayers.first(where: { layersArray.contains($0) }), layer != "0" {
+               let layer = editorLayers.first(where: { layersArray.contains($0) }) {
                 object.selectedLayer = layer
             }
             

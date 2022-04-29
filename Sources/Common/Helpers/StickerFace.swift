@@ -10,22 +10,18 @@ public class StickerFace {
     
     public func openStickerFace() {
         let viewController = Utils.getRootViewController()
-        let navigationController = UINavigationController()
-        navigationController.interactivePopGestureRecognizer?.isEnabled = true
-        navigationController.navigationBar.isHidden = true
-        navigationController.setNavigationBarHidden(true, animated: false)
-        navigationController.setViewControllers([OnboardingViewController()], animated: false)
-        navigationController.modalPresentationStyle = .fullScreen
         
-        viewController?.present(navigationController, animated: true)
+        viewController?.present(getRootNavigationController(), animated: true)
     }
     
     public func getRootNavigationController() -> UINavigationController {
-        let navigationController = UINavigationController()
+        let rootVC = UserSettings.isOnboardingShown ? GenerateAvatarViewController() : OnboardingViewController()
+        UserSettings.isOnboardingShown = true
+        let navigationController = RootNavigationController()
         navigationController.interactivePopGestureRecognizer?.isEnabled = true
         navigationController.navigationBar.isHidden = true
         navigationController.setNavigationBarHidden(true, animated: false)
-        navigationController.setViewControllers([OnboardingViewController()], animated: false)
+        navigationController.setViewControllers([rootVC], animated: false)
         navigationController.modalPresentationStyle = .fullScreen
         
         return navigationController

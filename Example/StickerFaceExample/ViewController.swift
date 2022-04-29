@@ -1,5 +1,5 @@
 import UIKit
-import StickerFace
+import StickerFaceSDK
 import SnapKit
 
 class ViewController: UIViewController {
@@ -16,6 +16,10 @@ class ViewController: UIViewController {
         
         return button
     }()
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .darkContent
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

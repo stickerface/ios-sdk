@@ -90,13 +90,13 @@ class ModalExportController: ModalScrollViewController {
     
     private func setupImages() {
         let firstLayers = "s3;" + layers
-        ImageLoader.setImage(layers: firstLayers, imgView: mainView.leftImageView, outlined: true, size: 248)
+        ImageLoader.setImage(layers: firstLayers, imgView: mainView.leftImageView, size: 248)
         
         let secondLayers = "s15;" + layers
-        ImageLoader.setImage(layers: secondLayers, imgView: mainView.centerImageView, outlined: true, size: 248)
+        ImageLoader.setImage(layers: secondLayers, imgView: mainView.centerImageView, size: 248)
         
         let thirdLayers = "s27;" + layers
-        ImageLoader.setImage(layers: thirdLayers, imgView: mainView.rightImageView, outlined: true, size: 248)
+        ImageLoader.setImage(layers: thirdLayers, imgView: mainView.rightImageView, size: 248)
     }
     
     private func layout() {

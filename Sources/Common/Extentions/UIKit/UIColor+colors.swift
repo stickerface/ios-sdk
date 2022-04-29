@@ -26,4 +26,8 @@ extension UIColor {
         return UIColor(hex: 0xE5E5EA)
     }
     
+    open class var sfDisabled: UIColor {
+        return UIColor(hex: 0xE0E6EB)
+    }
+    
 }

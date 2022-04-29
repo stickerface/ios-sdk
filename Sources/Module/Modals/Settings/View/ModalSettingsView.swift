@@ -26,6 +26,7 @@ class ModalSettingsView: RootView {
         view.layer.cornerRadius = 16.0
         view.layer.borderWidth = 1
         view.layer.borderColor = UIColor.sfSeparatorLight.cgColor
+        view.backgroundColor = .white
         
         return view
     }()
