@@ -15,7 +15,12 @@ public class StickerFace {
     }
     
     public func getRootNavigationController() -> UINavigationController {
-        let rootVC = UserSettings.isOnboardingShown ? GenerateAvatarViewController() : OnboardingViewController()
+        let layers = UserSettings.layers ?? ""
+        
+        print("===", layers)
+        
+        let viewController = layers == "" ? GenerateAvatarViewController() : StickerFaceViewController(type: .main, layers: layers)
+        let rootVC = UserSettings.isOnboardingShown ? viewController : OnboardingViewController()
         UserSettings.isOnboardingShown = true
 
         let navigationController = RootNavigationController()

@@ -52,24 +52,24 @@ class ModalSettingsController: ModalScrollViewController {
     
     private func setupModels() {
         models = [
-            ModalSettingsCellModel(title: "settingsLanguage".libraryLocalized,
-                               image: UIImage(libraryNamed: "language"),
-                               action: languageAction),
+//            ModalSettingsCellModel(title: "settingsLanguage".libraryLocalized,
+//                                   image: UIImage(libraryNamed: "language"),
+//                                   action: languageAction),
             ModalSettingsCellModel(title: "FAQ",
-                               image: UIImage(libraryNamed: "FAQ"),
-                               action: faqAction),
+                                   image: UIImage(libraryNamed: "FAQ"),
+                                   action: faqAction),
             ModalSettingsCellModel(title: "settingsRate".libraryLocalized,
-                               image: UIImage(libraryNamed: "icon-24_outline"),
-                               action: rateAction),
+                                   image: UIImage(libraryNamed: "icon-24_outline"),
+                                   action: rateAction),
             ModalSettingsCellModel(title: "settingsAbout".libraryLocalized,
-                               image: UIImage(libraryNamed: "info"),
-                               action: aboutAction)
+                                   image: UIImage(libraryNamed: "info"),
+                                   action: aboutAction)
         ]
     }
     
     private func layout() {
         mainView.pin.below(of: hideIndicatorView).marginTop(12.0).left().width(contentWidth)
-
+        
         mainView.layoutIfNeeded()
         
         contentHeight = mainView.containerView.bounds.height

@@ -126,7 +126,7 @@ class ModalSettingsView: RootView {
             .left(16.0)
             .right(16.0)
             .top(to: titleLabel.edge.bottom).marginTop(24.0)
-            .height(48.0 * 4)
+            .height(48.0 * 3)
         
         tonView.pin
             .left(16.0)

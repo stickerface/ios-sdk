@@ -16,6 +16,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     private var requestId = 0
     private var layers: String {
         didSet {
+            print("===user", layers)
             UserSettings.layers = layers
         }
     }
@@ -112,7 +113,8 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
             mainView.tonBalanceView.isHidden = true
             mainView.backButton.isHidden = false
             mainView.editButton.isHidden = true
-            mainView.rightTopButton.setImageType(.male)
+            mainView.rightTopButton.isHidden = true
+//            mainView.rightTopButton.setImageType(.male)
             type = .editor
             
         case .hanger:
@@ -130,7 +132,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
 //            mainView.tonBalanceView.isHidden = false
             mainView.backButton.isHidden = true
             mainView.editButton.isHidden = false
-            mainView.rightTopButton.isHidden = true
+            mainView.rightTopButton.isHidden = false
             type = .main
             
             self.layers = mainView.editorViewController.layers
@@ -169,7 +171,8 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         
         mainView.backButton.isHidden = true
         mainView.editButton.isHidden = type == .editor
-        mainView.rightTopButton.isHidden = true
+        mainView.rightTopButton.isHidden = false
+        mainView.rightTopButton.setImageType(.settings)
 //        mainView.rightTopButton.setImageType(type == .editor ? genderType : .settings)
     }
     
@@ -250,12 +253,17 @@ extension StickerFaceViewController: StickerFaceEditorViewControllerDelegate {
     }
     
     func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didSave layers: String) {
+        self.layers = layers
+        
+        print("===1", self.layers)
+        print("===2", self.layers)
+        
         let layersWitoutBack = editorDelegate?.layersWithout(section: "background", layers: layers).layers ?? ""
         mainView.mainViewController.updateLayers(layersWitoutBack)
-//        mainView.tonBalanceView.isHidden = false
         mainView.backButton.isHidden = true
         mainView.editButton.isHidden = false
-        mainView.rightTopButton.isHidden = true
+        mainView.rightTopButton.isHidden = false
+        
         type = .main
     }
     

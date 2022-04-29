@@ -74,7 +74,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     
     @objc private func saveButtonTapped() {
         layers = currentLayers
-        delegate?.stickerFaceEditorViewController(self, didSave: currentLayers)
+        delegate?.stickerFaceEditorViewController(self, didSave: layers)
         
         headers.enumerated().forEach { $0.element.isSelected = $0.offset == 0 }
         objects.forEach { $0.layersImages = nil }
@@ -137,7 +137,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                 
                 self.headers = editor.sections.flatMap({ $0.subsections }).compactMap({ subsection in
                     
-                    if subsection.name != "background", subsection.name != "clothing", subsection.name != "glasses", subsection.name != "tattoos", subsection.name != "accessories" {
+                    if subsection.name != "background", subsection.name != "clothing", subsection.name != "glasses", subsection.name != "tattoos", subsection.name != "accessories", subsection.name != "masks" {
                         let model = EditorHeaderSectionModel(title: subsection.name)
                         return model
                     }
