@@ -17,7 +17,7 @@ public class StickerFace {
     public func getRootNavigationController() -> UINavigationController {
         let rootVC = UserSettings.isOnboardingShown ? GenerateAvatarViewController() : OnboardingViewController()
         UserSettings.isOnboardingShown = true
-        
+
         let navigationController = RootNavigationController()
         navigationController.interactivePopGestureRecognizer?.isEnabled = true
         navigationController.setNavigationBarHidden(true, animated: false)
