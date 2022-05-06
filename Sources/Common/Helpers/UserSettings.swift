@@ -65,4 +65,15 @@ import Foundation
             defaults.set(newValue, forKey: #function)
         }
     }
+    
+    public static var tonClient: TonClient? {
+        get {
+            let data = defaults.data(forKey: #function) ?? Data()
+            return try? JSONDecoder().decode(TonClient.self, from: data)
+        }
+        set {
+            let data = try? JSONEncoder().encode(newValue)
+            defaults.set(data, forKey: #function)
+        }
+    }
 }
