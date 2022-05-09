@@ -8,9 +8,11 @@ class ConnectWalletViewController: ViewController<ConnectWalletView> {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         mainView.connectButton.addTarget(self, action: #selector(connectButtonTapped), for: .touchUpInside)
         mainView.continueButton.addTarget(self, action: #selector(continueButtonTapped), for: .touchUpInside)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(tonClientDidLoad), name: .tonClientDidLoad, object: nil)
     }
     
     @objc private func connectButtonTapped() {
@@ -23,6 +25,10 @@ class ConnectWalletViewController: ViewController<ConnectWalletView> {
     }
     
     @objc private func continueButtonTapped() {
+        navigationController?.pushViewController(GenerateAvatarViewController(), animated: false)
+    }
+    
+    @objc private func tonClientDidLoad() {
         navigationController?.pushViewController(GenerateAvatarViewController(), animated: false)
     }
     

@@ -44,7 +44,7 @@ public class StickerFace {
         else { return }
         
         if components.path == "/api/tonkeeper/login" {
-            TonLogin().loginClient(url: incomingURL)
+            TonNetwork().loginClient(url: incomingURL)
         }
     }
 
