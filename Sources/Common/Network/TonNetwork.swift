@@ -15,8 +15,8 @@ class TonNetwork {
                 do {
                     let login = try JSONDecoder().decode(TonLoginModel.self, from: data)
                     
-                    let id = login.clientId
-                    let address = login.payload?.first?.address
+                    let id = login.clientId ?? ""
+                    let address = login.payload?.first?.address ?? ""
                     let client = TonClient(clientId: id, address: address)
                     
                     UserSettings.tonClient = client
@@ -35,15 +35,22 @@ class TonNetwork {
     func updateBalance() {
         guard let address = UserSettings.tonClient?.address else { return }
         
-        let path = "https://stickerface.io/api/tonkeeper/balance?wallet=\(address)"
+        let path = "https://beta.stickerface.io/api/tonkeeper/balance?wallet=\(address)"
+//        let path = "https://beta.stickerface.io/api/tonkeeper/balance?wallet=EQDLjf6s4SHpsWokFm31CbiLbnMCz9ELC7zYPKPy9qwgW9d-"
         let url = URL(string: path)!
         
         AF.request(url, method: .get).response { responseData in
             if let data = responseData.data {
                 do {
-                    let json = try JSONSerialization.jsonObject(with: data)
+                    let balance = try JSONDecoder().decode(TonBalance.self, from: data)
                     
-                    print("=== json", json)
+                    var client = UserSettings.tonClient
+                    client?.balance = balance.balance
+                    client?.usd = balance.usd
+                    
+                    UserSettings.tonClient = client
+                    
+                    print("=== client", client)
                 } catch {
                     print(error)
                 }

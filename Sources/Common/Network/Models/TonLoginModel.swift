@@ -9,3 +9,8 @@ struct TonLoginPayload: Codable {
     let type: String?
     let address: String?
 }
+
+struct TonBalance: Codable {
+    let balance: Float
+    let usd: Float
+}
