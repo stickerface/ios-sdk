@@ -15,14 +15,9 @@ public class StickerFace {
     }
     
     public func getRootNavigationController() -> UINavigationController {
-        let layers = UserSettings.layers ?? ""
+        let rootVC = UserSettings.isOnboardingShown ? ConnectWalletViewController() : OnboardingViewController()
+        UserSettings.isOnboardingShown = false
         
-        print("===", layers)
-        
-        let viewController = layers == "" ? GenerateAvatarViewController() : StickerFaceViewController(type: .main, layers: layers)
-        let rootVC = UserSettings.isOnboardingShown ? viewController : OnboardingViewController()
-        UserSettings.isOnboardingShown = true
-
         let navigationController = RootNavigationController()
         navigationController.interactivePopGestureRecognizer?.isEnabled = true
         navigationController.setNavigationBarHidden(true, animated: false)
@@ -38,6 +33,18 @@ public class StickerFace {
             nav.pushViewController(controller, animated: true)
         } else {
             nav.present(controller, animated: true)
+        }
+    }
+    
+    public func handle(userActivity: NSUserActivity) {
+        guard
+            userActivity.activityType == NSUserActivityTypeBrowsingWeb,
+            let incomingURL = userActivity.webpageURL,
+            let components = NSURLComponents(url: incomingURL, resolvingAgainstBaseURL: true)
+        else { return }
+        
+        if components.path == "/api/tonkeeper/login" {
+            TonNetwork().loginClient(url: incomingURL)
         }
     }
 
