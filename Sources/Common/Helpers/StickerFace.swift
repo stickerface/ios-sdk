@@ -15,8 +15,8 @@ public class StickerFace {
     }
     
     public func getRootNavigationController() -> UINavigationController {
-        let rootVC = UserSettings.isOnboardingShown ? ConnectWalletViewController() : OnboardingViewController()
-        UserSettings.isOnboardingShown = false
+        let rootVC = UserSettings.isOnboardingShown ? StickerFaceViewController(type: .main, layers: UserSettings.layers ?? "") : OnboardingViewController()
+        UserSettings.isOnboardingShown = true
         
         let navigationController = RootNavigationController()
         navigationController.interactivePopGestureRecognizer?.isEnabled = true

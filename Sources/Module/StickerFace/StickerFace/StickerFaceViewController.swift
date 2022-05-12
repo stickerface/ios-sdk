@@ -129,10 +129,10 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
             type = .main
             
         case .back:
-//            mainView.tonBalanceView.isHidden = false
+            mainView.tonBalanceView.isHidden = false
             mainView.backButton.isHidden = true
             mainView.editButton.isHidden = false
-            mainView.rightTopButton.isHidden = false
+//            mainView.rightTopButton.isHidden = false
             type = .main
             
             self.layers = mainView.editorViewController.layers
@@ -169,7 +169,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         
         mainView.backButton.isHidden = true
         mainView.editButton.isHidden = type == .editor
-        mainView.rightTopButton.isHidden = false
+//        mainView.rightTopButton.isHidden = false
         mainView.rightTopButton.setImageType(.settings)
 //        mainView.rightTopButton.setImageType(type == .editor ? genderType : .settings)
     }
@@ -260,7 +260,8 @@ extension StickerFaceViewController: StickerFaceEditorViewControllerDelegate {
         mainView.mainViewController.updateLayers(layersWitoutBack)
         mainView.backButton.isHidden = true
         mainView.editButton.isHidden = false
-        mainView.rightTopButton.isHidden = false
+        mainView.tonBalanceView.isHidden = false
+//        mainView.rightTopButton.isHidden = false
         
         type = .main
     }

@@ -40,7 +40,6 @@ class StickerFaceView: RootView {
     let tonBalanceView: TonBalanceView = {
         let view = TonBalanceView()
         view.layer.cornerRadius = 16
-        view.isHidden = true
         
         return view
     }()
@@ -48,6 +47,7 @@ class StickerFaceView: RootView {
     let rightTopButton: AvatarButton = {
         let button = AvatarButton(imageType: .male)
         button.layer.cornerRadius = 24.0
+        button.isHidden = true
         
         return button
     }()
@@ -114,12 +114,12 @@ class StickerFaceView: RootView {
         }
         
         editButton.snp.makeConstraints { make in
-            make.right.equalToSuperview().offset(-16.0)
-            make.top.equalTo(rightTopButton.snp.bottom).offset(16.0)
-            make.size.equalTo(48.0)
 //            make.right.equalToSuperview().offset(-16.0)
-//            make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(8.0)
+//            make.top.equalTo(rightTopButton.snp.bottom).offset(16.0)
 //            make.size.equalTo(48.0)
+            make.right.equalToSuperview().offset(-16.0)
+            make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(8.0)
+            make.size.equalTo(48.0)
         }
         
         hangerButton.snp.makeConstraints { make in
