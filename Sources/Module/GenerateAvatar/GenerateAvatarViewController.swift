@@ -177,7 +177,7 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
         let vc = StickerFaceViewController(type: .editor, layers: layers)
         vc.modalPresentationStyle = .fullScreen
         
-        navigationController?.pushViewController(vc, animated: true)
+        navigationController?.setViewControllers([vc], animated: true)
     }
     
     private func updateButtonTitles() {
