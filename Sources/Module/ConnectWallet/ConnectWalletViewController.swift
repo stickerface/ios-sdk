@@ -12,7 +12,7 @@ class ConnectWalletViewController: ViewController<ConnectWalletView> {
         mainView.connectButton.addTarget(self, action: #selector(connectButtonTapped), for: .touchUpInside)
         mainView.continueButton.addTarget(self, action: #selector(continueButtonTapped), for: .touchUpInside)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(tonClientDidLoad), name: .tonClientDidLoad, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(tonClientDidUpdate), name: .tonClientDidUpdate, object: nil)
     }
     
     @objc private func connectButtonTapped() {
@@ -28,7 +28,7 @@ class ConnectWalletViewController: ViewController<ConnectWalletView> {
         navigationController?.pushViewController(GenerateAvatarViewController(), animated: false)
     }
     
-    @objc private func tonClientDidLoad() {
+    @objc private func tonClientDidUpdate() {
         navigationController?.pushViewController(GenerateAvatarViewController(), animated: false)
     }
     

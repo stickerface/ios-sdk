@@ -3,7 +3,7 @@ import UIKit
 // TODO: Translate
 class TonBalanceView: UIView {
 
-    enum BalanceType {
+    enum BalanceType: Equatable {
         case disconnected
         case connected(ton: Double)
     }

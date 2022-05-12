@@ -76,6 +76,8 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         mainView.hangerButton.setCount(UserSettings.wardrobe.count)
         mainView.renderWebView.navigationDelegate = self
         
+        NotificationCenter.default.addObserver(self, selector: #selector(tonClientDidUpdate), name: .tonClientDidUpdate, object: nil)
+        
         do {
             let handler = AvatarRenderResponseHandler()
             handler.delegate = self
@@ -141,9 +143,17 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     }
     
     @objc private func balanceViewTapped() {
-        let ton = UserSettings.tonBalance
-        
-        UserSettings.tonBalance = ton == nil ? 50 : nil
+        if mainView.tonBalanceView.balanceType == .disconnected {
+            let path = "https://app.tonkeeper.com/ton-login/stickerface.io/api/tonkeeper/authRequest"
+            let url = URL(string: path)
+            
+            if let url = url {
+                UIApplication.shared.open(url)
+            }
+        }
+    }
+    
+    @objc private func tonClientDidUpdate() {
         updateBalanceView()
     }
     

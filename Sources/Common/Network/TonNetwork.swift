@@ -22,7 +22,6 @@ class TonNetwork {
                     UserSettings.tonClient = client
                     
                     self.updateBalance()
-                    NotificationCenter.default.post(name: .tonClientDidLoad, object: nil)
                 } catch {
                     print(error)
                 }
@@ -57,6 +56,8 @@ class TonNetwork {
             } else {
                 print(responseData)
             }
+            
+            NotificationCenter.default.post(name: .tonClientDidUpdate, object: nil)
         }
     }
     

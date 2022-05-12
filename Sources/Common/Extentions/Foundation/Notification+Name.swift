@@ -2,6 +2,6 @@ import Foundation
 
 extension Notification.Name {
     
-    static let tonClientDidLoad = Notification.Name("tonClientDidLoad")
+    static let tonClientDidUpdate = Notification.Name("tonClientDidUpdate")
     
 }
