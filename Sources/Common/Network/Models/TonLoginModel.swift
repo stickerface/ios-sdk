@@ -11,6 +11,6 @@ struct TonLoginPayload: Codable {
 }
 
 struct TonBalance: Codable {
-    let balance: Float
-    let usd: Float
+    let balance: Double
+    let usd: Double
 }

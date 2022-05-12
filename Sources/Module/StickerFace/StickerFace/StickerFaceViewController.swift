@@ -150,10 +150,8 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     // MARK: Private methods
     
     private func updateBalanceView() {
-        let tonBalance = UserSettings.tonBalance
-        
-        if let tonBalance = tonBalance {
-            mainView.tonBalanceView.balanceType = .connected(ton: tonBalance)
+        if let tonClient = UserSettings.tonClient {
+            mainView.tonBalanceView.balanceType = .connected(ton: tonClient.balance)
         } else {
             mainView.tonBalanceView.balanceType = .disconnected
         }
