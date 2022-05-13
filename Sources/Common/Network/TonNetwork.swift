@@ -2,15 +2,12 @@ import Foundation
 import Alamofire
 
 class TonNetwork {
-    
-    init() { }
-    
-    func loginClient(url: URL) {
+        
+    static func loginClient(url: URL) {
         var path = url.absoluteString
         path.removeLast()
-        let newUrl = URL(string: path)!
         
-        AF.request(newUrl, method: .get).response { responseData in
+        AF.request(path, method: .get).response { responseData in
             if let data = responseData.data {
                 do {
                     let login = try JSONDecoder().decode(TonLoginModel.self, from: data)
@@ -21,7 +18,7 @@ class TonNetwork {
                     
                     UserSettings.tonClient = client
                     
-                    self.updateBalance()
+                    TonNetwork.updateBalance()
                 } catch {
                     print(error)
                 }
@@ -31,14 +28,11 @@ class TonNetwork {
         }
     }
     
-    func updateBalance() {
+    static func updateBalance() {
         guard let address = UserSettings.tonClient?.address else { return }
-        
         let path = "https://beta.stickerface.io/api/tonkeeper/balance?wallet=\(address)"
-//        let path = "https://beta.stickerface.io/api/tonkeeper/balance?wallet=EQDLjf6s4SHpsWokFm31CbiLbnMCz9ELC7zYPKPy9qwgW9d-"
-        let url = URL(string: path)!
         
-        AF.request(url, method: .get).response { responseData in
+        AF.request(path, method: .get).response { responseData in
             if let data = responseData.data {
                 do {
                     let balance = try JSONDecoder().decode(TonBalance.self, from: data)
@@ -48,8 +42,6 @@ class TonNetwork {
                     client?.usd = balance.usd
                     
                     UserSettings.tonClient = client
-                    
-                    print("=== client", client)
                 } catch {
                     print(error)
                 }
@@ -58,6 +50,14 @@ class TonNetwork {
             }
             
             NotificationCenter.default.post(name: .tonClientDidUpdate, object: nil)
+        }
+    }
+    
+    static func tonkeeperAuthRequest() {
+        let path = "https://app.tonkeeper.com/ton-login/stickerface.io/api/tonkeeper/authRequest"
+        
+        if let url = URL(string: path) {
+            UIApplication.shared.open(url)
         }
     }
     
