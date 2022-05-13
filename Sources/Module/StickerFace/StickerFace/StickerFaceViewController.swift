@@ -187,13 +187,15 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         
         mainView.renderWebView.evaluateJavaScript(renderFunc)
         
-        let layer = tuple?.sectionLayer ?? ""
-        let url = "https://stickerface.io/api/section/png/\(layer)?size=\(mainView.bounds.width)"
-        
-        ImageLoader.setImage(url: url, imgView: mainView.backgroundImageView) { result in
-            switch result {
-            case .success: self.mainView.backgroundImageView.hideSkeleton()
-            case .failure: break
+        if let layer = tuple?.sectionLayer, layer != "0" {
+            let layer = tuple?.sectionLayer ?? ""
+            let url = "https://stickerface.io/api/section/png/\(layer)?size=\(mainView.bounds.width)"
+            
+            ImageLoader.setImage(url: url, imgView: mainView.backgroundImageView) { result in
+                switch result {
+                case .success: self.mainView.backgroundImageView.hideSkeleton()
+                case .failure: break
+                }
             }
         }
     }
@@ -227,7 +229,7 @@ extension StickerFaceViewController: StickerFaceMainViewControllerDelegate {
         
         // TODO: - может метод сделать где параметр будет все лееры и не парется с создаванием промежуточных лееров?
         for layer in withLayers {
-            allLayers = editorDelegate?.replaceCurrentLayers(with: layer.layer, with: layer.color) ?? ""
+            allLayers = editorDelegate?.replaceCurrentLayers(with: layer.layer, with: layer.color, isCurrent: false) ?? ""
             mainView.editorViewController.currentLayers = allLayers
         }
         
@@ -257,6 +259,8 @@ extension StickerFaceViewController: StickerFaceEditorViewControllerDelegate {
     }
     
     func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didSave layers: String) {
+        self.layers = layers
+                
         let layersWitoutBack = editorDelegate?.layersWithout(section: "background", layers: layers).layers ?? ""
         mainView.mainViewController.updateLayers(layersWitoutBack)
         mainView.tonBalanceView.isHidden = false
@@ -310,7 +314,7 @@ extension StickerFaceViewController: ModalWardrobeDelegate {
     }
     
     func modalWardrobeController(_ controller: ModalWardrobeController, needLayers forLayer: String) -> String {
-        return editorDelegate?.replaceCurrentLayers(with: forLayer, with: nil) ?? ""
+        return editorDelegate?.replaceCurrentLayers(with: forLayer, with: nil, isCurrent: true) ?? ""
     }
 }
 

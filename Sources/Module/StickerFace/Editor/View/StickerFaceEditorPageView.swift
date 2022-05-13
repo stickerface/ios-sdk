@@ -34,6 +34,7 @@ class StickerFaceEditorPageView: RootView {
         collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        
         renderWebView.snp.makeConstraints { make in
             make.center.equalToSuperview()
             make.width.equalTo(166.0)

@@ -24,6 +24,7 @@ class StickerFaceView: RootView {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
         view.isSkeletonable = true
+        view.image = UIImage(libraryNamed: "mvp_background")
         
         return view
     }()
