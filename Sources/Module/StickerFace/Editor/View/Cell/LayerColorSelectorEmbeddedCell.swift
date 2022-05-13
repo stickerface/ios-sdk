@@ -24,7 +24,7 @@ class LayerColorSelectorEmbeddedCell: UICollectionViewCell {
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
 //        let width = 40.0
 //        let offset = (bounds.width - width) / 2
-        view.contentInset = UIEdgeInsets(top: 0.0, left: 14.0, bottom: 0.0, right: 12.0)
+        view.contentInset = UIEdgeInsets(top: 0.0, left: 12.0, bottom: 0.0, right: 12.0)
         view.alwaysBounceHorizontal = true
         view.showsHorizontalScrollIndicator = false
         view.backgroundColor = .clear

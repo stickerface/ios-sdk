@@ -42,8 +42,6 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     private var headers: [EditorHeaderSectionModel] = []
     private var objects: [EditorSubsectionSectionModel] = []
     private var viewControllers: [UIViewController]? = []
-    //    private var productInput: ProductInput?
-//    private var newPaidLayers: String?
     
     private lazy var headerAdapter: ListAdapter = {
         return ListAdapter(updater: ListAdapterUpdater(), viewController: self, workingRangeSize: 0)
@@ -172,6 +170,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                     
                     return controller
                 }
+                
                 self.updateSelectedLayers()
                 self.loadingState = .loaded
                 

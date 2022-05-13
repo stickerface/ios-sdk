@@ -73,7 +73,7 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
     
     private func createRenderFunc(requestId: Int, layers: String, size: Int, section: String) -> String {
         var neededLayers = ""
-        
+
         let allLayers = editorDelegate?.replaceCurrentLayers(with: layers, with: nil, isCurrent: false)
         let layersWitoutBack = editorDelegate?.layersWithout(section: "background", layers: allLayers ?? "")
         let layersWithoutClothing = editorDelegate?.layersWithout(section: "clothing", layers: layersWitoutBack?.layers ?? "")

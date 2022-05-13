@@ -257,10 +257,7 @@ extension StickerFaceViewController: StickerFaceEditorViewControllerDelegate {
     
     func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didSave layers: String) {
         self.layers = layers
-        
-        print("===1", self.layers)
-        print("===2", self.layers)
-        
+
         let layersWitoutBack = editorDelegate?.layersWithout(section: "background", layers: layers).layers ?? ""
         mainView.mainViewController.updateLayers(layersWitoutBack)
         mainView.backButton.isHidden = true
