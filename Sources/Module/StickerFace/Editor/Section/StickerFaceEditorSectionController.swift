@@ -79,7 +79,6 @@ class StickerFaceEditorSectionController: ListSectionController {
     }
     
     // TODO: need fit size
-    // TODO: fix colors left spacing
     override func sizeForItem(at index: Int) -> CGSize {
         // size for background layers
         if sectionModel.editorSubsection.name == "background" {
@@ -88,7 +87,7 @@ class StickerFaceEditorSectionController: ListSectionController {
         
         // size for titels
         if index == 0 || (layerColors.count > 0 && index == 2) {
-            return CGSize(width: collectionContext!.containerSize.width, height: 30.0)
+            return CGSize(width: collectionContext!.containerSize.width - 16 - 16, height: 30.0)
         }
         
         // size for colors
