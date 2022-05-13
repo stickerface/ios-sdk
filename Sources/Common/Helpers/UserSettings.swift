@@ -65,4 +65,15 @@ import Foundation
             defaults.set(newValue, forKey: #function)
         }
     }
+    
+    public static var tonClient: TonClient? {
+        get {
+            return try? defaults.get(objectType: TonClient.self, forKey: #function) 
+        }
+        set {
+            if let newValue = newValue {
+                try? defaults.set(object: newValue, forKey: #function)
+            }
+        }
+    }
 }
