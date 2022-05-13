@@ -28,7 +28,7 @@ class EditorSectionHeaderCell: UICollectionViewCell {
     }
     
     private func layout() {
-        titleLabel.pin.top().bottom().left().right(20.0)
+        titleLabel.pin.top(4).bottom().left().right(20.0)
     }
     
 }
