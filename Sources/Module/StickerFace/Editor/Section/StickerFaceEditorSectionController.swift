@@ -51,8 +51,11 @@ class StickerFaceEditorSectionController: ListSectionController {
         } else {
             layerIndex = index - 1
         }
-        if let layer = sectionModel.editorSubsection.layers?[layerIndex] {
-            delegate?.stickerFaceEditorSectionController(self, didSelect: layer, section: section)
+        
+        guard let layers = sectionModel.editorSubsection.layers else { return }
+        
+        if layers.count - 1 >= layerIndex, layerIndex >= 0 {
+            delegate?.stickerFaceEditorSectionController(self, didSelect: layers[layerIndex], section: section)
         }
     }
     

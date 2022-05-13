@@ -35,7 +35,6 @@ class TonNetwork {
         guard let address = UserSettings.tonClient?.address else { return }
         
         let path = "https://beta.stickerface.io/api/tonkeeper/balance?wallet=\(address)"
-//        let path = "https://beta.stickerface.io/api/tonkeeper/balance?wallet=EQDLjf6s4SHpsWokFm31CbiLbnMCz9ELC7zYPKPy9qwgW9d-"
         let url = URL(string: path)!
         
         AF.request(url, method: .get).response { responseData in
@@ -48,8 +47,6 @@ class TonNetwork {
                     client?.usd = balance.usd
                     
                     UserSettings.tonClient = client
-                    
-                    print("=== client", client)
                 } catch {
                     print(error)
                 }
