@@ -146,12 +146,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     
     @objc private func balanceViewTapped() {
         if mainView.tonBalanceView.balanceType == .disconnected {
-            let path = "https://app.tonkeeper.com/ton-login/stickerface.io/api/tonkeeper/authRequest"
-            let url = URL(string: path)
-            
-            if let url = url {
-                UIApplication.shared.open(url)
-            }
+            TonNetwork.tonkeeperAuthRequest()
         }
     }
     
