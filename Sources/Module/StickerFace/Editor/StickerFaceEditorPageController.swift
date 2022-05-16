@@ -54,15 +54,12 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
         
         mainView.renderWebView.configuration.userContentController.add(handler, name: handler.name)
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        adapter.reloadData()
-    }
-    
+        
     private func renderLayer() {
-        guard let layer = layersForRender.first, !isRendering, isRenderRedy else { return }
+        guard let layer = layersForRender.first, !isRendering, isRenderRedy else {
+            adapter.reloadData()
+            return
+        }
         
         isRendering = true
         let id = getNextRequestId()
@@ -74,7 +71,7 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
     private func createRenderFunc(requestId: Int, layers: String, size: Int, section: String) -> String {
         var neededLayers = ""
 
-        let allLayers = editorDelegate?.replaceCurrentLayers(with: layers, with: nil, isCurrent: false)
+        let allLayers = editorDelegate?.replaceCurrentLayers(with: layers, with: nil, isCurrent: true)
         let layersWitoutBack = editorDelegate?.layersWithout(section: "background", layers: allLayers ?? "")
         let layersWithoutClothing = editorDelegate?.layersWithout(section: "clothing", layers: layersWitoutBack?.layers ?? "")
         
@@ -154,7 +151,6 @@ extension StickerFaceEditorPageController: AvatarRenderResponseHandlerDelegate {
             }
             
             isRendering = false
-            adapter.reloadData()
             renderLayer()
         }
     }

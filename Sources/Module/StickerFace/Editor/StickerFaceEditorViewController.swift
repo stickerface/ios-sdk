@@ -240,10 +240,12 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         
         objects.forEach { object in
             object.selectedColor = nil
-            object.selectedLayer = nil
+            object.selectedLayer = "0"
         }
-        
+
         objects.enumerated().forEach { index, object in
+            object.layersImages = nil
+            
             if let editorLayers = object.editorSubsection.layers,
                let layer = editorLayers.first(where: { layersArray.contains($0) }) {
                 object.selectedLayer = layer
@@ -340,7 +342,8 @@ extension StickerFaceEditorViewController: StickerFaceEditorPageDelegate {
     }
     
     func stickerFaceEditorPageController(_ controller: StickerFaceEditorPageController, didSelect layer: String, section: Int) {
-        currentLayers = replaceCurrentLayer(with: layer, section: section, isCurrent: true)
+        let layerForReplace = layer == "0" ? "" : layer
+        currentLayers = replaceCurrentLayer(with: layerForReplace, section: section, isCurrent: true)
         delegate?.stickerFaceEditorViewController(self, didUpdate: currentLayers)
         updateSelectedLayers()
     }
