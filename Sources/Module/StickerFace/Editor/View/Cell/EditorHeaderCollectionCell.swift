@@ -38,6 +38,13 @@ class EditorHeaderCollectionCell: UICollectionViewCell {
         layout()
     }
     
+    override func sizeThatFits(_ size: CGSize) -> CGSize {
+        contentView.pin.height(size.height)
+        layout()
+        
+        return contentView.frame.size
+    }
+    
     private func layout() {
         
         titleLabel.pin
@@ -52,13 +59,6 @@ class EditorHeaderCollectionCell: UICollectionViewCell {
             .bottom()
         
         contentView.pin.width(titleLabel.frame.maxX + 16.0)
-    }
-    
-    override func sizeThatFits(_ size: CGSize) -> CGSize {
-        contentView.pin.height(size.height)
-        layout()
-        
-        return contentView.frame.size
     }
     
 }

@@ -46,6 +46,16 @@ class GenerateAvatarView: RootView {
         return view
     }()
     
+    let backgroundImageView: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(libraryNamed: "mvp_background")
+        view.layer.cornerRadius = 280.0/2
+        view.clipsToBounds = true
+        view.alpha = 0
+        
+        return view
+    }()
+    
     let avatarPlaceholderView: UIImageView = {
         let view = UIImageView()
         view.image = UIImage(libraryNamed: "camera_72")?.withRenderingMode(.alwaysTemplate)
@@ -99,6 +109,7 @@ class GenerateAvatarView: RootView {
         addSubview(continueButton)
         addSubview(allowButton)
         addSubview(descriptionLabel)
+        addSubview(backgroundImageView)
         addSubview(avatarImageView)
         
         setupConstraints()
@@ -128,6 +139,10 @@ class GenerateAvatarView: RootView {
         avatarPlaceholderView.snp.makeConstraints { make in
             make.center.equalTo(onboardingAvatarVideoView)
             make.size.equalTo(72.0)
+        }
+        
+        backgroundImageView.snp.makeConstraints { make in
+            make.edges.equalTo(avatarImageView.snp.edges)
         }
         
         avatarImageView.snp.makeConstraints { make in

@@ -4,7 +4,7 @@ PODS:
   - IGListDiffKit (4.0.0)
   - IGListKit (4.0.0):
     - IGListDiffKit (= 4.0.0)
-  - Kingfisher (7.2.1)
+  - Kingfisher (7.2.2)
   - PinLayout (1.10.2)
   - SkeletonView (1.25.2)
   - SnapKit (5.6.0)
@@ -43,7 +43,7 @@ SPEC CHECKSUMS:
   Atributika: 47e778507cfb3cd2c996278b0285221a62e97d71
   IGListDiffKit: 665d6cf43ce726e676013db9c7d6c4294259b6b2
   IGListKit: fd5a5d21935298f5849fa49d426843cff97b77c7
-  Kingfisher: 7c084bebf7d548c623ad41bcf765fb200efed369
+  Kingfisher: 184d4d1a8c36666e663caf8e08abe87898595c53
   PinLayout: d6b1960e4b182b4da1481b9aa6728f621e20708d
   SkeletonView: 820b2bbd180d7408f3f03b6462cfc3cac39d2ef2
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
@@ -52,4 +52,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 4adb15f298cf63eb6d644efedb0f1cb089eed1f0
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.11.2

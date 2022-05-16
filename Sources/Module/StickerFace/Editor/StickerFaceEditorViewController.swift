@@ -17,7 +17,7 @@ protocol StickerFaceEditorViewControllerDelegate: AnyObject {
 protocol StickerFaceEditorDelegate: AnyObject {
     func updateLayers(_ layers: String)
     func layersWithout(section: String, layers: String) -> (sectionLayer: String, layers: String)
-    func replaceCurrentLayers(with layer: String, with color: String?) -> String
+    func replaceCurrentLayers(with layer: String, with color: String?, isCurrent: Bool) -> String
 }
 
 class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
@@ -42,8 +42,6 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     private var headers: [EditorHeaderSectionModel] = []
     private var objects: [EditorSubsectionSectionModel] = []
     private var viewControllers: [UIViewController]? = []
-    //    private var productInput: ProductInput?
-//    private var newPaidLayers: String?
     
     private lazy var headerAdapter: ListAdapter = {
         return ListAdapter(updater: ListAdapterUpdater(), viewController: self, workingRangeSize: 0)
@@ -74,7 +72,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     
     @objc private func saveButtonTapped() {
         layers = currentLayers
-        delegate?.stickerFaceEditorViewController(self, didSave: currentLayers)
+        delegate?.stickerFaceEditorViewController(self, didSave: layers)
         
         headers.enumerated().forEach { $0.element.isSelected = $0.offset == 0 }
         objects.forEach { $0.layersImages = nil }
@@ -155,6 +153,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                     
                     return model
                 })
+
                 self.viewControllers = self.objects.enumerated().map { index, object in
                     let controller = StickerFaceEditorPageController(sectionModel: object)
                     controller.delegate = self
@@ -163,6 +162,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                     
                     return controller
                 }
+                
                 self.updateSelectedLayers()
                 self.loadingState = .loaded
                 
@@ -191,8 +191,8 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         }
     }
     
-    private func replaceCurrentLayer(with replacementLayer: String, section: Int) -> String {
-        var layers = currentLayers
+    private func replaceCurrentLayer(with replacementLayer: String, section: Int, isCurrent: Bool) -> String {
+        var layers = isCurrent ? currentLayers : layers
         
         if let range = layers.range(of: "/") {
             layers.removeSubrange(range.lowerBound..<layers.endIndex)
@@ -232,10 +232,12 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         
         objects.forEach { object in
             object.selectedColor = nil
-            object.selectedLayer = nil
+            object.selectedLayer = "0"
         }
-        
+
         objects.enumerated().forEach { index, object in
+            object.layersImages = nil
+            
             if let editorLayers = object.editorSubsection.layers,
                let layer = editorLayers.first(where: { layersArray.contains($0) }) {
                 object.selectedLayer = layer
@@ -312,10 +314,6 @@ extension StickerFaceEditorViewController: StickerFaceEditorPageDelegate {
             emptyView.caption = "commonNothingWasFound".libraryLocalized
             emptyView.buttonText = String()
             
-            //            emptyView.buttonOnClick = {
-            //                Utils.getRootNavigationController()?.present(ModalInvite(), animated: true)
-            //            }
-            
             return HolderView(view: emptyView)
         case .failed:
             let errorView = PlaceholderView(userId: 9)
@@ -339,12 +337,13 @@ extension StickerFaceEditorViewController: StickerFaceEditorPageDelegate {
         let isPaid = UserSettings.wardrobe.contains(layer) || UserSettings.paidBackgrounds.contains(layer)
         
         if let price = prices["\(layer)"], !isPaid {
-            let newPaidLayers = replaceCurrentLayer(with: layer, section: section)
+            let newPaidLayers = replaceCurrentLayer(with: layer, section: section, isCurrent: true)
             let type: LayerType = objects[section].editorSubsection.name == "background" ? .background : .NFT
             
             delegate?.stickerFaceEditorViewController(self, didSelectPaid: layer, layers: newPaidLayers, with: price, layerType: type)
         } else {
-            currentLayers = replaceCurrentLayer(with: layer, section: section)
+            let layerForReplace = layer == "0" ? "" : layer
+            currentLayers = replaceCurrentLayer(with: layerForReplace, section: section, isCurrent: true)
             delegate?.stickerFaceEditorViewController(self, didUpdate: currentLayers)
             updateSelectedLayers()
         }
@@ -385,19 +384,25 @@ extension StickerFaceEditorViewController: UIPageViewControllerDataSource, UIPag
 
 // MARK: - StickerFaceEditorDelegate
 extension StickerFaceEditorViewController: StickerFaceEditorDelegate {
-    func replaceCurrentLayers(with layer: String, with color: String?) -> String {
+    func replaceCurrentLayers(with layer: String, with color: String?, isCurrent: Bool) -> String {
         let section = objects.firstIndex { sectionModel in
             return sectionModel.editorSubsection.layers?.contains(layer) ?? false
         }
         
         if let section = section {
-            var layers = replaceCurrentLayer(with: layer, section: section)
+            var layers = replaceCurrentLayer(with: layer, section: section, isCurrent: isCurrent)
             
             if let color = color {
-                let tmpLayers = self.currentLayers
-                self.currentLayers = layers
-                layers = replaceCurrentLayer(with: color, section: section)
-                self.currentLayers = tmpLayers
+                let tmpLayers = currentLayers
+                if isCurrent {
+                    currentLayers = layers
+                    layers = replaceCurrentLayer(with: color, section: section, isCurrent: isCurrent)
+                    currentLayers = tmpLayers
+                } else {
+                    self.layers = layers
+                    layers = replaceCurrentLayer(with: color, section: section, isCurrent: isCurrent)
+                    self.layers = tmpLayers
+                }
             }
             
             return layers

@@ -7,12 +7,28 @@ class StickerFaceEditorView: RootView {
     
     let pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
         
+    let rightGradientView: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(libraryNamed: "sections_fade_right")
+        view.backgroundColor = .clear
+        
+        return view
+    }()
+    
+    let leftGradientView: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(libraryNamed: "sections_fade_left")
+        view.backgroundColor = .clear
+        
+        return view
+    }()
+    
     let headerCollectionView: UICollectionView = {
         let collectionViewLayout = UICollectionViewFlowLayout()
         collectionViewLayout.scrollDirection = .horizontal
         
         let view = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
-        view.contentInset = UIEdgeInsets(top: 16.0, left: 0.0, bottom: 16.0, right: 0.0)
+        view.contentInset = UIEdgeInsets(top: 16.0, left: 16.0, bottom: 16.0, right: 16.0)
         view.alwaysBounceHorizontal = true
         view.showsHorizontalScrollIndicator = false
         view.backgroundColor = .white
@@ -48,6 +64,8 @@ class StickerFaceEditorView: RootView {
         backgroundColor = .clear
         
         addSubview(headerCollectionView)
+        addSubview(rightGradientView)
+        addSubview(leftGradientView)
         addSubview(separator)
         addSubview(pageViewController.view)
         addSubview(saveButton)
@@ -67,6 +85,16 @@ class StickerFaceEditorView: RootView {
             make.top.equalToSuperview()
             make.left.right.equalToSuperview()
             make.height.equalTo(51.0)
+        }
+        
+        rightGradientView.snp.makeConstraints { make in
+            make.top.right.equalToSuperview()
+            make.height.equalTo(headerCollectionView.snp.height)
+        }
+        
+        leftGradientView.snp.makeConstraints { make in
+            make.top.left.equalToSuperview()
+            make.height.equalTo(headerCollectionView.snp.height)
         }
         
         separator.snp.makeConstraints { make in
