@@ -7,6 +7,14 @@ class StickerFaceEditorView: RootView {
     
     let pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
         
+    let rightGradientView: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(libraryNamed: "sections_fade_right")
+        view.backgroundColor = .clear
+        
+        return view
+    }()
+    
     let headerCollectionView: UICollectionView = {
         let collectionViewLayout = UICollectionViewFlowLayout()
         collectionViewLayout.scrollDirection = .horizontal
@@ -48,6 +56,7 @@ class StickerFaceEditorView: RootView {
         backgroundColor = .clear
         
         addSubview(headerCollectionView)
+        addSubview(rightGradientView)
         addSubview(separator)
         addSubview(pageViewController.view)
         addSubview(saveButton)
@@ -67,6 +76,11 @@ class StickerFaceEditorView: RootView {
             make.top.equalToSuperview()
             make.left.right.equalToSuperview()
             make.height.equalTo(51.0)
+        }
+        
+        rightGradientView.snp.makeConstraints { make in
+            make.top.right.equalToSuperview()
+            make.height.equalTo(headerCollectionView.snp.height)
         }
         
         separator.snp.makeConstraints { make in
