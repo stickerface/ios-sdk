@@ -51,7 +51,7 @@ class LayerColorSelectorEmbeddedCell: UICollectionViewCell {
     }
     
     private func layout() {
-        collectionView.pin.left(-16).top().right().bottom()
+        collectionView.pin.left(-16.0).top().right().bottom()
 //        colorSelectionIndicatorView.pin.size(60).hCenter().vCenter()
     }
     
