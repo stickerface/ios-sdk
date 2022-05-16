@@ -165,6 +165,7 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
         mainView.linesRoundRotateAnimationView.alpha = 0
         mainView.descriptionLabel.alpha = 0
         mainView.avatarImageView.alpha = 1
+        mainView.backgroundImageView.alpha = 1
         isAvatarGenerated = true
         
         let side = mainView.avatarImageView.bounds.size.height
@@ -205,6 +206,7 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
         mainView.avatarPlaceholderView.alpha = 1
         mainView.linesRoundRotateAnimationView.alpha = 1
         mainView.avatarImageView.alpha = 0
+        mainView.backgroundImageView.alpha = 0
         mainView.camera.previewLayer.alpha = 1
         mainView.linesRoundRotateAnimationView.setState(false)
         mainView.linesRoundRotateAnimationView.loader(false, completion: {

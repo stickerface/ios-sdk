@@ -86,12 +86,6 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
             mainView.renderWebView.configuration.userContentController.add(handler, name: handler.name)
         }
     }
-        
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-//        mainView.backgroundImageView.showSkeleton(usingColor: .clouds)
-    }
     
     // MARK: Private Actions
     
