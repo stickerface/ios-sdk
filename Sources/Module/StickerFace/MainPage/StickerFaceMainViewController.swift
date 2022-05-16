@@ -23,6 +23,7 @@ class StickerFaceMainViewController: ViewController<StickerFaceMainView> {
         
         adapter.collectionView = mainView.collectionView
         adapter.dataSource = self
+        adapter.scrollViewDelegate = self
     }
     
     func updateLayers(_ layers: String) {
@@ -87,5 +88,13 @@ extension StickerFaceMainViewController: StickersSectionControllerDelegate {
 extension StickerFaceMainViewController: StickerFaceMainStoreSectionDelegate {
     func stickerFaceMainStoreSection(needAllLayers withLayers: [(layer: String, color: String?)]) -> String {
         return delegate?.stickerFaceMainViewController(needAllLayers: withLayers) ?? ""
+    }
+}
+
+extension StickerFaceMainViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let alpha: CGFloat = scrollView.contentOffset.y > 0 ? 1 : 0
+        
+        self.mainView.gradientView.alpha = alpha
     }
 }
