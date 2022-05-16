@@ -37,6 +37,7 @@ class StickerFaceMainView: RootView {
     
     let gradientView: UIView = {
         let view = UIView()
+        view.alpha = 0
         
         return view
     }()
