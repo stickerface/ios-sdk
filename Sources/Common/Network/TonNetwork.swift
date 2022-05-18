@@ -3,7 +3,7 @@ import Alamofire
 
 class TonNetwork {
         
-    func loginClient(url: URL) {
+    static func loginClient(url: URL) {
         var path = url.absoluteString
         path.removeLast()
         
@@ -18,7 +18,7 @@ class TonNetwork {
                     
                     UserSettings.tonClient = client
                     
-                    self?.updateBalance()
+                    TonNetwork.updateBalance()
                 } catch {
                     print(error)
                 }
@@ -28,7 +28,7 @@ class TonNetwork {
         }
     }
     
-    func updateBalance() {
+    static func updateBalance() {
         guard let address = UserSettings.tonClient?.address else { return }
         let path = "https://beta.stickerface.io/api/tonkeeper/balance?wallet=\(address)"
         
@@ -53,7 +53,7 @@ class TonNetwork {
         }
     }
     
-    func tonkeeperAuthRequest() {
+    static func tonkeeperAuthRequest() {
         let path = "https://app.tonkeeper.com/ton-login/stickerface.io/api/tonkeeper/authRequest"
         
         if let url = URL(string: path) {

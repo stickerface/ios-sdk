@@ -140,7 +140,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     
     @objc private func balanceViewTapped() {
         if mainView.tonBalanceView.balanceType == .disconnected {
-            TonNetwork().tonkeeperAuthRequest()
+            TonNetwork.tonkeeperAuthRequest()
         }
     }
     
