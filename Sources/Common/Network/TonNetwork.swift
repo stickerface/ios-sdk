@@ -7,7 +7,7 @@ class TonNetwork {
         var path = url.absoluteString
         path.removeLast()
         
-        AF.request(path, method: .get).response { [weak self] responseData in
+        AF.request(path, method: .get).response { responseData in
             if let data = responseData.data {
                 do {
                     let login = try JSONDecoder().decode(TonLoginModel.self, from: data)
