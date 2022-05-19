@@ -37,6 +37,8 @@ You can present module however you want. You can get root navigation controller 
 let navigationController = StickerFace.shared.getRootNavigationController()
 ```
 
+## Author
+
 Xaker69, max.xaker41@mail.ru
 
 ## License
