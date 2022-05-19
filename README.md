@@ -25,11 +25,17 @@ pod 'StickerFaceSDK'
 
 ### Open StickerFace module
 
+For open StickerFace module in new view controller:
+
 ```swift
-    StickerFace.shared.openStickerFace()
+StickerFace.shared.openStickerFace()
 ```
 
-## Author
+You can present module however you want. You can get root navigation controller like this: 
+
+```swift
+let navigationController = StickerFace.shared.getRootNavigationController()
+```
 
 Xaker69, max.xaker41@mail.ru
 
