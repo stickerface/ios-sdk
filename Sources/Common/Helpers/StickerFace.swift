@@ -15,14 +15,7 @@ public class StickerFace {
     }
     
     public func getRootNavigationController() -> UINavigationController {
-        let rootVC = UserSettings.isOnboardingShown ? StickerFaceViewController(type: .main, layers: UserSettings.layers ?? "") : OnboardingViewController()
-        UserSettings.isOnboardingShown = true
-        
         let navigationController = RootNavigationController()
-        navigationController.interactivePopGestureRecognizer?.isEnabled = true
-        navigationController.setNavigationBarHidden(true, animated: false)
-        navigationController.setViewControllers([rootVC], animated: false)
-        navigationController.modalPresentationStyle = .fullScreen
         
         return navigationController
     }

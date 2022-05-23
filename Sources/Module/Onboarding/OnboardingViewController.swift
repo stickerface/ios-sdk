@@ -9,6 +9,8 @@ class OnboardingViewController: ViewController<OnboardingView> {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        UserSettings.isOnboardingShown = true
+        
         mainView.continueButton.addTarget(self, action: #selector(continueButtonTapped), for: .touchUpInside)
     }
     
