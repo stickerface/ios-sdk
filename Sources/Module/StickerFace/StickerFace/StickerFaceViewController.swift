@@ -214,8 +214,8 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
 
 // MARK: - StickerFaceMainViewControllerDelegate
 extension StickerFaceViewController: StickerFaceMainViewControllerDelegate {
-    func stickerFaceMainViewController(needAllLayers withLayers: [(layer: String, color: String?)]) -> String {
-        var allLayers = ""
+    func stickerFaceMainViewController(needAllLayers withLayers: [(layer: String, color: String?)], needBack: Bool) -> String {
+        var allLayers = mainView.editorViewController.currentLayers
         let tmpLayers = mainView.editorViewController.currentLayers
         
         // TODO: - может метод сделать где параметр будет все лееры и не парется с создаванием промежуточных лееров?
@@ -226,7 +226,11 @@ extension StickerFaceViewController: StickerFaceMainViewControllerDelegate {
         
         mainView.editorViewController.currentLayers = tmpLayers
         
-        return editorDelegate?.layersWithout(section: "background", layers: allLayers).layers ?? ""
+        if needBack {
+            return allLayers
+        } else {
+            return editorDelegate?.layersWithout(section: "background", layers: allLayers).layers ?? ""
+        }
     }
     
     func stickerFaceMainViewController(didSelect sticker: UIImage?) {

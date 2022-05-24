@@ -3,7 +3,7 @@ import IGListKit
 
 protocol StickerFaceMainViewControllerDelegate: AnyObject {
     func stickerFaceMainViewController(didSelect sticker: UIImage?)
-    func stickerFaceMainViewController(needAllLayers withLayers: [(layer: String, color: String?)]) -> String
+    func stickerFaceMainViewController(needAllLayers withLayers: [(layer: String, color: String?)], needBack: Bool) -> String
 }
 
 class StickerFaceMainViewController: ViewController<StickerFaceMainView> {
@@ -59,7 +59,10 @@ extension StickerFaceMainViewController: ListAdapterDataSource {
             return section
             
         case is StickerFaceMainMint:
-            return StickerFaceMainMintSectionController()
+            let section = StickerFaceMainMintSectionController()
+            section.delegate = self
+            
+            return section
             
         case is StickerFaceMainSticker:
             let section = StickerFaceMainStickersSectionController()
@@ -86,11 +89,19 @@ extension StickerFaceMainViewController: StickersSectionControllerDelegate {
 
 // MARK: - StickerFaceMainStoreSectionDelegate
 extension StickerFaceMainViewController: StickerFaceMainStoreSectionDelegate {
-    func stickerFaceMainStoreSection(needAllLayers withLayers: [(layer: String, color: String?)]) -> String {
-        return delegate?.stickerFaceMainViewController(needAllLayers: withLayers) ?? ""
+    func stickerFaceMainStore(needAllLayers withLayers: [(layer: String, color: String?)]) -> String {
+        return delegate?.stickerFaceMainViewController(needAllLayers: withLayers, needBack: false) ?? ""
     }
 }
 
+// MARK: - StickerFaceMainMintSectionDelegate
+extension StickerFaceMainViewController: StickerFaceMainMintSectionDelegate {
+    func stickerFaceMainMintNeedAllLayers() -> String {
+        return delegate?.stickerFaceMainViewController(needAllLayers: [], needBack: true) ?? ""
+    }
+}
+
+// MARK: - UIScrollViewDelegate
 extension StickerFaceMainViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let alpha: CGFloat = scrollView.contentOffset.y > 0 ? 1 : 0

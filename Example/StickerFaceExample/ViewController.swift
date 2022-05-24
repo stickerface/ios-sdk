@@ -17,6 +17,15 @@ class ViewController: UIViewController {
         return button
     }()
     
+    let avatarImageView: UIImageView = {
+        let view = UIImageView()
+        view.layer.cornerRadius = 140.0
+        view.contentMode = .scaleAspectFit
+        view.clipsToBounds = true
+        
+        return view
+    }()
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .darkContent
     }
@@ -26,8 +35,11 @@ class ViewController: UIViewController {
         
         view.backgroundColor = .white
         view.addSubview(openButton)
+        view.addSubview(avatarImageView)
         
         openButton.addTarget(self, action: #selector(openButtonTapped), for: .touchUpInside)
+        
+        sdk.delegate = self
         
         setupConstraints()
     }
@@ -43,7 +55,19 @@ class ViewController: UIViewController {
             make.right.equalToSuperview().offset(-32)
             make.height.equalTo(48)
         }
+        
+        avatarImageView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.size.equalTo(280.0)
+        }
     }
     
 }
 
+extension ViewController: StickerFaceDelegate {
+    func stickerFace(viewController: UIViewController, didReceive avatar: UIImage) {
+        avatarImageView.image = avatar
+        
+        viewController.dismiss(animated: true)
+    }
+}
