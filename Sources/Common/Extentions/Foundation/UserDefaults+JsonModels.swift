@@ -8,9 +8,13 @@ extension UserDefaults {
     ///   - object: Codable Object
     ///   - forKey: Key string
     /// - Throws: UserDefaults Error
-    func set<T: Codable>(object: T, forKey: String) throws {
-        let jsonData = try JSONEncoder().encode(object)
-        set(jsonData, forKey: forKey)
+    func set<T: Codable>(object: T?, forKey: String) throws {
+        if let object = object {
+            let jsonData = try JSONEncoder().encode(object)
+            set(jsonData, forKey: forKey)
+        } else {
+            set(nil, forKey: forKey)
+        }
     }
 
     /// Get Codable object into UserDefaults

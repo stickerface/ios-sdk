@@ -133,6 +133,19 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
             mainView.editorViewController.currentLayers = layers
             mainView.editorViewController.updateSelectedLayers()
             renderAvatar()
+            
+        case .logout:
+            let alert = UIAlertController(title: "Are sure you want to log out?", message: "After logging out you will not be able to buy NFTs for your avatar", preferredStyle: .alert)
+            
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+            let logoutAction = UIAlertAction(title: "Log out", style: .default) { _ in
+                StickerFace.shared.logoutUser()
+            }
+            
+            alert.addAction(cancelAction)
+            alert.addAction(logoutAction)
+            
+            present(alert, animated: true)
         }
     }
     

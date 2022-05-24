@@ -40,5 +40,12 @@ public class StickerFace {
             TonNetwork.loginClient(url: incomingURL)
         }
     }
+        
+    public func logoutUser() {
+        UserSettings.layers = nil
+        UserSettings.tonClient = nil
+        
+        RootNavigationController.shared.updateRootController()
+    }
 
 }
