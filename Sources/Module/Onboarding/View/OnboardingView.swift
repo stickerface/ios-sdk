@@ -25,7 +25,9 @@ class OnboardingView: RootView {
     let subtitleLabel: AttributedLabel = {
         let label = AttributedLabel()
         label.numberOfLines = 0
-
+        label.isEnabled = true
+        label.isUserInteractionEnabled = true
+        
         var paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineHeightMultiple = 1.4
         paragraphStyle.alignment = .center
@@ -35,7 +37,7 @@ class OnboardingView: RootView {
             .paragraphStyle(paragraphStyle)
             .foregroundColor(UIColor.sfTextPrimary)
             .font(Palette.fontMedium.withSize(16))
-        
+            
         label.attributedText = "onboardingSubtitle".libraryLocalized.styleAll(style)
     
         return label
