@@ -1,28 +1,27 @@
 import UIKit
 
+public protocol StickerFaceDelegate: AnyObject {
+    func stickerFace(viewController: UIViewController, didReceive avatar: UIImage)
+}
+
 public class StickerFace {
-
+    
+    public weak var delegate: StickerFaceDelegate?
+    
     public static let shared = StickerFace()
-
+    
     public init() {
         StickerFaceFonts.setup()
     }
     
     public func openStickerFace() {
         let viewController = Utils.getRootViewController()
-        
+
         viewController?.present(getRootNavigationController(), animated: true)
     }
     
     public func getRootNavigationController() -> UINavigationController {
-        let rootVC = UserSettings.isOnboardingShown ? GenerateAvatarViewController() : OnboardingViewController()
-        UserSettings.isOnboardingShown = false
-        let navigationController = RootNavigationController()
-        navigationController.interactivePopGestureRecognizer?.isEnabled = true
-        navigationController.navigationBar.isHidden = true
-        navigationController.setNavigationBarHidden(true, animated: false)
-        navigationController.setViewControllers([rootVC], animated: false)
-        navigationController.modalPresentationStyle = .fullScreen
+        let navigationController = RootNavigationController.shared
         
         return navigationController
     }
@@ -46,6 +45,10 @@ public class StickerFace {
         if components.path == "/api/tonkeeper/login" {
             TonNetwork.loginClient(url: incomingURL)
         }
+    }
+    
+    public func receiveAvatar(_ avatar: UIImage) {
+        delegate?.stickerFace(viewController: RootNavigationController.shared, didReceive: avatar)
     }
 
 }
