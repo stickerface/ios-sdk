@@ -50,5 +50,12 @@ public class StickerFace {
     public func receiveAvatar(_ avatar: UIImage) {
         delegate?.stickerFace(viewController: RootNavigationController.shared, didReceive: avatar)
     }
+    
+    public func logoutUser() {
+        UserSettings.layers = nil
+        UserSettings.tonClient = nil
+        
+        RootNavigationController.shared.updateRootController()
+    }
 
 }

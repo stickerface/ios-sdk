@@ -71,9 +71,7 @@ import Foundation
             return try? defaults.get(objectType: TonClient.self, forKey: #function) 
         }
         set {
-            if let newValue = newValue {
-                try? defaults.set(object: newValue, forKey: #function)
-            }
+            try? defaults.set(object: newValue, forKey: #function)
         }
     }
 }
