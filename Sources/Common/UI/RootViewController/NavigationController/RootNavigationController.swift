@@ -13,6 +13,21 @@ class RootNavigationController: UINavigationController {
     }
 
     init() {
+        super.init(nibName: nil, bundle: nil)
+        
+        interactivePopGestureRecognizer?.isEnabled = true
+        navigationBar.isHidden = true
+        setNavigationBarHidden(true, animated: false)
+        modalPresentationStyle = .fullScreen
+        
+        updateRootController()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func updateRootController() {
         var rootVC: UIViewController = OnboardingViewController()
         
         if UserSettings.isOnboardingShown {
@@ -22,18 +37,7 @@ class RootNavigationController: UINavigationController {
                 rootVC = GenerateAvatarViewController()
             }
         }
-        
-        super.init(rootViewController: rootVC)
-        
-        interactivePopGestureRecognizer?.isEnabled = true
-        navigationBar.isHidden = true
-        setNavigationBarHidden(true, animated: false)
-        setViewControllers([rootVC], animated: false)
-        modalPresentationStyle = .fullScreen
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
+        setViewControllers([rootVC], animated: false)
+    }
 }
