@@ -27,14 +27,14 @@ class ConnectWalletView: RootView {
         label.numberOfLines = 0
         
         var paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineHeightMultiple = 1.4
+        paragraphStyle.lineHeightMultiple = 1.23
         paragraphStyle.alignment = .center
         paragraphStyle.lineBreakMode = .byWordWrapping
         
         let style = Style()
             .paragraphStyle(paragraphStyle)
             .foregroundColor(UIColor.sfTextPrimary)
-            .font(Palette.fontMedium.withSize(16))
+            .font(Palette.fontMedium.withSize(17))
 
         label.attributedText = "connectWalletSubtitle".libraryLocalized.styleAll(style)
         
@@ -61,6 +61,7 @@ class ConnectWalletView: RootView {
         button.layer.cornerRadius = 14.0
         button.setImage(UIImage(libraryNamed: "tonkeeper_1"), for: .normal)
         button.tintColor = .white
+        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10)
         
         return button
     }()
@@ -79,7 +80,7 @@ class ConnectWalletView: RootView {
     
     private func setupConstraints() {
         imageView.snp.makeConstraints { make in
-            let topOffset = (UIScreen.main.bounds.height - Utils.safeAreaVertical()) * 0.20
+            let topOffset = (UIScreen.main.bounds.height - Utils.safeAreaVertical()) * 0.24
             make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(topOffset)
             make.centerX.equalToSuperview()
             make.size.equalTo(104)
