@@ -114,12 +114,12 @@ class StickerFaceView: RootView {
         }
         
         editButton.snp.makeConstraints { make in
-//            make.right.equalToSuperview().offset(-16.0)
-//            make.top.equalTo(rightTopButton.snp.bottom).offset(16.0)
-//            make.size.equalTo(48.0)
             make.right.equalToSuperview().offset(-16.0)
-            make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(8.0)
+            make.top.equalTo(rightTopButton.snp.bottom).offset(16.0)
             make.size.equalTo(48.0)
+//            make.right.equalToSuperview().offset(-16.0)
+//            make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(8.0)
+//            make.size.equalTo(48.0)
         }
         
         hangerButton.snp.makeConstraints { make in
