@@ -27,8 +27,8 @@ class OnboardingViewController: ViewController<OnboardingView> {
 //        navigationController?.pushViewController(vc, animated: true)
     }
     
-    private func setupSubtitle() {
-        mainView.subtitleLabel.onClick = { [weak self] label, detection in
+    private func setupSubtitle() {        
+        mainView.policyLabel.onClick = { [weak self] label, detection in
             switch detection.type {
             case .tag(let tag):
                 if tag.name == "a", let href = tag.attributes["href"], let url = URL(string: href) {
