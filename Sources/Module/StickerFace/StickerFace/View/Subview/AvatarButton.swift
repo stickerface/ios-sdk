@@ -10,6 +10,7 @@ class AvatarButton: UIButton {
         case hanger
         case close
         case back
+        case logout
     }
     
     private(set) var imageType: ImageType = .settings
