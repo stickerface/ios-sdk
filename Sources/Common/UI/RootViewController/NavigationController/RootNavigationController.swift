@@ -2,6 +2,8 @@ import UIKit
 
 class RootNavigationController: UINavigationController {
 
+    static let shared = RootNavigationController()
+    
     override var childViewControllerForStatusBarStyle: UIViewController? {
         return visibleViewController
     }

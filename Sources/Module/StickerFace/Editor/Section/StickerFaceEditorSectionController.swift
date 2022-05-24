@@ -159,7 +159,7 @@ class StickerFaceEditorSectionController: ListSectionController {
         }
         
         let isPaid = UserSettings.wardrobe.contains(layer) || UserSettings.paidBackgrounds.contains(layer)
-                
+        
         cell.setPrice(sectionModel.prices["\(layer)"], isPaid: isPaid)
         cell.setSelected(sectionModel.selectedLayer == layer)
         

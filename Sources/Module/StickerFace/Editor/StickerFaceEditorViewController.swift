@@ -216,7 +216,10 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
             }
         }
         
-        layers = layersArray.joined(separator: ";") + ";\(replacementLayer);"
+        layers = layersArray.joined(separator: ";")
+        if replacementLayer != "0" {
+            layers += ";\(replacementLayer);"
+        }
         
         return layers
     }
@@ -230,13 +233,14 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         
         let layersArray = layers.components(separatedBy: ";")
         
-        objects.forEach { object in
+        objects.enumerated().forEach { index, object in
+            let prevColor = object.selectedColor
             object.selectedColor = nil
             object.selectedLayer = "0"
-        }
-
-        objects.enumerated().forEach { index, object in
-            object.layersImages = nil
+            
+            if let header = headers.first(where: { $0.isSelected }), header.title.lowercased() != object.editorSubsection.name.lowercased() {
+                object.layersImages = nil
+            }
             
             if let editorLayers = object.editorSubsection.layers,
                let layer = editorLayers.first(where: { layersArray.contains($0) }) {
@@ -246,6 +250,10 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
             if let colorLayers = object.editorSubsection.colors?.compactMap({ String($0.id) }),
                let colorId = layersArray.first(where: { colorLayers.contains($0) }) {
                 object.selectedColor = colorId
+                
+                if prevColor != colorId {
+                    object.layersImages = nil
+                }
             }
             
             if let viewController = viewControllers?[index] as? StickerFaceEditorPageController {
@@ -342,8 +350,7 @@ extension StickerFaceEditorViewController: StickerFaceEditorPageDelegate {
             
             delegate?.stickerFaceEditorViewController(self, didSelectPaid: layer, layers: newPaidLayers, with: price, layerType: type)
         } else {
-            let layerForReplace = layer == "0" ? "" : layer
-            currentLayers = replaceCurrentLayer(with: layerForReplace, section: section, isCurrent: true)
+            currentLayers = replaceCurrentLayer(with: layer, section: section, isCurrent: true)
             delegate?.stickerFaceEditorViewController(self, didUpdate: currentLayers)
             updateSelectedLayers()
         }

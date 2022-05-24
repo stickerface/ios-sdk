@@ -192,7 +192,6 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         if let layer = tuple?.sectionLayer, layer != "0" {
             let layer = tuple?.sectionLayer ?? ""
             let url = "https://stickerface.io/api/section/png/\(layer)?size=\(mainView.bounds.width)"
-            mainView.backgroundImageView.showSkeleton(usingColor: .clouds)
             
             ImageLoader.setImage(url: url, imgView: mainView.backgroundImageView) { result in
                 switch result {
