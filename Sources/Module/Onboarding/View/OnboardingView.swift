@@ -25,8 +25,6 @@ class OnboardingView: RootView {
     let subtitleLabel: AttributedLabel = {
         let label = AttributedLabel()
         label.numberOfLines = 0
-        label.isEnabled = true
-        label.isUserInteractionEnabled = true
         
         var paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineHeightMultiple = 1.4
@@ -49,6 +47,8 @@ class OnboardingView: RootView {
         label.textColor = .sfTextSecondary
         label.numberOfLines = 0
         label.font = Palette.fontMedium.withSize(12)
+        label.isEnabled = true
+        label.isUserInteractionEnabled = true
         
         let a = Style("a")
             .underlineStyle(.styleSingle)
