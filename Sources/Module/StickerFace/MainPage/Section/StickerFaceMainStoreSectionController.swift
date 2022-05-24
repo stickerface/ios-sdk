@@ -2,7 +2,7 @@ import UIKit
 import IGListKit
 
 protocol StickerFaceMainStoreSectionDelegate: AnyObject {
-    func stickerFaceMainStoreSection(needAllLayers withLayers: [(layer: String, color: String?)]) -> String
+    func stickerFaceMainStore(needAllLayers withLayers: [(layer: String, color: String?)]) -> String
 }
 
 class StickerFaceMainStoreSectionController: ListSectionController {
@@ -26,7 +26,7 @@ class StickerFaceMainStoreSectionController: ListSectionController {
         let cell = collectionContext!.dequeue(of: StickerFaceMainStoreCell.self, for: self, at: index)
         
         let frontReplaceLayers = [(layer: "291", color: "3214"), (layer: "146", color: nil)]
-        let frontLayers = delegate?.stickerFaceMainStoreSection(needAllLayers: frontReplaceLayers)
+        let frontLayers = delegate?.stickerFaceMainStore(needAllLayers: frontReplaceLayers)
         
         if frontLayers != "" {
             ImageLoader.setAvatar(with: frontLayers, for: cell.nftStoreView.frontAvatarImageView, side: 150, cornerRadius: 0)
@@ -37,7 +37,7 @@ class StickerFaceMainStoreSectionController: ListSectionController {
             (layer: "255", color: nil),
             (layer: "238", color: nil)
         ]
-        let backLayers = delegate?.stickerFaceMainStoreSection(needAllLayers: backReplaceLayers)
+        let backLayers = delegate?.stickerFaceMainStore(needAllLayers: backReplaceLayers)
         
         if backLayers != "" {
             ImageLoader.setAvatar(with: backLayers, for: cell.nftStoreView.backAvatarImageView, side: 150, cornerRadius: 0)
