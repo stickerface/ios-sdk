@@ -77,7 +77,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
             delegate?.stickerFaceEditorViewController(self, didSave: layers)
             
             headers.enumerated().forEach { $0.element.isSelected = $0.offset == 0 }
-            objects.forEach { $0.layersImages = nil }
+            objects.forEach { $0.newLayersImages = nil }
             
             mainView.saveButton.isUserInteractionEnabled = false
             mainView.saveButton.backgroundColor = .sfDisabled
@@ -251,7 +251,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
             object.selectedLayer = "0"
             
             if let header = headers.first(where: { $0.isSelected }), header.title.lowercased() != object.editorSubsection.name.lowercased() {
-                object.layersImages = nil
+                object.newLayersImages = nil
             }
             
             if let editorLayers = object.editorSubsection.layers,
@@ -264,13 +264,13 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                 object.selectedColor = colorId
                 
                 if prevColor != colorId {
-                    object.layersImages = nil
+                    object.newLayersImages = nil
                 }
             }
             
             if let viewController = viewControllers?[index] as? StickerFaceEditorPageController {
                 viewController.sectionModel = object
-                viewController.adapter.reloadData()
+                viewController.needUpdate()
             }
         }
     }
