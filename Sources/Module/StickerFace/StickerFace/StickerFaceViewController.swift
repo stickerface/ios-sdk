@@ -73,6 +73,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         
         updateChild()
         updateBalanceView()
+        firstLoadAvatar()
         
         mainView.hangerButton.setCount(UserSettings.wardrobe.count)
         mainView.renderWebView.navigationDelegate = self
@@ -186,6 +187,28 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
 //        mainView.rightTopButton.setImageType(type == .editor ? genderType : .settings)
     }
     
+    // TODO: можно ли что то придумать с уменьшением времени загрузки веб вью? и убрать этот метод
+    private func firstLoadAvatar() {
+        guard
+            let tuple = editorDelegate?.layersWithout(section: "background", layers: layers),
+            tuple.layers != ""
+        else { return }
+        
+        ImageLoader.setImage(layers: tuple.layers, imgView: mainView.avatarView.avatarImageView)
+        
+        if tuple.sectionLayer != "0" {
+            let layer = tuple.sectionLayer
+            let url = "https://stickerface.io/api/section/png/\(layer)?size=\(mainView.bounds.width)"
+            
+            ImageLoader.setImage(url: url, imgView: mainView.backgroundImageView) { result in
+                switch result {
+                case .success: self.mainView.backgroundImageView.hideSkeleton()
+                case .failure: break
+                }
+            }
+        }
+    }
+        
     private func renderAvatar() {
         let tuple = editorDelegate?.layersWithout(section: "background", layers: layers)
         let id = getNextRequestId()
@@ -322,17 +345,18 @@ extension StickerFaceViewController: AvatarRenderResponseHandlerDelegate {
     
     func onImageReady(base64: String) {
         if let data = Data(base64Encoded: base64, options: []) {
+            print("=== did load image")
             mainView.avatarView.avatarImageView.image = UIImage(data: data)
-            mainView.avatarView.hideSkeleton()
         }
     }
     
 }
 
-// MARK: - WKScriptMessageHandler
+// MARK: - WKNavigationDelegate
 extension StickerFaceViewController: WKNavigationDelegate {
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        print("=== did finish navigation")
         renderAvatar()
     }
     
