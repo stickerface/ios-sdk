@@ -73,7 +73,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     @objc private func saveButtonTapped() {
         layers = currentLayers
         
-//        if Bundle.main.bundleIdentifier == "org.sflabs.StickerFace" {
+        if Bundle.main.bundleIdentifier == "org.sflabs.StickerFace" {
             delegate?.stickerFaceEditorViewController(self, didSave: layers)
             
             headers.enumerated().forEach { $0.element.isSelected = $0.offset == 0 }
@@ -93,16 +93,16 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                 vc.mainView.collectionView.scrollToTop(animated: false)
                 mainView.pageViewController.setViewControllers([vc], direction: .forward, animated: false)
             }
-//        } else {
-//            let imageView = UIImageView()
-//            
-//            ImageLoader.setImage(layers: layers, imgView: imageView) { result in
-//                switch result {
-//                case .success(let imageResult): StickerFace.shared.receiveAvatar(imageResult.image)
-//                case .failure: break
-//                }
-//            }
-//        }
+        } else {
+            let imageView = UIImageView()
+            
+            ImageLoader.setImage(layers: layers, imgView: imageView) { result in
+                switch result {
+                case .success(let imageResult): StickerFace.shared.receiveAvatar(imageResult.image)
+                case .failure: break
+                }
+            }
+        }
     }
     
     @objc private func changeSelectedTab(_ gestureRecognizer: UISwipeGestureRecognizer) {
