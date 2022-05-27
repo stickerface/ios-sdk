@@ -147,10 +147,21 @@ class StickerFaceEditorSectionController: ListSectionController {
         } else {
             cell.layerType = .layers
         }
-                
-        if let image = sectionModel.layersImages?[layer] {
+         
+        cell.layerImageView.image = nil
+        if let image = sectionModel.newLayersImages?[layer] {
             cell.contentView.hideSkeleton()
-            cell.layerImageView.image = image
+//            UIView.transition(with: cell.layerImageView, duration: 0.15, options: .transitionCrossDissolve) {
+                cell.layerImageView.image = image
+//            }
+        } else if let image = sectionModel.oldLayersImages?[layer] {
+            cell.contentView.hideSkeleton()
+            
+//            UIView.transition(with: cell.layerImageView, duration: 0.15, options: .transitionCrossDissolve) {
+                cell.layerImageView.image = image
+//            }
+            
+            delegate?.stickerFaceEditorSectionController(self, needRedner: layer, section: sectionModel.editorSubsection.name)
         } else {
             delegate?.stickerFaceEditorSectionController(self, needRedner: layer, section: sectionModel.editorSubsection.name)
         }
