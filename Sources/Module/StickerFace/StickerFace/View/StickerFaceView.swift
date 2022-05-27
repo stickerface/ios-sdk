@@ -8,7 +8,6 @@ class StickerFaceView: RootView {
     
     let renderWebView: WKWebView = {
         let webView = WKWebView()
-        webView.alpha = 0
         
         return webView
     }()
@@ -76,13 +75,13 @@ class StickerFaceView: RootView {
     override func setup() {
         backgroundColor = .white
         
+        addSubview(renderWebView)
         addSubview(backgroundImageView)
         addSubview(tonBalanceView)
         addSubview(rightTopButton)
         addSubview(editButton)
         addSubview(hangerButton)
         addSubview(backButton)
-        addSubview(renderWebView)
         addSubview(avatarView)
         addSubview(editorViewController.view)
         addSubview(mainViewController.view)
