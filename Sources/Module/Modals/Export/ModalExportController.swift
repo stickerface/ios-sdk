@@ -40,7 +40,7 @@ class ModalExportController: ModalScrollViewController {
         self.isLoading = true
         let stickerSet = StickerSet(software: "StickerFace", type: .image)
         let tmpImageView = UIImageView()
-        let path = "http://sticker.face.cat/api/png/"
+        let path = "http://stickerface.io/api/png/"
         
         for i in 0...28 {
             let url = path + "s\(i + 1);\(self.layers)"
