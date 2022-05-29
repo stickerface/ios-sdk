@@ -264,7 +264,7 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
         let resizedImage = resizeImage(image: UIImage(data: image, scale:1.0)!, targetSize: CGSize(width: 600, height: 600))
         
         let imageData = UIImageJPEGRepresentation(resizedImage, 0.9)
-        let urlString = "https://sticker.face.cat/api/process?platform=ios"
+        let urlString = "https://stickerface.io/api/process?platform=ios"
         let session = URLSession(configuration: URLSessionConfiguration.default)
         
         let mutableURLRequest = NSMutableURLRequest(url: NSURL(string: urlString)! as URL)

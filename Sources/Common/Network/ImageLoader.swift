@@ -31,7 +31,7 @@ class ImageLoader: NSObject {
         }
         
         let placeholder = UIImage(libraryNamed: "placeholder_sticker_200")?.withRenderingMode(.alwaysTemplate)
-        let url = URL(string: "http://sticker.face.cat/api/png/" + layers + "?size=" + String(describing: size * UIScreen.main.scale) + "&outline=\(outlined)")
+        let url = URL(string: "http://stickerface.io/api/png/" + layers + "?size=" + String(describing: size * UIScreen.main.scale) + "&outline=\(outlined)")
         
         return imgView.kf.setImage(with: url, placeholder: placeholder, options: options, completionHandler: completionHandler)
     }
@@ -45,7 +45,7 @@ class ImageLoader: NSObject {
         } else if let imageUrl = imageUrl, !imageUrl.isEmpty {
             avatarURL = URL(string: imageUrl)
         } else if let layers = layers {
-            avatarURL = URL(string: "http://sticker.face.cat/api/png/" + layers + "?size=" + String(Int(side * UIScreen.main.scale)) + "&outline=\(outlined)")
+            avatarURL = URL(string: "http://stickerface.io/api/png/" + layers + "?size=" + String(Int(side * UIScreen.main.scale)) + "&outline=\(outlined)")
         } else {
             preconditionFailure("Unknown avatar type")
         }
