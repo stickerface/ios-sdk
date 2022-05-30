@@ -7,8 +7,16 @@ class AvatarView: UIView {
         static let avatarImageViewHeight: CGFloat = 207.0
     }
     
-    let avatarImageView = UIImageView()
     let avatarClosedEyesImageView = UIImageView()
+    
+    let avatarImageView: UIImageView = {
+        let view = UIImageView()
+        view.clipsToBounds = true
+        view.image = UIImage(libraryNamed: "placeholder_sticker_200")
+        view.tintColor = .black.withAlphaComponent(0.06)
+        
+        return view
+    }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)

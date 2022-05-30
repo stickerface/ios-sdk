@@ -143,10 +143,17 @@ extension StickerFaceEditorPageController: AvatarRenderResponseHandlerDelegate {
         if let data = Data(base64Encoded: base64, options: []), let layer = layersForRender.first {
             let image = UIImage(data: data)
             layersForRender.remove(at: 0)
-            if sectionModel.layersImages != nil {
-                sectionModel.layersImages?[layer.layer] = image
+            
+            if sectionModel.newLayersImages != nil {
+                sectionModel.newLayersImages?[layer.layer] = image
             } else {
-                sectionModel.layersImages = [layer.layer: image ?? UIImage()]
+                sectionModel.newLayersImages = [layer.layer: image ?? UIImage()]
+            }
+            
+            if sectionModel.oldLayersImages != nil {
+                sectionModel.oldLayersImages?[layer.layer] = image
+            } else {
+                sectionModel.oldLayersImages = [layer.layer: image ?? UIImage()]
             }
             
             isRendering = false

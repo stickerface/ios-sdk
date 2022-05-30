@@ -73,11 +73,11 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     @objc private func saveButtonTapped() {
         layers = currentLayers
         
-//        if Bundle.main.bundleIdentifier == "org.sflabs.StickerFace" {
+        if Bundle.main.bundleIdentifier == "org.sflabs.StickerFace" {
             delegate?.stickerFaceEditorViewController(self, didSave: layers)
             
             headers.enumerated().forEach { $0.element.isSelected = $0.offset == 0 }
-            objects.forEach { $0.layersImages = nil }
+            objects.forEach { $0.newLayersImages = nil }
             
             mainView.saveButton.isUserInteractionEnabled = false
             mainView.saveButton.backgroundColor = .sfDisabled
@@ -93,16 +93,16 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                 vc.mainView.collectionView.scrollToTop(animated: false)
                 mainView.pageViewController.setViewControllers([vc], direction: .forward, animated: false)
             }
-//        } else {
-//            let imageView = UIImageView()
-//            
-//            ImageLoader.setImage(layers: layers, imgView: imageView) { result in
-//                switch result {
-//                case .success(let imageResult): StickerFace.shared.receiveAvatar(imageResult.image)
-//                case .failure: break
-//                }
-//            }
-//        }
+        } else {
+            let imageView = UIImageView()
+            
+            ImageLoader.setImage(layers: layers, imgView: imageView) { result in
+                switch result {
+                case .success(let imageResult): StickerFace.shared.receiveAvatar(imageResult.image)
+                case .failure: break
+                }
+            }
+        }
     }
     
     @objc private func changeSelectedTab(_ gestureRecognizer: UISwipeGestureRecognizer) {
@@ -251,7 +251,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
             object.selectedLayer = "0"
             
             if let header = headers.first(where: { $0.isSelected }), header.title.lowercased() != object.editorSubsection.name.lowercased() {
-                object.layersImages = nil
+                object.newLayersImages = nil
             }
             
             if let editorLayers = object.editorSubsection.layers,
@@ -264,13 +264,13 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                 object.selectedColor = colorId
                 
                 if prevColor != colorId {
-                    object.layersImages = nil
+                    object.newLayersImages = nil
                 }
             }
             
             if let viewController = viewControllers?[index] as? StickerFaceEditorPageController {
                 viewController.sectionModel = object
-                viewController.adapter.reloadData()
+                viewController.needUpdate()
             }
         }
     }
