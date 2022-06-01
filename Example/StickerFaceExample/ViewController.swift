@@ -45,7 +45,7 @@ class ViewController: UIViewController {
     }
     
     @objc private func openButtonTapped() {
-        sdk.openStickerFace()
+        sdk.openCreateAvatarController(false)
     }
     
     private func setupConstraints() {
@@ -66,6 +66,6 @@ class ViewController: UIViewController {
 
 extension ViewController: StickerFaceDelegate {
     func stickerFace(viewController: UIViewController, didReceive avatar: SFAvatar) {
-        avatarImageView.image = avatar.avatarImage
+        avatarImageView.image = UIImage(data: avatar.avatarImage)
     }
 }
