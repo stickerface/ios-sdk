@@ -67,29 +67,53 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         
         loadEditor()
     }
-        
+    
     // MARK: Private actions
     
     @objc private func saveButtonTapped() {
         layers = currentLayers
         
-        delegate?.stickerFaceEditorViewController(self, didSave: layers)
+        //        delegate?.stickerFaceEditorViewController(self, didSave: layers)
         
-//        headers.enumerated().forEach { $0.element.isSelected = $0.offset == 0 }
-//        objects.forEach { $0.newLayersImages = nil }
-//        
-//        mainView.saveButton.isUserInteractionEnabled = false
-//        mainView.saveButton.backgroundColor = .sfDisabled
-//        
-//        headerAdapter.reloadData()
-//        adapter.reloadData()
-//        
-//        mainView.headerCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: true)
-//        
-//        if let vc = viewControllers?[0] as? StickerFaceEditorPageController {
-//            vc.mainView.collectionView.scrollToTop(animated: false)
-//            mainView.pageViewController.setViewControllers([vc], direction: .forward, animated: false)
-//        }
+        //        headers.enumerated().forEach { $0.element.isSelected = $0.offset == 0 }
+        //        objects.forEach { $0.newLayersImages = nil }
+        //
+        //        mainView.saveButton.isUserInteractionEnabled = false
+        //        mainView.saveButton.backgroundColor = .sfDisabled
+        //
+        //        headerAdapter.reloadData()
+        //        adapter.reloadData()
+        //
+        //        mainView.headerCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: true)
+        //
+        //        if let vc = viewControllers?[0] as? StickerFaceEditorPageController {
+        //            vc.mainView.collectionView.scrollToTop(animated: false)
+        //            mainView.pageViewController.setViewControllers([vc], direction: .forward, animated: false)
+        //        }
+        
+        if Bundle.main.bundleIdentifier == "org.sflabs.StickerFace" {
+            delegate?.stickerFaceEditorViewController(self, didSave: layers)
+            
+            headers.enumerated().forEach { $0.element.isSelected = $0.offset == 0 }
+            objects.forEach { $0.newLayersImages = nil }
+            
+            mainView.saveButton.isUserInteractionEnabled = false
+            mainView.saveButton.backgroundColor = .sfDisabled
+            
+            mainView.saveButton.setTitle("Save", for: .normal)
+            
+            headerAdapter.reloadData()
+            adapter.reloadData()
+            
+            mainView.headerCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: true)
+            
+            if let vc = viewControllers?[0] as? StickerFaceEditorPageController {
+                vc.mainView.collectionView.scrollToTop(animated: false)
+                mainView.pageViewController.setViewControllers([vc], direction: .forward, animated: false)
+            }
+        } else {
+            delegate?.stickerFaceEditorViewController(self, didSave: layers)
+        }
     }
     
     @objc private func changeSelectedTab(_ gestureRecognizer: UISwipeGestureRecognizer) {
@@ -160,7 +184,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                     
                     return model
                 })
-
+                
                 self.viewControllers = self.objects.enumerated().map { index, object in
                     let controller = StickerFaceEditorPageController(sectionModel: object)
                     controller.delegate = self
@@ -178,14 +202,14 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                 }
                 
                 self.delegate?.stickerFaceEditorViewControllerDidLoadLayers(self)
-            
+                
             case .failure(let error):
                 self?.mainView.loaderView.showError(error.localizedDescription)
                 self?.loadingState = .failed
             }
         }
     }
-        
+    
     private func updatePrices(_ layers: [String]) {
         layers.forEach { prices.removeValue(forKey: $0) }
         objects.enumerated().forEach { index, object in
@@ -230,7 +254,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         
         return layers
     }
-        
+    
     // MARK: Public methods
     
     func updateSelectedLayers() {
