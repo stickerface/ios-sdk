@@ -1,14 +1,14 @@
 import UIKit
 
-public struct SFAvatar {
-    /// Avatar image with all layers
-    public let avatarImage: UIImage
+public struct SFAvatar: Codable {
+    /// Avatar png image with all layers
+    public let avatarImage: Data
     
-    /// Avatar image without background layer
-    public let personImage: UIImage
+    /// Avatar png image without background layer
+    public let personImage: Data
     
-    /// Background layer image from avatar
-    public let backgroundImage: UIImage
+    /// Background layer png image from avatar
+    public let backgroundImage: Data
     
     /// Layers from avatar
     public let layers: String

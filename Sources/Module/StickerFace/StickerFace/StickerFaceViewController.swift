@@ -73,7 +73,6 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         
         updateChild()
         updateBalanceView()
-        firstLoadAvatar()
         
         mainView.hangerButton.setCount(UserSettings.wardrobe.count)
         mainView.renderWebView.navigationDelegate = self
@@ -272,6 +271,7 @@ extension StickerFaceViewController: StickerFaceMainViewControllerDelegate {
 extension StickerFaceViewController: StickerFaceEditorViewControllerDelegate {
     func stickerFaceEditorViewControllerDidLoadLayers(_ controller: StickerFaceEditorViewController) {
         let layersWitoutBack = editorDelegate?.layersWithout(section: "background", layers: layers).layers ?? ""
+        firstLoadAvatar()
         mainView.mainViewController.updateLayers(layersWitoutBack)
     }
     
@@ -297,9 +297,9 @@ extension StickerFaceViewController: StickerFaceEditorViewControllerDelegate {
             
             switch result {
             case .success(let imageResult):
-                let avatarImage = imageResult.image
-                let personImage = self.mainView.avatarView.avatarImageView.image ?? UIImage()
-                let backgroundImage = self.mainView.backgroundImageView.image ?? UIImage()
+                let avatarImage = UIImagePNGRepresentation(imageResult.image) ?? Data()
+                let personImage = UIImagePNGRepresentation(self.mainView.avatarView.avatarImageView.image ?? UIImage()) ?? Data()
+                let backgroundImage = UIImagePNGRepresentation(self.mainView.backgroundImageView.image ?? UIImage()) ?? Data()
                 
                 let avatar = SFAvatar(avatarImage: avatarImage, personImage: personImage, backgroundImage: backgroundImage, layers: layers)
                 StickerFace.shared.receiveAvatar(avatar)

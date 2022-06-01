@@ -230,18 +230,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         
         return layers
     }
-    
-    private func receiveAvatar(avatarImage: UIImage?, personImage: UIImage?, backgroundImage: UIImage?) {
-        guard
-            let avatarImage = avatarImage,
-            let personImage = personImage,
-            let backgroundImage = backgroundImage
-        else { return }
         
-        let avatar = SFAvatar(avatarImage: avatarImage, personImage: personImage, backgroundImage: backgroundImage, layers: layers)
-        StickerFace.shared.receiveAvatar(avatar)
-    }
-    
     // MARK: Public methods
     
     func updateSelectedLayers() {
