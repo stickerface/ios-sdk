@@ -1,7 +1,7 @@
 import UIKit
 
 public protocol StickerFaceDelegate: AnyObject {
-    func stickerFace(viewController: UIViewController, didReceive avatar: UIImage)
+    func stickerFace(viewController: UIViewController, didReceive avatar: SFAvatar)
 }
 
 public class StickerFace {
@@ -46,15 +46,16 @@ public class StickerFace {
             TonNetwork.loginClient(url: incomingURL)
         }
     }
-    
-    public func receiveAvatar(_ avatar: UIImage) {
-        delegate?.stickerFace(viewController: RootNavigationController.shared, didReceive: avatar)
-    }
 
     public func logoutUser() {
         UserSettings.layers = nil
         UserSettings.tonClient = nil
         
         RootNavigationController.shared.updateRootController()
+    }
+    
+    func receiveAvatar(_ avatar: SFAvatar) {
+        RootNavigationController.shared.dismiss(animated: true)
+        delegate?.stickerFace(viewController: RootNavigationController.shared, didReceive: avatar)
     }
 }
