@@ -1,6 +1,6 @@
 import Foundation
 
-@objc public class UserSettings: NSObject {
+class UserSettings {
     
     public enum Gender: String {
         case male

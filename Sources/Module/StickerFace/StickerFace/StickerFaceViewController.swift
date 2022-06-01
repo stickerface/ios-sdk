@@ -281,16 +281,32 @@ extension StickerFaceViewController: StickerFaceEditorViewControllerDelegate {
     }
     
     func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didSave layers: String) {
-        self.layers = layers
-
-        let layersWitoutBack = editorDelegate?.layersWithout(section: "background", layers: layers).layers ?? ""
-        mainView.mainViewController.updateLayers(layersWitoutBack)
-        mainView.backButton.isHidden = true
-        mainView.editButton.isHidden = false
-        mainView.tonBalanceView.isHidden = false
-        mainView.rightTopButton.isHidden = false
+        self.layers = layers                
+//        let layersWitoutBack = editorDelegate?.layersWithout(section: "background", layers: layers).layers ?? ""
+//        mainView.mainViewController.updateLayers(layersWitoutBack)
+//        mainView.tonBalanceView.isHidden = false
+//        mainView.backButton.isHidden = true
+//        mainView.editButton.isHidden = false
+//        mainView.editButton.isHidden = false
+//        mainView.rightTopButton.setImageType(.settings)
+//        type = .main
         
-        type = .main
+        let avatarImageView = UIImageView()
+        ImageLoader.setImage(layers: layers, imgView: avatarImageView) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let imageResult):
+                let avatarImage = imageResult.image
+                let personImage = self.mainView.avatarView.avatarImageView.image ?? UIImage()
+                let backgroundImage = self.mainView.backgroundImageView.image ?? UIImage()
+                
+                let avatar = SFAvatar(avatarImage: avatarImage, personImage: personImage, backgroundImage: backgroundImage, layers: layers)
+                StickerFace.shared.receiveAvatar(avatar)
+                
+            case .failure: break
+            }
+        }
     }
     
     func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didSelectPaid layer: String, layers withLayer: String, with price: Int, layerType: LayerType) {

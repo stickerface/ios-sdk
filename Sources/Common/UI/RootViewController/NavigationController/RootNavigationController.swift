@@ -19,12 +19,15 @@ class RootNavigationController: UINavigationController {
         navigationBar.isHidden = true
         setNavigationBarHidden(true, animated: false)
         modalPresentationStyle = .fullScreen
-        
-        updateRootController()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func openGenerateAvatar() {
+        let rootVC = GenerateAvatarViewController()
+        setViewControllers([rootVC], animated: false)
     }
 
     func updateRootController() {

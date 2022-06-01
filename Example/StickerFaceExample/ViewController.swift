@@ -65,9 +65,7 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: StickerFaceDelegate {
-    func stickerFace(viewController: UIViewController, didReceive avatar: UIImage) {
-        avatarImageView.image = avatar
-        
-        viewController.dismiss(animated: true)
+    func stickerFace(viewController: UIViewController, didReceive avatar: SFAvatar) {
+        avatarImageView.image = avatar.avatarImage
     }
 }

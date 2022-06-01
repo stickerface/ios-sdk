@@ -73,36 +73,23 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     @objc private func saveButtonTapped() {
         layers = currentLayers
         
-        if Bundle.main.bundleIdentifier == "org.sflabs.StickerFace" {
-            delegate?.stickerFaceEditorViewController(self, didSave: layers)
-            
-            headers.enumerated().forEach { $0.element.isSelected = $0.offset == 0 }
-            objects.forEach { $0.newLayersImages = nil }
-            
-            mainView.saveButton.isUserInteractionEnabled = false
-            mainView.saveButton.backgroundColor = .sfDisabled
-            
-            mainView.saveButton.setTitle("Save", for: .normal)
-            
-            headerAdapter.reloadData()
-            adapter.reloadData()
-            
-            mainView.headerCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: true)
-            
-            if let vc = viewControllers?[0] as? StickerFaceEditorPageController {
-                vc.mainView.collectionView.scrollToTop(animated: false)
-                mainView.pageViewController.setViewControllers([vc], direction: .forward, animated: false)
-            }
-        } else {
-            let imageView = UIImageView()
-            
-            ImageLoader.setImage(layers: layers, imgView: imageView) { result in
-                switch result {
-                case .success(let imageResult): StickerFace.shared.receiveAvatar(imageResult.image)
-                case .failure: break
-                }
-            }
-        }
+        delegate?.stickerFaceEditorViewController(self, didSave: layers)
+        
+//        headers.enumerated().forEach { $0.element.isSelected = $0.offset == 0 }
+//        objects.forEach { $0.newLayersImages = nil }
+//        
+//        mainView.saveButton.isUserInteractionEnabled = false
+//        mainView.saveButton.backgroundColor = .sfDisabled
+//        
+//        headerAdapter.reloadData()
+//        adapter.reloadData()
+//        
+//        mainView.headerCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: true)
+//        
+//        if let vc = viewControllers?[0] as? StickerFaceEditorPageController {
+//            vc.mainView.collectionView.scrollToTop(animated: false)
+//            mainView.pageViewController.setViewControllers([vc], direction: .forward, animated: false)
+//        }
     }
     
     @objc private func changeSelectedTab(_ gestureRecognizer: UISwipeGestureRecognizer) {
@@ -243,6 +230,19 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         
         return layers
     }
+    
+    private func receiveAvatar(avatarImage: UIImage?, personImage: UIImage?, backgroundImage: UIImage?) {
+        guard
+            let avatarImage = avatarImage,
+            let personImage = personImage,
+            let backgroundImage = backgroundImage
+        else { return }
+        
+        let avatar = SFAvatar(avatarImage: avatarImage, personImage: personImage, backgroundImage: backgroundImage, layers: layers)
+        StickerFace.shared.receiveAvatar(avatar)
+    }
+    
+    // MARK: Public methods
     
     func updateSelectedLayers() {
         var layers = currentLayers
