@@ -1,0 +1,6 @@
+framework module StickerFaceSDK {
+  umbrella header "StickerFaceSDK-umbrella.h"
+
+  export *
+  module * { export * }
+}
