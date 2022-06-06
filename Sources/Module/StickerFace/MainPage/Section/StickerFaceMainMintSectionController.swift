@@ -26,7 +26,7 @@ class StickerFaceMainMintSectionController: ListSectionController {
         let cell = collectionContext!.dequeue(of: StickerFaceMainMintCell.self, for: self, at: index)
         
         let layers = delegate?.stickerFaceMainMintNeedAllLayers() ?? ""
-        ImageLoader.setImage(layers: layers, imgView: cell.avatarImageView)
+        StickerLoader.loadSticker(into: cell.avatarImageView, with: layers)
         
         return cell
     }

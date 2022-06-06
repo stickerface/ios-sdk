@@ -39,10 +39,7 @@ class WardrobeSectionController: ListSectionController {
         cell.layerType = .NFT
         
         let layer = sectionModel.layers[index]
-        let imageSide = 172
-        let url = "https://stickerface.io/api/section/png/\(layer)?size=\(imageSide)"
-                
-        ImageLoader.setImage(url: url, imgView: cell.layerImageView) { result in
+        StickerLoader.loadSticker(into: cell.layerImageView, with: layer, stickerType: .section, size: 172) { result in
             switch result {
             case .success: cell.contentView.hideSkeleton()
             case .failure: break

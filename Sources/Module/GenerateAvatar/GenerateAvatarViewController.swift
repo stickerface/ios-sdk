@@ -104,7 +104,7 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
             initCamera()
         } else {
             shouldAutoOpenCamera = false
-            layers = ImageLoader.defaultLayers
+            layers = StickerLoader.defaultLayers
             close()
             isAvatarGenerated = true
             nextStep()
@@ -169,7 +169,7 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
         isAvatarGenerated = true
         
         let side = mainView.avatarImageView.bounds.size.height
-        ImageLoader.setAvatar(with: layers, for: mainView.avatarImageView, side: side, cornerRadius: side/2)
+        StickerLoader.loadSticker(into: mainView.avatarImageView, with: layers ?? "")
     }
     
     private func nextStep() {

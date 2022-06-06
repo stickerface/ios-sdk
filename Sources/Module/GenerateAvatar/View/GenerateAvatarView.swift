@@ -42,6 +42,8 @@ class GenerateAvatarView: RootView {
     
     let avatarImageView: UIImageView = {
         let view = UIImageView()
+        view.clipsToBounds = true
+        view.layer.cornerRadius = 280.0/2.0
         
         return view
     }()
@@ -49,7 +51,7 @@ class GenerateAvatarView: RootView {
     let backgroundImageView: UIImageView = {
         let view = UIImageView()
         view.image = UIImage(libraryNamed: "mvp_background")
-        view.layer.cornerRadius = 280.0/2
+        view.layer.cornerRadius = 280.0/2.0
         view.clipsToBounds = true
         view.alpha = 0
         

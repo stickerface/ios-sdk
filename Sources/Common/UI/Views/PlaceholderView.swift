@@ -218,9 +218,7 @@ fileprivate extension PlaceholderView {
 //        }
 //
 //        let layers = "s"  + String(describing: stickerId.rawValue) + ";" + userLayers
-        ImageLoader.setAvatar(for: avatarView.avatarImageView,
-                              side: AvatarView.Layout.avatarImageViewHeight,
-                              cornerRadius: AvatarView.Layout.avatarImageViewHeight / 2)
+        StickerLoader.loadSticker(into: avatarView.avatarImageView)
     }
     
     @objc func layersDidUpdate() {

@@ -189,13 +189,10 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
             tuple.layers != ""
         else { return }
         
-        ImageLoader.setImage(layers: tuple.layers, imgView: mainView.avatarView.avatarImageView)
+        StickerLoader.loadSticker(into: mainView.avatarView.avatarImageView, with: tuple.layers)
         
         if tuple.sectionLayer != "0" {
-            let layer = tuple.sectionLayer
-            let url = "https://stickerface.io/api/section/png/\(layer)?size=\(mainView.bounds.width)"
-            
-            ImageLoader.setImage(url: url, imgView: mainView.backgroundImageView) { result in
+            StickerLoader.loadSticker(into: mainView.backgroundImageView, with: tuple.sectionLayer, stickerType: .section) { result in
                 switch result {
                 case .success: self.mainView.backgroundImageView.hideSkeleton()
                 case .failure: break
@@ -212,10 +209,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         mainView.renderWebView.evaluateJavaScript(renderFunc)
         
         if let layer = tuple?.sectionLayer, layer != "0" {
-            let layer = tuple?.sectionLayer ?? ""
-            let url = "https://stickerface.io/api/section/png/\(layer)?size=\(mainView.bounds.width)"
-            
-            ImageLoader.setImage(url: url, imgView: mainView.backgroundImageView) { result in
+            StickerLoader.loadSticker(into: mainView.backgroundImageView, with: layer, stickerType: .section) { result in
                 switch result {
                 case .success: self.mainView.backgroundImageView.hideSkeleton()
                 case .failure: break
@@ -299,21 +293,14 @@ extension StickerFaceViewController: StickerFaceEditorViewControllerDelegate {
 //        mainView.rightTopButton.setImageType(.settings)
 //        type = .main
         
-        let avatarImageView = UIImageView()
-        ImageLoader.setImage(layers: layers, imgView: avatarImageView) { [weak self] result in
-            guard let self = self else { return }
+        let path = StickerLoader.avatarPath + layers
+        StickerLoader.shared.loadImage(url: path) { image in
+            let avatarImage = UIImagePNGRepresentation(image) ?? Data()
+            let personImage = UIImagePNGRepresentation(self.mainView.avatarView.avatarImageView.image ?? UIImage()) ?? Data()
+            let backgroundImage = UIImagePNGRepresentation(self.mainView.backgroundImageView.image ?? UIImage()) ?? Data()
             
-            switch result {
-            case .success(let imageResult):
-                let avatarImage = UIImagePNGRepresentation(imageResult.image) ?? Data()
-                let personImage = UIImagePNGRepresentation(self.mainView.avatarView.avatarImageView.image ?? UIImage()) ?? Data()
-                let backgroundImage = UIImagePNGRepresentation(self.mainView.backgroundImageView.image ?? UIImage()) ?? Data()
-                
-                let avatar = SFAvatar(avatarImage: avatarImage, personImage: personImage, backgroundImage: backgroundImage, layers: layers)
-                StickerFace.shared.receiveAvatar(avatar)
-                
-            case .failure: break
-            }
+            let avatar = SFAvatar(avatarImage: avatarImage, personImage: personImage, backgroundImage: backgroundImage, layers: layers)
+            StickerFace.shared.receiveAvatar(avatar)
         }
     }
     

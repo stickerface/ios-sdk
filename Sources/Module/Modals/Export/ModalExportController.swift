@@ -39,12 +39,11 @@ class ModalExportController: ModalScrollViewController {
         
         self.isLoading = true
         let stickerSet = StickerSet(software: "StickerFace", type: .image)
-        let tmpImageView = UIImageView()
-        let path = "http://stickerface.io/api/png/"
+        let path = StickerLoader.avatarPath
         
         for i in 0...28 {
             let url = path + "s\(i + 1);\(self.layers)"
-            ImageLoader.shared.loadImage(url: url as NSString) { image in
+            StickerLoader.shared.loadImage(url: url) { image in
                 if let stickerData = Sticker.StickerData(image: image) {
                     try? stickerSet.addSticker(
                         data: stickerData,
@@ -90,13 +89,13 @@ class ModalExportController: ModalScrollViewController {
     
     private func setupImages() {
         let firstLayers = "s3;" + layers
-        ImageLoader.setImage(layers: firstLayers, imgView: mainView.leftImageView, size: 248)
+        StickerLoader.loadSticker(into: mainView.leftImageView, with: firstLayers)
         
         let secondLayers = "s15;" + layers
-        ImageLoader.setImage(layers: secondLayers, imgView: mainView.centerImageView, size: 248)
+        StickerLoader.loadSticker(into: mainView.centerImageView)
         
         let thirdLayers = "s27;" + layers
-        ImageLoader.setImage(layers: thirdLayers, imgView: mainView.rightImageView, size: 248)
+        StickerLoader.loadSticker(into: mainView.rightImageView, with: thirdLayers)
     }
     
     private func layout() {
