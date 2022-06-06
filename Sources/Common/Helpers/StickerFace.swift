@@ -16,7 +16,7 @@ public class StickerFace {
     
     public func createAvatarController() -> UIViewController {
         let rootViewController = RootNavigationController.shared
-        rootViewController.openGenerateAvatar()
+        rootViewController.updateRootController()
         
         return rootViewController
     }

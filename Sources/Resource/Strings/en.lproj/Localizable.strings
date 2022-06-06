@@ -28,8 +28,8 @@
 
 // Connect Wallet
 "connectWalletTitle" = "Connect your crypto wallet";
-"connectWalletSubtitle" = "To continue you need to have a cryptocurrency wallet Tonkeeper";
-"connectWalletWithoutWallet" = "Continue without wallet";
+"connectWalletSubtitle" = "To create an NFT avatar, you need a Tonkeeper wallet. You can connect it later in settings.";
+"connectWalletWithoutWallet" = "Connect wallet later";
 "connectWalletConnectTitle" = "Connect with Tonkeeper";
 
 // Editor

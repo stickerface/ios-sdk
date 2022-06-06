@@ -28,7 +28,7 @@
 
 // Connect Wallet
 "connectWalletTitle" = "Подключить свой криптокошелек";
-"connectWalletSubtitle" = "Для продолжения вам необходимо иметь криптовалютный кошелек Tonkeeper.";
+"connectWalletSubtitle" = "Подключение кошелька Tonkeeper позволит создать ваш аватар как NFT и предоставит вам лучший опыт";
 "connectWalletWithoutWallet" = "Продолжить без кошелька";
 "connectWalletConnectTitle" = "Подключить Tonkeeper";
 
