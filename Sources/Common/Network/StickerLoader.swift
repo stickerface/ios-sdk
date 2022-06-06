@@ -3,28 +3,28 @@ import Kingfisher
 
 public class StickerLoader: NSObject {
 
-    static var shared: StickerLoader = {
+    public static var shared: StickerLoader = {
        return StickerLoader()
     }()
     
-    static let defaultLayers = "12;3200;1;3040;3000;159;28;160;100;15;253;265;13;89;273;224;250;69;81;3;22;7;75;"
-    static let avatarPath = "http://stickerface.io/api/png/"
-    static let sectionPath = "http://stickerface.io/api/section/png/"
+    public static let defaultLayers = "12;3200;1;3040;3000;159;28;160;100;15;253;265;13;89;273;224;250;69;81;3;22;7;75;"
+    public static let avatarPath = "http://stickerface.io/api/png/"
+    public static let sectionPath = "http://stickerface.io/api/section/png/"
     
     var cache = NSCache<NSString, UIImage>()
     
-    enum PlaceholderStyle {
+    public enum PlaceholderStyle {
         case light
         case dark
     }
     
-    enum StickerType: String {
+    public enum StickerType: String {
         case avatar = "png"
         case section = "section/png"
     }
 
     @discardableResult
-    static func loadSticker(into imgView: UIImageView, with layers: String = StickerLoader.defaultLayers, stickerType: StickerType = .avatar, outlined: Bool = false, size: CGFloat = UIScreen.main.bounds.width, placeholderStyle: PlaceholderStyle = .dark, placeholderImage: UIImage? = nil, completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) -> DownloadTask? {
+    public static func loadSticker(into imgView: UIImageView, with layers: String = StickerLoader.defaultLayers, stickerType: StickerType = .avatar, outlined: Bool = false, size: CGFloat = UIScreen.main.bounds.width, placeholderStyle: PlaceholderStyle = .dark, placeholderImage: UIImage? = nil, completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) -> DownloadTask? {
         
         let options: KingfisherOptionsInfo = [
             .loadDiskFileSynchronously,
@@ -41,7 +41,7 @@ public class StickerLoader: NSObject {
     }
 
     @discardableResult
-    func loadImage(url: String, completion: @escaping (UIImage) -> ()) -> URLSessionDataTask? {
+    public func loadImage(url: String, completion: @escaping (UIImage) -> ()) -> URLSessionDataTask? {
         let url = url as NSString
         
         if let image = cache.object(forKey: url) {
