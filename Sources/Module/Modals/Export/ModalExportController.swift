@@ -92,7 +92,7 @@ class ModalExportController: ModalScrollViewController {
         StickerLoader.loadSticker(into: mainView.leftImageView, with: firstLayers)
         
         let secondLayers = "s15;" + layers
-        StickerLoader.loadSticker(into: mainView.centerImageView)
+        StickerLoader.loadSticker(into: mainView.centerImageView, with secondLayers)
         
         let thirdLayers = "s27;" + layers
         StickerLoader.loadSticker(into: mainView.rightImageView, with: thirdLayers)

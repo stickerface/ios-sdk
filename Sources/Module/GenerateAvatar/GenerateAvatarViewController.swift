@@ -168,7 +168,6 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
         mainView.backgroundImageView.alpha = 1
         isAvatarGenerated = true
         
-        let side = mainView.avatarImageView.bounds.size.height
         StickerLoader.loadSticker(into: mainView.avatarImageView, with: layers ?? "")
     }
     
