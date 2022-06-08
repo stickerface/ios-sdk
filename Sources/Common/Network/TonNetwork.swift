@@ -1,7 +1,7 @@
 import Foundation
 import Alamofire
 
-class TonNetwork {
+public class TonNetwork {
         
     static func loginClient(url: URL) {
         var path = url.absoluteString
@@ -53,7 +53,7 @@ class TonNetwork {
         }
     }
     
-    static func tonkeeperAuthRequest() {
+    public static func authRequest() {
         let path = "https://app.tonkeeper.com/ton-login/stickerface.io/api/tonkeeper/authRequest"
         
         if let url = URL(string: path) {

@@ -16,7 +16,7 @@ class ConnectWalletViewController: ViewController<ConnectWalletView> {
     }
     
     @objc private func connectButtonTapped() {
-        TonNetwork.tonkeeperAuthRequest()
+        TonNetwork.authRequest()
     }
     
     @objc private func continueButtonTapped() {
