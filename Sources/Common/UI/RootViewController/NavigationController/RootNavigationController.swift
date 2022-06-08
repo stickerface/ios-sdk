@@ -26,8 +26,13 @@ class RootNavigationController: UINavigationController {
     }
     
     func openGenerateAvatar() {
-        let rootVC = GenerateAvatarViewController()
-        setViewControllers([rootVC], animated: false)
+        let generateAvatar = GenerateAvatarViewController()
+        setViewControllers([generateAvatar], animated: false)
+    }
+    
+    func openEditor(avatar: SFAvatar) {
+        let editor = StickerFaceViewController(type: .editor, layers: avatar.layers)
+        setViewControllers([editor], animated: false)
     }
 
     func updateRootController() {

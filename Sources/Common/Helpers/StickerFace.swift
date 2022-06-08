@@ -21,6 +21,13 @@ public class StickerFace {
         return rootViewController
     }
     
+    public func editorController(avatar: SFAvatar) -> UIViewController {
+        let rootViewController = RootNavigationController.shared
+        rootViewController.openEditor(avatar: avatar)
+        
+        return rootViewController
+    }
+    
     public func openCreateAvatarController(_ animated: Bool) {
         let viewController = Utils.getRootViewController()
 
@@ -42,7 +49,5 @@ public class StickerFace {
     public func logoutUser() {
         UserSettings.layers = nil
         UserSettings.tonClient = nil
-        
-        RootNavigationController.shared.updateRootController()
     }
 }

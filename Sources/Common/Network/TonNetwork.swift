@@ -49,7 +49,7 @@ public class TonNetwork {
                 print(responseData)
             }
             
-            NotificationCenter.default.post(name: .tonClientDidUpdate, object: nil)
+            NotificationCenter.default.post(name: .tonClientDidUpdate, object: UserSettings.tonClient)
         }
     }
     

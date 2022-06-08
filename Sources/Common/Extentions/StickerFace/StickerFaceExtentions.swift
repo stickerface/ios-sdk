@@ -9,7 +9,6 @@ extension StickerFace {
     }
     
     func receiveAvatar(_ avatar: SFAvatar) {
-        RootNavigationController.shared.dismiss(animated: true)
         delegate?.stickerFace(viewController: RootNavigationController.shared, didReceive: avatar)
     }
     
