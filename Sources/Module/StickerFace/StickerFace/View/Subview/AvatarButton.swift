@@ -29,7 +29,7 @@ class AvatarButton: UIButton {
     private let counterLabel: UILabel = {
         let label = UILabel()
         label.textColor = .sfAccentSecondary
-        label.font = Palette.fontBold.withSize(10)
+        label.font = SFPalette.fontBold.withSize(10)
         label.textAlignment = .center
         
         return label

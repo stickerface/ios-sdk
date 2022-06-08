@@ -5,7 +5,7 @@ class EditorHeaderCollectionCell: UICollectionViewCell {
     
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = Palette.fontSemiBold.withSize(16)
+        label.font = SFPalette.fontSemiBold.withSize(16)
         label.textColor = .sfTextPrimary
         label.textAlignment = .center
         

@@ -11,7 +11,7 @@ class NFTStoreView: UIView {
         paragraphStyle.lineHeightMultiple = 1.17
         
         let style = Style()
-            .font(Palette.fontBold.withSize(14))
+            .font(SFPalette.fontBold.withSize(14))
             .foregroundColor(UIColor.sfAccentSecondary)
             .paragraphStyle(paragraphStyle)
 
@@ -27,7 +27,7 @@ class NFTStoreView: UIView {
         button.backgroundColor = .sfAccentBrand
         button.setTitleColor(.sfDefaultWhite, for: .normal)
         button.setTitle("mainStoreButton".libraryLocalized, for: .normal)
-        button.titleLabel?.font = Palette.fontBold.withSize(12)
+        button.titleLabel?.font = SFPalette.fontBold.withSize(12)
         button.contentEdgeInsets = UIEdgeInsets(top: 13, left: 19.5, bottom: 13, right: 19.5)
         
         return button

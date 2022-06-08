@@ -17,7 +17,7 @@ class PresentHeaderView: UIView {
     let titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.text = "inviteContactsShare".libraryLocalized
-        titleLabel.font = Palette.fontBold.withSize(20.0)
+        titleLabel.font = SFPalette.fontBold.withSize(20.0)
         titleLabel.textColor = .black
         
         return titleLabel

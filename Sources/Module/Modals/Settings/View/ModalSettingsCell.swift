@@ -4,7 +4,7 @@ class ModalSettingsCell: UITableViewCell {
 
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = Palette.fontMedium.withSize(16.0)
+        label.font = SFPalette.fontMedium.withSize(16.0)
         label.textColor = .sfAccentSecondary
         
         return label

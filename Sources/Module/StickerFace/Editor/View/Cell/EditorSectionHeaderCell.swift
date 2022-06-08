@@ -5,7 +5,7 @@ class EditorSectionHeaderCell: UICollectionViewCell {
     let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .sfTextSecondary
-        label.font = Palette.fontMedium.withSize(15.0)
+        label.font = SFPalette.fontMedium.withSize(15.0)
         
         return label
     }()

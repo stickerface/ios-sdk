@@ -11,7 +11,7 @@ class ModalSettingsView: RootView {
     
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = Palette.fontBold.withSize(20)
+        label.font = SFPalette.fontBold.withSize(20)
         label.textColor = .sfAccentSecondary
         label.textAlignment = .center
         label.text = "settingsTitle".libraryLocalized
@@ -49,7 +49,7 @@ class ModalSettingsView: RootView {
     
     let tonTitleLabel: UILabel = {
         let label = UILabel()
-        label.font = Palette.fontSemiBold.withSize(12)
+        label.font = SFPalette.fontSemiBold.withSize(12)
         label.textColor = .sfTextSecondary
         label.textAlignment = .left
         label.text = "Tonkeeper"
@@ -59,7 +59,7 @@ class ModalSettingsView: RootView {
     
     let tonSubtitleLabel: UILabel = {
         let label = UILabel()
-        label.font = Palette.fontBold.withSize(12)
+        label.font = SFPalette.fontBold.withSize(12)
         label.textColor = .sfAccentSecondary
         label.textAlignment = .left
         label.text = "settingsConnectToBuy".libraryLocalized
@@ -74,7 +74,7 @@ class ModalSettingsView: RootView {
         button.backgroundColor = .sfAccentBrand
         button.setTitleColor(.sfDefaultWhite, for: .normal)
         button.setTitle("commonConnect".libraryLocalized, for: .normal)
-        button.titleLabel?.font = Palette.fontBold.withSize(14)
+        button.titleLabel?.font = SFPalette.fontBold.withSize(14)
         button.contentEdgeInsets = UIEdgeInsets(top: 8.0, left: 16.0, bottom: 8.0, right: 16.0)
         
         return button

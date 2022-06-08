@@ -39,7 +39,7 @@ class EditorLayerCollectionCell: UICollectionViewCell {
     let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .sfTextSecondary
-        label.font = Palette.fontMedium.withSize(14)
+        label.font = SFPalette.fontMedium.withSize(14)
         label.textAlignment = .center
         
         return label
@@ -48,7 +48,7 @@ class EditorLayerCollectionCell: UICollectionViewCell {
     let priceLabel: UILabel = {
         let label = UILabel()
         label.textColor = .sfTextPrimary
-        label.font = Palette.fontBold.withSize(16)
+        label.font = SFPalette.fontBold.withSize(16)
         label.textAlignment = .left
         
         return label
@@ -57,7 +57,7 @@ class EditorLayerCollectionCell: UICollectionViewCell {
     let priceSubtitleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .sfTextSecondary
-        label.font = Palette.fontMedium.withSize(14)
+        label.font = SFPalette.fontMedium.withSize(14)
         label.textAlignment = .left
         label.text = "$9,8"
         
@@ -77,7 +77,7 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         button.setImage(UIImage(libraryNamed: "shoppingCartSmal"), for: .normal)
         button.isHidden = true
         button.setTitleColor(.sfTextPrimary, for: .normal)
-        button.titleLabel?.font = Palette.fontBold.withSize(12)
+        button.titleLabel?.font = SFPalette.fontBold.withSize(12)
         button.imageView?.contentMode = .scaleAspectFit
         
         return button

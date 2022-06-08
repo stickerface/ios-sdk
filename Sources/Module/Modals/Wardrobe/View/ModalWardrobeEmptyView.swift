@@ -14,7 +14,7 @@ class ModalWardrobeEmptyView: RootView {
     let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "wardrobeEmptyTitle".libraryLocalized
-        label.font = Palette.fontMedium.withSize(14)
+        label.font = SFPalette.fontMedium.withSize(14)
         label.textColor = .sfTextSecondary
         label.numberOfLines = 0
         label.textAlignment = .center

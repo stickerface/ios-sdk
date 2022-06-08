@@ -51,7 +51,7 @@ class StickerFaceEditorView: RootView {
         let button = UIButton(type: .system)
         button.setTitle("editorSave".libraryLocalized, for: .normal)
         button.setTitleColor(.sfDefaultWhite, for: .normal)
-        button.titleLabel?.font = Palette.fontBold.withSize(16.0)
+        button.titleLabel?.font = SFPalette.fontBold.withSize(16.0)
         button.backgroundColor = .sfAccentBrand
         button.layer.cornerRadius = 12.0
         

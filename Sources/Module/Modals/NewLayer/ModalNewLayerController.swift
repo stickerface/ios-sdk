@@ -52,7 +52,7 @@ class ModalNewLayerController: ModalScrollViewController {
         let subtitleStyle = Style()
             .paragraphStyle(paragraphStyle)
             .foregroundColor(UIColor.sfTextPrimary)
-            .font(Palette.fontMedium.withSize(16))
+            .font(SFPalette.fontMedium.withSize(16))
         
         StickerLoader.loadSticker(into: mainView.imageView, with: layers)
         
@@ -79,7 +79,7 @@ class ModalNewLayerController: ModalScrollViewController {
                     mainView.buyButton.setTitle("newLayerBuyNFT".libraryLocalized, for: .normal)
                     mainView.buyButton.addTarget(self, action: #selector(buyLayer), for: .touchUpInside)
                 } else {
-                    let style = Style("bold").font(Palette.fontBold.withSize(16))
+                    let style = Style("bold").font(SFPalette.fontBold.withSize(16))
                     let addCount = (Double(price) - balance).description
                     mainView.titleLabel.text = "newLayerInsufficientFunds".libraryLocalized
                     mainView.subtitleLabel.attributedText = "newLayerAddMinimum".libraryLocalized(addCount).style(tags: style).styleAll(subtitleStyle)

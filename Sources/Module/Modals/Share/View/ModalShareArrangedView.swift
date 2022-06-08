@@ -13,7 +13,7 @@ class ModalShareArrangedView: RootView {
     
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = Palette.fontMedium.withSize(12)
+        label.font = SFPalette.fontMedium.withSize(12)
         label.textColor = .sfTextPrimary
         label.textAlignment = .center
         

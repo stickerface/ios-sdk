@@ -13,7 +13,7 @@ class ModalNewLayerView: UIView {
     let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .sfTextPrimary
-        label.font = Palette.fontBold.withSize(20)
+        label.font = SFPalette.fontBold.withSize(20)
         label.text = "Title"
         label.textAlignment = .center
         
@@ -38,7 +38,7 @@ class ModalNewLayerView: UIView {
     let imageNameLabel: UILabel = {
         let label = UILabel()
         label.textColor = .sfTextSecondary
-        label.font = Palette.fontMedium.withSize(14)
+        label.font = SFPalette.fontMedium.withSize(14)
         label.text = "Layer Name"
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -49,7 +49,7 @@ class ModalNewLayerView: UIView {
     let priceLabel: UILabel = {
         let label = UILabel()
         label.textColor = .sfTextPrimary
-        label.font = Palette.fontBold.withSize(16)
+        label.font = SFPalette.fontBold.withSize(16)
         label.text = "Layer price"
         label.textAlignment = .center
         
@@ -59,7 +59,7 @@ class ModalNewLayerView: UIView {
     let priceSubtitleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .sfTextSecondary
-        label.font = Palette.fontMedium.withSize(14)
+        label.font = SFPalette.fontMedium.withSize(14)
         label.text = "price in $"
         label.textAlignment = .center
         
@@ -70,7 +70,7 @@ class ModalNewLayerView: UIView {
         let button = UIButton(type: .system)
         button.setTitle("connectWalletConnectTitle".libraryLocalized, for: .normal)
         button.setImage(UIImage(libraryNamed: "tonkeeper_1"), for: .normal)
-        button.titleLabel?.font = Palette.fontBold.withSize(16.0)
+        button.titleLabel?.font = SFPalette.fontBold.withSize(16.0)
         button.setTitleColor(.sfDefaultWhite, for: .normal)
         button.backgroundColor = .sfAccentBrand
         button.layer.cornerRadius = 14.0

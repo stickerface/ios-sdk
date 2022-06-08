@@ -20,7 +20,7 @@ class StickerFaceMainMintCell: UICollectionViewCell {
         button.isUserInteractionEnabled = false
         button.backgroundColor = .sfAccentSecondary
         button.setTitle("Coming soon", for: .normal)
-        button.titleLabel?.font = Palette.fontBold.withSize(10)
+        button.titleLabel?.font = SFPalette.fontBold.withSize(10)
         button.contentEdgeInsets = UIEdgeInsets(top: 4.0, left: 6.0, bottom: 4.0, right: 6.0)
         button.layer.cornerRadius = 10.0
         
@@ -30,7 +30,7 @@ class StickerFaceMainMintCell: UICollectionViewCell {
     let createLabel: UILabel = {
         let label = UILabel()
         label.text = "Create own NFT"
-        label.font = Palette.fontBold.withSize(14)
+        label.font = SFPalette.fontBold.withSize(14)
         label.textColor = .sfTextPrimary
         label.alpha = 0.25
         
@@ -40,7 +40,7 @@ class StickerFaceMainMintCell: UICollectionViewCell {
     let mintLabel: UILabel = {
         let label = UILabel()
         label.text = "Mint current avatar"
-        label.font = Palette.fontMedium.withSize(14)
+        label.font = SFPalette.fontMedium.withSize(14)
         label.textColor = .sfTextSecondary
         label.alpha = 0.25
         

@@ -12,7 +12,7 @@ class ModalExportView: RootView {
     let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "exportTitle".libraryLocalized
-        label.font = Palette.fontBold.withSize(24)
+        label.font = SFPalette.fontBold.withSize(24)
         label.textColor = .sfTextPrimary
         label.textAlignment = .center
         
@@ -23,7 +23,7 @@ class ModalExportView: RootView {
     let subtitleLabel: UILabel = {
         let label = UILabel()
         label.text = "exportSubtitle".libraryLocalized
-        label.font = Palette.fontMedium.withSize(16)
+        label.font = SFPalette.fontMedium.withSize(16)
         label.textColor = .sfTextPrimary
         label.textAlignment = .center
         label.numberOfLines = 0

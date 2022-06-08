@@ -42,7 +42,7 @@ class TonBalanceView: UIView {
         let label = UILabel()
         label.text = "Tonkeeper"
         label.textColor = .sfTextSecondary
-        label.font = Palette.fontMedium.withSize(10)
+        label.font = SFPalette.fontMedium.withSize(10)
         label.textAlignment = .left
         
         return label
@@ -52,7 +52,7 @@ class TonBalanceView: UIView {
         let label = UILabel()
         label.text = "commonConnect".libraryLocalized
         label.textColor = .sfTextPrimary
-        label.font = Palette.fontBold.withSize(12)
+        label.font = SFPalette.fontBold.withSize(12)
         label.textAlignment = .left
         
         return label

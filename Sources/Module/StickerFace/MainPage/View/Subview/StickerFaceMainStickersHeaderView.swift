@@ -5,7 +5,7 @@ class StickerFaceMainStickersHeaderView: UICollectionReusableView {
     let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .sfAccentSecondary
-        label.font = Palette.fontBold.withSize(20.0)
+        label.font = SFPalette.fontBold.withSize(20.0)
         
         return label
     }()

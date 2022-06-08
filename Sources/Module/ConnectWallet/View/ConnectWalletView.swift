@@ -14,7 +14,7 @@ class ConnectWalletView: RootView {
     let titleLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
-        label.font = Palette.fontBold.withSize(35)
+        label.font = SFPalette.fontBold.withSize(35)
         label.textColor = .sfTextPrimary
         label.text = "connectWalletTitle".libraryLocalized
         label.textAlignment = .center
@@ -34,7 +34,7 @@ class ConnectWalletView: RootView {
         let style = Style()
             .paragraphStyle(paragraphStyle)
             .foregroundColor(UIColor.sfTextPrimary)
-            .font(Palette.fontMedium.withSize(17))
+            .font(SFPalette.fontMedium.withSize(17))
 
         label.attributedText = "connectWalletSubtitle".libraryLocalized.styleAll(style)
         
@@ -44,7 +44,7 @@ class ConnectWalletView: RootView {
     let continueButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("connectWalletWithoutWallet".libraryLocalized, for: .normal)
-        button.titleLabel?.font = Palette.fontSemiBold.withSize(16.0)
+        button.titleLabel?.font = SFPalette.fontSemiBold.withSize(16.0)
         button.setTitleColor(.sfAccentBrand, for: .normal)
         button.backgroundColor = .clear
         button.layer.cornerRadius = 14.0
@@ -55,7 +55,7 @@ class ConnectWalletView: RootView {
     let connectButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("connectWalletConnectTitle".libraryLocalized, for: .normal)
-        button.titleLabel?.font = Palette.fontBold.withSize(16.0)
+        button.titleLabel?.font = SFPalette.fontBold.withSize(16.0)
         button.setTitleColor(.sfDefaultWhite, for: .normal)
         button.backgroundColor = .sfAccentBrand
         button.layer.cornerRadius = 14.0

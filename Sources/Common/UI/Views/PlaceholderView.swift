@@ -80,7 +80,7 @@ class PlaceholderView: UIView {
             actionButton.setTitle(buttonText, for: .normal)
             actionButton.isHidden = buttonText.count == 0
             
-            let textWidth = buttonText.size(withAttributes: [.font: Palette.font]).width
+            let textWidth = buttonText.size(withAttributes: [.font: SFPalette.font]).width
             actionButton.snp.updateConstraints { update in
                 update.width.equalTo(textWidth + 16.0 * 2)
             }
@@ -123,7 +123,7 @@ class PlaceholderView: UIView {
         let captionView = UILabel()
         captionView.textColor = .sfTextSecondary
         captionView.numberOfLines = 0
-        captionView.font = Palette.font
+        captionView.font = SFPalette.font
         captionView.textAlignment = .center
         
         return captionView
@@ -132,7 +132,7 @@ class PlaceholderView: UIView {
     let actionButton: UIButton = {
         let button = UIButton()
         button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = Palette.font
+        button.titleLabel?.font = SFPalette.font
         button.backgroundColor = .sfAccentBrand
         button.layer.cornerRadius = 20.0
         button.isHidden = true

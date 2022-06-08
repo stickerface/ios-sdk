@@ -14,7 +14,7 @@ class OnboardingView: RootView {
     let titleLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
-        label.font = Palette.fontBold.withSize(35)
+        label.font = SFPalette.fontBold.withSize(35)
         label.textColor = .sfTextPrimary
         label.text = "onboardingTitle".libraryLocalized
         label.textAlignment = .center
@@ -34,7 +34,7 @@ class OnboardingView: RootView {
         let style = Style()
             .paragraphStyle(paragraphStyle)
             .foregroundColor(UIColor.sfTextPrimary)
-            .font(Palette.fontMedium.withSize(16))
+            .font(SFPalette.fontMedium.withSize(16))
             
         label.attributedText = "onboardingSubtitle".libraryLocalized.styleAll(style)
     
@@ -46,7 +46,7 @@ class OnboardingView: RootView {
         label.textAlignment = .center
         label.textColor = .sfTextSecondary
         label.numberOfLines = 0
-        label.font = Palette.fontMedium.withSize(12)
+        label.font = SFPalette.fontMedium.withSize(12)
         label.isEnabled = true
         label.isUserInteractionEnabled = true
         
@@ -62,7 +62,7 @@ class OnboardingView: RootView {
     let continueButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("commonContinue".libraryLocalized, for: .normal)
-        button.titleLabel?.font = Palette.fontBold.withSize(16.0)
+        button.titleLabel?.font = SFPalette.fontBold.withSize(16.0)
         button.setTitleColor(.sfDefaultWhite, for: .normal)
         button.backgroundColor = .sfAccentBrand
         button.layer.cornerRadius = 14.0

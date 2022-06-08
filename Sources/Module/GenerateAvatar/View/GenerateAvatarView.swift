@@ -14,7 +14,7 @@ class GenerateAvatarView: RootView {
         let label = UILabel()
         label.textColor = .sfTextPrimary
         label.textAlignment = .center
-        label.font = Palette.fontBold.withSize(34.0)
+        label.font = SFPalette.fontBold.withSize(34.0)
         label.text = "setupAvatarTitle".libraryLocalized
         
         return label
@@ -24,7 +24,7 @@ class GenerateAvatarView: RootView {
         let label = UILabel()
         label.textColor = .sfTextPrimary
         label.textAlignment = .center
-        label.font = Palette.fontMedium.withSize(16)
+        label.font = SFPalette.fontMedium.withSize(16)
         label.text = "setupAvatarSubtitle".libraryLocalized
         label.numberOfLines = 0
         
@@ -71,7 +71,7 @@ class GenerateAvatarView: RootView {
         label.text = "setupAvatarDescription".libraryLocalized
         label.textColor = .sfTextSecondary
         label.textAlignment = .center
-        label.font = Palette.fontMedium.withSize(12)
+        label.font = SFPalette.fontMedium.withSize(12)
         label.numberOfLines = 0
         
         return label
@@ -81,7 +81,7 @@ class GenerateAvatarView: RootView {
         let button = UIButton(type: .system)
         button.setTitleColor(.sfAccentBrand, for: .normal)
         button.setTitle("setupAvatarContinueTitle".libraryLocalized, for: .normal)
-        button.titleLabel?.font = Palette.fontSemiBold.withSize(16.0)
+        button.titleLabel?.font = SFPalette.fontSemiBold.withSize(16.0)
         button.backgroundColor = .clear
         
         return button
@@ -91,7 +91,7 @@ class GenerateAvatarView: RootView {
         let button = UIButton(type: .system)
         button.setTitleColor(.sfDefaultWhite, for: .normal)
         button.setTitle("setupAvatarAllowTitle".libraryLocalized, for: .normal)
-        button.titleLabel?.font = Palette.fontBold.withSize(16.0)
+        button.titleLabel?.font = SFPalette.fontBold.withSize(16.0)
         button.backgroundColor = .sfAccentBrand
         button.layer.cornerRadius = 14.0
         

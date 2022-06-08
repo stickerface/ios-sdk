@@ -1,6 +1,6 @@
 import UIKit
 
-public class Palette {
+public class SFPalette {
 
     public enum Fonts {
         public static let regular = UIFont(name: "Montserrat-Regular", size: 16)!

@@ -34,7 +34,7 @@ class LoaderView: UIView {
     
     private let errorLabel: UILabel = {
         let errorLabel = UILabel(frame: CGRect(x: 24, y: 45, width: 0, height: 0))
-        errorLabel.font = Palette.fontSemiBold
+        errorLabel.font = SFPalette.fontSemiBold
         errorLabel.textAlignment = .center
         errorLabel.isHidden = true
         errorLabel.numberOfLines = 0
