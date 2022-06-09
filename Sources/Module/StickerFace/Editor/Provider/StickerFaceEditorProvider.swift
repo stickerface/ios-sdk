@@ -15,7 +15,7 @@ class StickerFaceEditorProvider {
 //            }
 //        }
         
-        let url = "http://stickerface.io/api/editor"
+        let url = "http://stickerface.io/api/v2/editor"
         
         AF.request(url, method: .get).response { responseData in
             if let data = responseData.data {

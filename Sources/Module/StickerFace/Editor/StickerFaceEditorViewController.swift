@@ -132,7 +132,9 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
             case .success(let editor):
                 guard let self = self else { return }
                 
-                self.headers = editor.sections.flatMap({ $0.subsections }).map({ EditorHeaderSectionModel(title: $0.name) })
+                let sections = UserSettings.gender == .male ? editor.sections.man : editor.sections.woman
+                
+                self.headers = sections.flatMap({ $0.subsections }).map({ EditorHeaderSectionModel(title: $0.name) })
                 self.headers.first?.isSelected = true
                 self.headerAdapter.performUpdates(animated: true)
                 
@@ -141,7 +143,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                 // TODO: убрать говнокод
                 self.prices["271"] = 2
                 
-                self.objects = editor.sections.flatMap({ $0.subsections }).map({ subsection in
+                self.objects = sections.flatMap({ $0.subsections }).map({ subsection in
                     let newSubsection = EditorSubsection(
                         name: subsection.name,
                         layers: subsection.layers,
