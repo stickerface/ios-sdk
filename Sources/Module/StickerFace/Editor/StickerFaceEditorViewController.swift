@@ -15,6 +15,7 @@ protocol StickerFaceEditorViewControllerDelegate: AnyObject {
 }
 
 protocol StickerFaceEditorDelegate: AnyObject {
+    func toggleGender()
     func updateLayers(_ layers: String)
     func layersWithout(section: String, layers: String) -> (sectionLayer: String, layers: String)
     func replaceCurrentLayers(with layer: String, with color: String?, isCurrent: Bool) -> String
@@ -36,6 +37,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         }
     }
     
+    private var editor: Editor?
     private var loadingState = LoadingState.loading
     private let provider = StickerFaceEditorProvider()
     private var prices: [String: Int] = [:]
@@ -132,44 +134,8 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
             case .success(let editor):
                 guard let self = self else { return }
                 
-                let sections = SFDefaults.gender == .male ? editor.sections.man : editor.sections.woman
-                
-                self.headers = sections.flatMap({ $0.subsections }).map({ EditorHeaderSectionModel(title: $0.name) })
-                self.headers.first?.isSelected = true
-                self.headerAdapter.performUpdates(animated: true)
-                
-                self.prices = editor.prices
-                
-                // TODO: убрать говнокод
-                self.prices["271"] = 2
-                
-                self.objects = sections.flatMap({ $0.subsections }).map({ subsection in
-                    let newSubsection = EditorSubsection(
-                        name: subsection.name,
-                        layers: subsection.layers,
-                        colors: subsection.colors?.reversed()
-                    )
-                    let model = EditorSubsectionSectionModel(editorSubsection: newSubsection, prices: self.prices)
-                    model.selectedLayer = "0"
-                    
-                    return model
-                })
-
-                self.viewControllers = self.objects.enumerated().map { index, object in
-                    let controller = StickerFaceEditorPageController(sectionModel: object)
-                    controller.delegate = self
-                    controller.editorDelegate = self
-                    controller.index = index
-                    
-                    return controller
-                }
-                
-                self.updateSelectedLayers()
-                self.loadingState = .loaded
-                
-                if let viewController = self.viewControllers?[0] {
-                    self.mainView.pageViewController.setViewControllers([viewController], direction: .reverse, animated: true)
-                }
+                self.editor = editor
+                self.setupSections(needSetDefault: false)
                 
                 self.delegate?.stickerFaceEditorViewControllerDidLoadLayers(self)
             
@@ -177,6 +143,61 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                 self?.mainView.loaderView.showError(error.localizedDescription)
                 self?.loadingState = .failed
             }
+        }
+    }
+    
+    private func setupSections(needSetDefault: Bool) {
+        guard let editor = editor else { return }
+
+        let sections = SFDefaults.gender == .male ? editor.sections.man : editor.sections.woman
+        
+        headers = sections.flatMap({ $0.subsections }).map({ EditorHeaderSectionModel(title: $0.name) })
+        headers.first?.isSelected = true
+        headerAdapter.performUpdates(animated: true)
+        
+        prices = editor.prices
+        
+        // TODO: убрать говнокод
+        prices["271"] = 2
+        
+        objects = sections.flatMap({ $0.subsections }).map({ subsection in
+            let newSubsection = EditorSubsection(
+                name: subsection.name,
+                layers: subsection.layers,
+                colors: subsection.colors?.reversed()
+            )
+            let model = EditorSubsectionSectionModel(editorSubsection: newSubsection, prices: prices)
+            model.selectedLayer = "0"
+            
+            return model
+        })
+        
+        if needSetDefault {
+            let defaultNames = ["head", "facelines", "hair", "beard", "bristle", "moustache", "eyes", "eyebrows", "nose", "mouth"]
+
+            sections.flatMap { $0.subsections }.forEach { subsection in
+                if defaultNames.contains(subsection.name) {
+                    if let layer = subsection.layers?.first {
+                        currentLayers += ";\(layer);"
+                    }
+                }
+            }
+        }
+
+        viewControllers = objects.enumerated().map { index, object in
+            let controller = StickerFaceEditorPageController(sectionModel: object)
+            controller.delegate = self
+            controller.editorDelegate = self
+            controller.index = index
+            
+            return controller
+        }
+        
+        updateSelectedLayers()
+        loadingState = .loaded
+        
+        if let viewController = viewControllers?[0] {
+            mainView.pageViewController.setViewControllers([viewController], direction: .reverse, animated: true)
         }
     }
         
@@ -435,20 +456,64 @@ extension StickerFaceEditorViewController: StickerFaceEditorDelegate {
         }
         
         var layersArray = layers.components(separatedBy: ";")
+                
         let sectionLayers = objects.first(where: { model in
-            model.editorSubsection.name == section
+            model.editorSubsection.name.lowercased() == section.lowercased()
         })
         
         if let sectionLayers = sectionLayers {
-            sectionLayers.editorSubsection.layers?.forEach({ layer in
+            sectionLayers.editorSubsection.layers?.forEach { layer in
                 if let index = layersArray.firstIndex(where: { $0 == layer }) {
                     sectionLayer = layer
                     layersArray.remove(at: index)
                 }
-            })
+            }
         }
         
         let resultLayers = layersArray.joined(separator: ";")
         return (sectionLayer: sectionLayer, layers: resultLayers)
+    }
+    
+    func toggleGender() {
+        switch SFDefaults.gender {
+        case .male:
+            SFDefaults.gender = .female
+            var layersArray = currentLayers.components(separatedBy: ";")
+            if let index = layersArray.firstIndex(where: { $0 == "1" }) {
+                layersArray.remove(at: index)
+            }
+            currentLayers = layersArray.joined(separator: ";")
+            currentLayers += ";0;25"
+            
+        case .female:
+            SFDefaults.gender = .male
+            var layersArray = currentLayers.components(separatedBy: ";")
+            
+            if let index = layersArray.firstIndex(where: { $0 == "0" }) {
+                layersArray.remove(at: index)
+            }
+            
+            if let index = layersArray.firstIndex(where: { $0 == "25" }) {
+                layersArray.remove(at: index)
+            }
+            
+            currentLayers = layersArray.joined(separator: ";")
+            currentLayers += ";1;"
+        }
+        
+        while currentLayers.contains(";;") {
+            currentLayers = currentLayers.replacingOccurrences(of: ";;", with: ";")
+        }
+        
+        let defaultNames = ["head", "facelines", "hair", "beard", "bristle", "moustache", "eyes", "eyebrows", "nose", "mouth"]
+        
+        for name in defaultNames {
+            let tuple = layersWithout(section: name, layers: currentLayers)
+            currentLayers = tuple.layers
+        }
+        
+        setupSections(needSetDefault: true)
+        
+        delegate?.stickerFaceEditorViewController(self, didUpdate: currentLayers)
     }
 }

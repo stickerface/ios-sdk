@@ -1,6 +1,6 @@
 import Foundation
 
-class SFDefaults {
+public class SFDefaults {
     
     static let prefixName = "stickerface.io."
     

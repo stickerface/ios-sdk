@@ -39,6 +39,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         super.viewDidLoad()
              
         setupEditor()
+        setupActions()
         setupButtons()
         updateChild()
         updateBalanceView()
@@ -53,6 +54,8 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
             
             mainView.renderWebView.configuration.userContentController.add(handler, name: handler.name)
         }
+        
+        SFDefaults.isFirstEdit = false
     }
     
     // MARK: Private Actions
@@ -65,12 +68,12 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
             present(viewController, animated: true)
             
         case .male:
-            SFDefaults.gender = .female
             sender.setImageType(.female)
+            editorDelegate?.toggleGender()
             
         case .female:
-            SFDefaults.gender = .male
             sender.setImageType(.male)
+            editorDelegate?.toggleGender()
             
         case .edit:
             mainView.tonBalanceView.isHidden = true
@@ -87,14 +90,11 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
             mainView.genderButton.setImageType(.settings)
             
         case .back:
-            mainView.tonBalanceView.isHidden = false
-            mainView.backButton.isHidden = true
-            mainView.genderButton.setImageType(.settings)
-            
             self.layers = mainView.editorViewController.layers
             mainView.editorViewController.currentLayers = layers
             mainView.editorViewController.updateSelectedLayers()
             renderAvatar()
+            receiveAvatar()
             
         case .logout:
             let alert = UIAlertController(title: "Are sure you want to log out?", message: "After logging out you will not be able to buy NFTs for your avatar", preferredStyle: .alert)
@@ -162,6 +162,8 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         mainView.backButton.isHidden = true
         mainView.genderButton.setImageType(genderType)
         mainView.hangerButton.setCount(SFDefaults.wardrobe.count)
+        mainView.tonBalanceView.isHidden = !SFDefaults.isFirstEdit
+        mainView.backButton.isHidden = SFDefaults.isFirstEdit
     }
             
     private func renderAvatar() {
@@ -199,6 +201,20 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         mainView.mainViewController.updateLayers(layersWitoutBack)
         editorDelegate?.updateLayers(layers)
         renderAvatar()
+    }
+    
+    private func receiveAvatar() {
+        let path = StickerLoader.avatarPath + layers
+        StickerLoader.shared.loadImage(url: path) { [weak self] image in
+            guard let self = self else { return }
+            
+            let avatarImage = UIImagePNGRepresentation(image) ?? Data()
+            let personImage = UIImagePNGRepresentation(self.mainView.avatarView.avatarImageView.image ?? UIImage())
+            let backgroundImage = UIImagePNGRepresentation(self.mainView.backgroundImageView.image ?? UIImage())
+            let avatar = SFAvatar(avatarImage: avatarImage, personImage: personImage, backgroundImage: backgroundImage, layers: self.layers)
+            
+            StickerFace.shared.receiveAvatar(avatar)
+        }
     }
 }
 
@@ -255,15 +271,7 @@ extension StickerFaceViewController: StickerFaceEditorViewControllerDelegate {
 //        mainView.rightTopButton.setImageType(.settings)
 //        type = .main
         
-        let path = StickerLoader.avatarPath + layers
-        StickerLoader.shared.loadImage(url: path) { image in
-            let avatarImage = UIImagePNGRepresentation(image) ?? Data()
-            let personImage = UIImagePNGRepresentation(self.mainView.avatarView.avatarImageView.image ?? UIImage()) ?? Data()
-            let backgroundImage = UIImagePNGRepresentation(self.mainView.backgroundImageView.image ?? UIImage()) ?? Data()
-            
-            let avatar = SFAvatar(avatarImage: avatarImage, personImage: personImage, backgroundImage: backgroundImage, layers: layers)
-            StickerFace.shared.receiveAvatar(avatar)
-        }
+        receiveAvatar()
     }
     
     func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didSelectPaid layer: String, layers withLayer: String, with price: Int, layerType: LayerType) {

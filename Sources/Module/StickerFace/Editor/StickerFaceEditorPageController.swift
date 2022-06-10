@@ -85,6 +85,9 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
         }
 
         neededLayers = neededLayers.replacingOccurrences(of: ";1;", with: ";")
+        neededLayers = neededLayers.replacingOccurrences(of: ";0;", with: ";")
+        neededLayers = neededLayers.replacingOccurrences(of: ";25;", with: ";")
+        
         return "renderPNG(\"\(neededLayers)\", \(requestId), \(size), {partial:true})"
     }
     

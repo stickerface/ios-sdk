@@ -53,6 +53,7 @@ class StickerFaceView: RootView {
     let hangerButton: AvatarButton = {
         let button = AvatarButton(imageType: .hanger)
         button.layer.cornerRadius = 24.0
+        button.isHidden = true
         
         return button
     }()
