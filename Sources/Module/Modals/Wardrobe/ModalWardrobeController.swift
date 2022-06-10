@@ -18,8 +18,8 @@ class ModalWardrobeController: ModalScrollViewController {
     override init() {
         super.init()
         
-        let wardrobe = UserSettings.wardrobe
-        let currentLayers = UserSettings.layers
+        let wardrobe = SFDefaults.wardrobe
+        let currentLayers = SFDefaults.layers
         var selectedLayer: String? = nil
         
         for layer in wardrobe {
@@ -27,7 +27,7 @@ class ModalWardrobeController: ModalScrollViewController {
         }
         
         mainView.subtitleLabel.isHidden = wardrobe.isEmpty
-        model = WardrobeSectionModel(layers: UserSettings.wardrobe)
+        model = WardrobeSectionModel(layers: SFDefaults.wardrobe)
         model.selectedLayer = selectedLayer
     }
     

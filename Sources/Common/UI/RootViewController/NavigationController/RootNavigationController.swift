@@ -31,21 +31,7 @@ class RootNavigationController: UINavigationController {
     }
     
     func openEditor(avatar: SFAvatar) {
-        let editor = StickerFaceViewController(type: .editor, layers: avatar.layers)
+        let editor = StickerFaceViewController(avatar: avatar)
         setViewControllers([editor], animated: false)
-    }
-
-    func updateRootController() {
-        var rootVC: UIViewController = OnboardingViewController()
-        
-        if UserSettings.isOnboardingShown {
-            if let layers = UserSettings.layers {
-                rootVC = StickerFaceViewController(type: .editor, layers: layers)
-            } else {
-                rootVC = GenerateAvatarViewController()
-            }
-        }
-
-        setViewControllers([rootVC], animated: false)
     }
 }

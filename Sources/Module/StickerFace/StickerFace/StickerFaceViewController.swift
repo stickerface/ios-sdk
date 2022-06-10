@@ -3,12 +3,7 @@ import WebKit
 import SkeletonView
 
 class StickerFaceViewController: ViewController<StickerFaceView> {
-    
-    enum PageType {
-        case editor
-        case main
-    }
-    
+        
     // MARK: Properties
     
     weak var editorDelegate: StickerFaceEditorDelegate?
@@ -16,24 +11,18 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     private var requestId = 0
     private var layers: String {
         didSet {
-            UserSettings.layers = layers
+            SFDefaults.layers = layers
         }
     }
-    
-    private var type: PageType = .main {
-        didSet {
-            updateChild()
-        }
-    }
-    
+        
     // MARK: Initalization
     
-    init(type: PageType, layers: String) {
-        self.type = type
-        self.layers = layers
+    init(avatar: SFAvatar) {
+        self.layers = avatar.layers
         super.init(nibName: nil, bundle: nil)
         
-        setupView(with: type)
+        mainView.avatarView.avatarImageView.image = UIImage(data: avatar.personImage ?? Data())
+        mainView.backgroundImageView.image = UIImage(data: avatar.backgroundImage ?? Data())
         
         if let url = URL(string: "https://stickerface.io/render.html") {
             mainView.renderWebView.load(URLRequest(url: url))
@@ -48,32 +37,12 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        mainView.rightTopButton.addTarget(self, action: #selector(avatarButtonTapped), for: .touchUpInside)
-        mainView.editButton.addTarget(self, action: #selector(avatarButtonTapped), for: .touchUpInside)
-        mainView.hangerButton.addTarget(self, action: #selector(avatarButtonTapped), for: .touchUpInside)
-        mainView.backButton.addTarget(self, action: #selector(avatarButtonTapped), for: .touchUpInside)
-        
-        let balanceGesture = UITapGestureRecognizer(target: self, action: #selector(balanceViewTapped))
-        mainView.tonBalanceView.addGestureRecognizer(balanceGesture)
-        
-        mainView.editorViewController.currentLayers = layers
-        mainView.editorViewController.layers = layers
-        
-        mainView.mainViewController.delegate = self
-        mainView.editorViewController.delegate = self
-        editorDelegate = mainView.editorViewController
-        
-        addChildViewController(mainView.editorViewController)
-        mainView.editorViewController.didMove(toParentViewController: self)
-        
-        addChildViewController(mainView.mainViewController)
-        mainView.mainViewController.didMove(toParentViewController: self)
-        
+             
+        setupEditor()
+        setupButtons()
         updateChild()
         updateBalanceView()
         
-        mainView.hangerButton.setCount(UserSettings.wardrobe.count)
         mainView.renderWebView.navigationDelegate = self
         
         NotificationCenter.default.addObserver(self, selector: #selector(tonClientDidUpdate), name: .tonClientDidUpdate, object: nil)
@@ -89,7 +58,6 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     // MARK: Private Actions
     
     @objc private func avatarButtonTapped(_ sender: AvatarButton) {
-        // TODO: Что должно происходить при смене пола?
         switch sender.imageType {
         case .settings:
             let viewController = ModalSettingsController()
@@ -97,19 +65,17 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
             present(viewController, animated: true)
             
         case .male:
-            UserSettings.gender = .female
+            SFDefaults.gender = .female
             sender.setImageType(.female)
             
         case .female:
-            UserSettings.gender = .male
+            SFDefaults.gender = .male
             sender.setImageType(.male)
             
         case .edit:
             mainView.tonBalanceView.isHidden = true
             mainView.backButton.isHidden = false
-            mainView.editButton.isHidden = true
-            mainView.rightTopButton.setImageType(.male)
-            type = .editor
+            mainView.genderButton.setImageType(.male)
             
         case .hanger:
             let viewController = ModalWardrobeController()
@@ -118,16 +84,12 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
             present(viewController, animated: true)
             
         case .close:
-            mainView.editButton.isHidden = false
-            mainView.rightTopButton.setImageType(.settings)
-            type = .main
+            mainView.genderButton.setImageType(.settings)
             
         case .back:
             mainView.tonBalanceView.isHidden = false
             mainView.backButton.isHidden = true
-            mainView.editButton.isHidden = false
-            mainView.rightTopButton.setImageType(.settings)
-            type = .main
+            mainView.genderButton.setImageType(.settings)
             
             self.layers = mainView.editorViewController.layers
             mainView.editorViewController.currentLayers = layers
@@ -161,8 +123,28 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     
     // MARK: Private methods
     
+    private func setupActions() {
+        let balanceGesture = UITapGestureRecognizer(target: self, action: #selector(balanceViewTapped))
+        mainView.tonBalanceView.addGestureRecognizer(balanceGesture)
+        
+        mainView.genderButton.addTarget(self, action: #selector(avatarButtonTapped), for: .touchUpInside)
+        mainView.hangerButton.addTarget(self, action: #selector(avatarButtonTapped), for: .touchUpInside)
+        mainView.backButton.addTarget(self, action: #selector(avatarButtonTapped), for: .touchUpInside)
+    }
+    
+    private func setupEditor() {
+        mainView.editorViewController.currentLayers = layers
+        mainView.editorViewController.layers = layers
+        
+        mainView.editorViewController.delegate = self
+        editorDelegate = mainView.editorViewController
+        
+        addChildViewController(mainView.editorViewController)
+        mainView.editorViewController.didMove(toParentViewController: self)
+    }
+    
     private func updateBalanceView() {
-        if let tonClient = UserSettings.tonClient {
+        if let tonClient = SFDefaults.tonClient {
             mainView.tonBalanceView.balanceType = .connected(ton: tonClient.balance)
         } else {
             mainView.tonBalanceView.balanceType = .disconnected
@@ -170,37 +152,18 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     }
     
     private func updateChild() {
-        mainView.editorViewController.view.alpha = type == .editor ? 1 : 0
-        mainView.mainViewController.view.alpha = type == .main ? 1 : 0
+        mainView.editorViewController.view.alpha = 1
+        mainView.mainViewController.view.alpha = 0
     }
     
-    private func setupView(with type: PageType) {
-        let genderType: AvatarButton.ImageType = UserSettings.gender == .male ? .male : .female
+    private func setupButtons() {
+        let genderType: AvatarButton.ImageType = SFDefaults.gender == .male ? .male : .female
         
         mainView.backButton.isHidden = true
-        mainView.editButton.isHidden = type == .editor
-        mainView.rightTopButton.setImageType(type == .editor ? genderType : .settings)
+        mainView.genderButton.setImageType(genderType)
+        mainView.hangerButton.setCount(SFDefaults.wardrobe.count)
     }
-    
-    // TODO: можно ли что то придумать с уменьшением времени загрузки веб вью? и убрать этот метод
-    private func firstLoadAvatar() {
-        guard
-            let tuple = editorDelegate?.layersWithout(section: "background", layers: layers),
-            tuple.layers != ""
-        else { return }
-        
-        StickerLoader.loadSticker(into: mainView.avatarView.avatarImageView, with: tuple.layers)
-        
-        if tuple.sectionLayer != "0" {
-            StickerLoader.loadSticker(into: mainView.backgroundImageView, with: tuple.sectionLayer, stickerType: .section) { result in
-                switch result {
-                case .success: self.mainView.backgroundImageView.hideSkeleton()
-                case .failure: break
-                }
-            }
-        }
-    }
-        
+            
     private func renderAvatar() {
         let tuple = editorDelegate?.layersWithout(section: "background", layers: layers)
         let id = getNextRequestId()
@@ -272,7 +235,6 @@ extension StickerFaceViewController: StickerFaceMainViewControllerDelegate {
 extension StickerFaceViewController: StickerFaceEditorViewControllerDelegate {
     func stickerFaceEditorViewControllerDidLoadLayers(_ controller: StickerFaceEditorViewController) {
         let layersWitoutBack = editorDelegate?.layersWithout(section: "background", layers: layers).layers ?? ""
-        firstLoadAvatar()
         mainView.mainViewController.updateLayers(layersWitoutBack)
     }
     
@@ -306,7 +268,7 @@ extension StickerFaceViewController: StickerFaceEditorViewControllerDelegate {
     
     func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didSelectPaid layer: String, layers withLayer: String, with price: Int, layerType: LayerType) {
         let modal = ModalNewLayerController(type: layerType)
-        let balance = UserSettings.tonBalance
+        let balance = SFDefaults.tonBalance
         modal.updateView(layer: layer, layers: withLayer, balance: balance, price: price)
         modal.delegate = self
         
@@ -322,16 +284,16 @@ extension StickerFaceViewController: ModalNewLayerDelegate {
     
     func modalNewLayerController(_ controller: ModalNewLayerController, didBuy layer: String, layerType: LayerType, allLayers: String) {
         if layerType == .NFT {
-            var wardrobe = UserSettings.wardrobe
+            var wardrobe = SFDefaults.wardrobe
             wardrobe.append(layer)
             mainView.hangerButton.setCount(wardrobe.count)
-            UserSettings.wardrobe = wardrobe
+            SFDefaults.wardrobe = wardrobe
         }
         
         if layerType == .background {
-            var backgounds = UserSettings.paidBackgrounds
+            var backgounds = SFDefaults.paidBackgrounds
             backgounds.append(layer)
-            UserSettings.paidBackgrounds = backgounds
+            SFDefaults.paidBackgrounds = backgounds
         }
         
         updateCurrentLayers(allLayers)

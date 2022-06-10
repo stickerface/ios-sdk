@@ -132,7 +132,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
             case .success(let editor):
                 guard let self = self else { return }
                 
-                let sections = UserSettings.gender == .male ? editor.sections.man : editor.sections.woman
+                let sections = SFDefaults.gender == .male ? editor.sections.man : editor.sections.woman
                 
                 self.headers = sections.flatMap({ $0.subsections }).map({ EditorHeaderSectionModel(title: $0.name) })
                 self.headers.first?.isSelected = true
@@ -345,7 +345,7 @@ extension StickerFaceEditorViewController: StickerFaceEditorPageDelegate {
     }
     
     func stickerFaceEditorPageController(_ controller: StickerFaceEditorPageController, didSelect layer: String, section: Int) {
-        let isPaid = UserSettings.wardrobe.contains(layer) || UserSettings.paidBackgrounds.contains(layer)
+        let isPaid = SFDefaults.wardrobe.contains(layer) || SFDefaults.paidBackgrounds.contains(layer)
         
         if let price = prices["\(layer)"], !isPaid {
             let newPaidLayers = replaceCurrentLayer(with: layer, section: section, isCurrent: true)

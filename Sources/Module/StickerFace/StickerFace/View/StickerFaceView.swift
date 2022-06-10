@@ -43,20 +43,13 @@ class StickerFaceView: RootView {
         return view
     }()
     
-    let rightTopButton: AvatarButton = {
+    let genderButton: AvatarButton = {
         let button = AvatarButton(imageType: .male)
         button.layer.cornerRadius = 24.0
         
         return button
     }()
-    
-    let editButton: AvatarButton = {
-        let button = AvatarButton(imageType: .edit, type: .custom)
-        button.layer.cornerRadius = 24.0
         
-        return button
-    }()
-    
     let hangerButton: AvatarButton = {
         let button = AvatarButton(imageType: .hanger)
         button.layer.cornerRadius = 24.0
@@ -78,8 +71,7 @@ class StickerFaceView: RootView {
         addSubview(renderWebView)
         addSubview(backgroundImageView)
         addSubview(tonBalanceView)
-        addSubview(rightTopButton)
-        addSubview(editButton)
+        addSubview(genderButton)
         addSubview(hangerButton)
         addSubview(backButton)
         addSubview(avatarView)
@@ -104,18 +96,12 @@ class StickerFaceView: RootView {
             make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(8.0)
         }
         
-        rightTopButton.snp.makeConstraints { make in
+        genderButton.snp.makeConstraints { make in
             make.right.equalToSuperview().offset(-16.0)
             make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(8.0)
             make.size.equalTo(48.0)
         }
-        
-        editButton.snp.makeConstraints { make in
-            make.right.equalToSuperview().offset(-16.0)
-            make.top.equalTo(rightTopButton.snp.bottom).offset(16.0)
-            make.size.equalTo(48.0)
-        }
-        
+                
         hangerButton.snp.makeConstraints { make in
             make.right.equalToSuperview().offset(-16.0)
             make.bottom.equalTo(avatarView.snp.bottom).offset(-16.0)
@@ -146,7 +132,6 @@ class StickerFaceView: RootView {
         blurView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        
     }
     
 }

@@ -169,7 +169,7 @@ class StickerFaceEditorSectionController: ListSectionController {
             delegate?.stickerFaceEditorSectionController(self, needRedner: layer, section: sectionModel.editorSubsection.name)
         }
         
-        let isPaid = UserSettings.wardrobe.contains(layer) || UserSettings.paidBackgrounds.contains(layer)
+        let isPaid = SFDefaults.wardrobe.contains(layer) || SFDefaults.paidBackgrounds.contains(layer)
         
         cell.setPrice(sectionModel.prices["\(layer)"], isPaid: isPaid)
         cell.setSelected(sectionModel.selectedLayer == layer)

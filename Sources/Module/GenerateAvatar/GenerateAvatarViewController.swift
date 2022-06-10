@@ -174,7 +174,18 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
     private func nextStep() {
         guard let layers = layers else { return }
         
-        let vc = StickerFaceViewController(type: .editor, layers: layers)
+        // TODO: сейчас у нас дефолтный бекграунд, потом нужно будет из аватара забрать сам аватар и бэкграунд
+        let background = UIImagePNGRepresentation(mainView.backgroundImageView.image ?? UIImage())
+        let person = UIImagePNGRepresentation(mainView.avatarImageView.image ?? UIImage())
+        
+        let sfAvatar = SFAvatar(
+            avatarImage: nil,
+            personImage: person,
+            backgroundImage: background,
+            layers: layers
+        )
+        
+        let vc = StickerFaceViewController(avatar: sfAvatar)
         vc.modalPresentationStyle = .fullScreen
         
         navigationController?.setViewControllers([vc], animated: true)

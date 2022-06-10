@@ -67,10 +67,10 @@ class ModalWardrobeView: RootView {
     private func layout() {
         let collectionHeight: CGFloat
         
-        if UserSettings.wardrobe.isEmpty {
+        if SFDefaults.wardrobe.isEmpty {
             collectionHeight = 90.0 + 136.0 + 146.0 + 34.0
         } else {
-            let linesCount = (CGFloat(UserSettings.wardrobe.count) / 2.0).rounded(.up)
+            let linesCount = (CGFloat(SFDefaults.wardrobe.count) / 2.0).rounded(.up)
             let contentHeight = linesCount * 188.0 + (linesCount - 1) * 12 + 50
             let maxHeight = UIScreen.main.bounds.height - Utils.safeArea().top - 24.0 - 104.0
             collectionHeight = min(contentHeight, maxHeight)

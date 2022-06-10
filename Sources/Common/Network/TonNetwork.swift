@@ -16,7 +16,7 @@ public class TonNetwork {
                     let address = login.payload?.first?.address ?? ""
                     let client = TonClient(clientId: id, address: address)
                     
-                    UserSettings.tonClient = client
+                    SFDefaults.tonClient = client
                     
                     TonNetwork.updateBalance()
                 } catch {
@@ -29,7 +29,7 @@ public class TonNetwork {
     }
     
     static func updateBalance() {
-        guard let address = UserSettings.tonClient?.address else { return }
+        guard let address = SFDefaults.tonClient?.address else { return }
         let path = "https://beta.stickerface.io/api/tonkeeper/balance?wallet=\(address)"
         
         AF.request(path, method: .get).response { responseData in
@@ -37,11 +37,11 @@ public class TonNetwork {
                 do {
                     let balance = try JSONDecoder().decode(TonBalance.self, from: data)
                     
-                    var client = UserSettings.tonClient
+                    var client = SFDefaults.tonClient
                     client?.balance = balance.balance
                     client?.usd = balance.usd
                     
-                    UserSettings.tonClient = client
+                    SFDefaults.tonClient = client
                 } catch {
                     print(error)
                 }
@@ -49,7 +49,7 @@ public class TonNetwork {
                 print(responseData)
             }
             
-            NotificationCenter.default.post(name: .tonClientDidUpdate, object: UserSettings.tonClient)
+            NotificationCenter.default.post(name: .tonClientDidUpdate, object: SFDefaults.tonClient)
         }
     }
     
