@@ -8,6 +8,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     
     weak var editorDelegate: StickerFaceEditorDelegate?
     
+    private var needToRedieve: Bool = false
     private var requestId = 0
     private var layers: String {
         didSet {
@@ -90,11 +91,11 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
             mainView.genderButton.setImageType(.settings)
             
         case .back:
-            self.layers = mainView.editorViewController.layers
+            layers = mainView.editorViewController.layers
             mainView.editorViewController.currentLayers = layers
             mainView.editorViewController.updateSelectedLayers()
             renderAvatar()
-            receiveAvatar()
+            needToRedieve = true
             
         case .logout:
             let alert = UIAlertController(title: "Are sure you want to log out?", message: "After logging out you will not be able to buy NFTs for your avatar", preferredStyle: .alert)
@@ -326,8 +327,10 @@ extension StickerFaceViewController: AvatarRenderResponseHandlerDelegate {
     
     func onImageReady(base64: String) {
         if let data = Data(base64Encoded: base64, options: []) {
-            print("=== did load image")
             mainView.avatarView.avatarImageView.image = UIImage(data: data)
+            if needToRedieve {
+                receiveAvatar()
+            }
         }
     }
     
@@ -337,7 +340,6 @@ extension StickerFaceViewController: AvatarRenderResponseHandlerDelegate {
 extension StickerFaceViewController: WKNavigationDelegate {
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        print("=== did finish navigation")
         renderAvatar()
     }
     
