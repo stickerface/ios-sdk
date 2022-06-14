@@ -56,7 +56,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
             mainView.renderWebView.configuration.userContentController.add(handler, name: handler.name)
         }
         
-        SFDefaults.isFirstEdit = false
+        SFDefaults.wasEdited = true
     }
     
     // MARK: Private Actions
@@ -163,8 +163,8 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         mainView.backButton.isHidden = true
         mainView.genderButton.setImageType(genderType)
         mainView.hangerButton.setCount(SFDefaults.wardrobe.count)
-        mainView.tonBalanceView.isHidden = !SFDefaults.isFirstEdit
-        mainView.backButton.isHidden = SFDefaults.isFirstEdit
+        mainView.tonBalanceView.isHidden = SFDefaults.wasEdited
+        mainView.backButton.isHidden = !SFDefaults.wasEdited
     }
             
     private func renderAvatar() {

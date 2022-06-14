@@ -68,7 +68,7 @@ public class SFDefaults {
         }
     }
     
-    public static var isFirstEdit: Bool  {
+    public static var wasEdited: Bool  {
         get {
             return defaults.bool(forKey: SFDefaults.prefixName + #function)
         }
