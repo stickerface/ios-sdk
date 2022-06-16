@@ -151,7 +151,15 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
 
         let sections = SFDefaults.gender == .male ? editor.sections.man : editor.sections.woman
         
-        headers = sections.flatMap({ $0.subsections }).map({ EditorHeaderSectionModel(title: $0.name) })
+        headers = sections.flatMap({ $0.subsections }).compactMap({ subsection in
+            
+            if subsection.name != "background", subsection.name != "clothing", subsection.name != "glasses", subsection.name != "tattoos", subsection.name != "accessories", subsection.name != "masks" {
+                let model = EditorHeaderSectionModel(title: subsection.name)
+                return model
+            }
+            
+            return nil
+        })
         headers.first?.isSelected = true
         headerAdapter.performUpdates(animated: true)
         
