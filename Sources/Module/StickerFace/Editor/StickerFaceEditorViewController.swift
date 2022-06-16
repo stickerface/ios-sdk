@@ -74,7 +74,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     
     @objc private func saveButtonTapped() {
         layers = currentLayers
-        
+        SFDefaults.wasEdited = true
         delegate?.stickerFaceEditorViewController(self, didSave: layers)
         
 //        headers.enumerated().forEach { $0.element.isSelected = $0.offset == 0 }

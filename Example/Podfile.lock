@@ -47,7 +47,7 @@ SPEC CHECKSUMS:
   PinLayout: 0090ccbf29ae69af6ae5a15eaeaf27ed7b2c4d83
   SkeletonView: 820b2bbd180d7408f3f03b6462cfc3cac39d2ef2
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
-  StickerFaceSDK: be0ed366d72c3853db538e87da2f48ee89073be1
+  StickerFaceSDK: 8761ac8b1d316b693a7cb9e3ef14b1f8fce213ec
   TelegramStickersImport: e0e79a382bd41ff748fa107f3604c25f0a934ee5
 
 PODFILE CHECKSUM: 4adb15f298cf63eb6d644efedb0f1cb089eed1f0

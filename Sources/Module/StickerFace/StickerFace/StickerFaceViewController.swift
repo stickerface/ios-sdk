@@ -55,8 +55,6 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
             
             mainView.renderWebView.configuration.userContentController.add(handler, name: handler.name)
         }
-        
-        SFDefaults.wasEdited = true
     }
     
     // MARK: Private Actions
@@ -163,7 +161,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         mainView.backButton.isHidden = true
         mainView.genderButton.setImageType(genderType)
         mainView.hangerButton.setCount(SFDefaults.wardrobe.count)
-        mainView.tonBalanceView.isHidden = SFDefaults.wasEdited
+        mainView.tonBalanceView.isHidden = true
         mainView.backButton.isHidden = !SFDefaults.wasEdited
     }
             
