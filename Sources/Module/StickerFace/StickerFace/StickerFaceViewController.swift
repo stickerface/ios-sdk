@@ -36,6 +36,10 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     
     // MARK: Overrides
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .darkContent
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
              
