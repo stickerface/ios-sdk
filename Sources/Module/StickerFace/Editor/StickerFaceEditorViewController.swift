@@ -161,7 +161,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
             return nil
         })
         headers.first?.isSelected = true
-        headerAdapter.performUpdates(animated: true)
+        headerAdapter.reloadData(completion: nil)
         
         prices = editor.prices
         
@@ -190,6 +190,8 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                     }
                 }
             }
+            
+            mainView.headerCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: true)
         }
 
         viewControllers = objects.enumerated().map { index, object in
