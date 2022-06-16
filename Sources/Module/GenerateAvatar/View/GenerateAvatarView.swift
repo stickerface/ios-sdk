@@ -44,6 +44,7 @@ class GenerateAvatarView: RootView {
         let view = UIImageView()
         view.clipsToBounds = true
         view.layer.cornerRadius = 280.0/2.0
+        view.contentMode = .scaleAspectFit
         
         return view
     }()
@@ -77,7 +78,7 @@ class GenerateAvatarView: RootView {
         return label
     }()
     
-    let continueButton: UIButton = {
+    let secondaryButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitleColor(.sfAccentBrand, for: .normal)
         button.setTitle("setupAvatarContinueTitle".libraryLocalized, for: .normal)
@@ -87,7 +88,7 @@ class GenerateAvatarView: RootView {
         return button
     }()
     
-    let allowButton: UIButton = {
+    let mainButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitleColor(.sfDefaultWhite, for: .normal)
         button.setTitle("setupAvatarAllowTitle".libraryLocalized, for: .normal)
@@ -108,8 +109,8 @@ class GenerateAvatarView: RootView {
         addSubview(camera.previewLayer)
         addSubview(onboardingAvatarVideoView)
         addSubview(linesRoundRotateAnimationView)
-        addSubview(continueButton)
-        addSubview(allowButton)
+        addSubview(secondaryButton)
+        addSubview(mainButton)
         addSubview(descriptionLabel)
         addSubview(backgroundImageView)
         addSubview(avatarImageView)
@@ -165,14 +166,14 @@ class GenerateAvatarView: RootView {
             make.size.equalTo(LinesRoundRotateAnimationView.Layout.side)
         }
         
-        continueButton.snp.makeConstraints { make in
-            make.bottom.equalTo(allowButton.snp.top).offset(-8.0)
+        secondaryButton.snp.makeConstraints { make in
+            make.bottom.equalTo(mainButton.snp.top).offset(-8.0)
             make.right.equalToSuperview().offset(-32.0)
             make.left.equalToSuperview().offset(32)
             make.height.equalTo(48.0)
         }
         
-        allowButton.snp.makeConstraints { make in
+        mainButton.snp.makeConstraints { make in
             make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-16.0)
             make.right.equalToSuperview().offset(-32.0)
             make.left.equalToSuperview().offset(32)
@@ -182,7 +183,7 @@ class GenerateAvatarView: RootView {
         descriptionLabel.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(48.0)
             make.right.equalToSuperview().offset(-48.0)
-            make.bottom.equalTo(continueButton.snp.top).offset(-16.0)
+            make.bottom.equalTo(secondaryButton.snp.top).offset(-16.0)
         }
         
     }

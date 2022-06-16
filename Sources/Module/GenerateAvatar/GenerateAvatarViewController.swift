@@ -14,10 +14,12 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
     private var layers: String?
     private var shouldAutoOpenCamera: Bool = true
     private var isAvatarGenerated: Bool = false
-    private var faceDetected = false
-    private var smallFace = false
+    private var isCameraStarting: Bool = false
+    private var faceDetected: Bool = false
+    private var smallFace: Bool = false
+    private var locked: Bool = false
     private var faceDetectTimer: Timer?
-    private var locked = false
+    private var uploadTaskTimer: Timer?
     private var uploadTask: URLSessionDataTask?
     
     private let player: AVPlayer = {
@@ -43,8 +45,8 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
         super.viewDidLoad()
         
         mainView.linesRoundRotateAnimationView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(openCamera)))
-        mainView.allowButton.addTarget(self, action: #selector(allowButtonTapped), for: .touchUpInside)
-        mainView.continueButton.addTarget(self, action: #selector(continueButtonTapped), for: .touchUpInside)
+        mainView.mainButton.addTarget(self, action: #selector(mainButtonTapped), for: .touchUpInside)
+        mainView.secondaryButton.addTarget(self, action: #selector(secondaryButtonTapped), for: .touchUpInside)
         
         mainView.camera.delegate = self
         
@@ -99,27 +101,36 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
         initCamera()
     }
     
-    @objc private func continueButtonTapped() {
+    @objc private func secondaryButtonTapped() {
         if isAvatarGenerated {
+            isAvatarGenerated = false
+            updateButtonTitles()
             initCamera()
         } else {
             shouldAutoOpenCamera = false
             layers = StickerLoader.defaultLayers
+            StickerLoader.loadSticker(into: mainView.avatarImageView, placeholderImage: UIImage(libraryNamed: "defaultAvatar"))
+            mainView.avatarImageView.alpha = 0
             close()
             isAvatarGenerated = true
             nextStep()
         }
     }
     
-    @objc private func allowButtonTapped() {
+    @objc private func mainButtonTapped() {
         if isAvatarGenerated {
             nextStep()
         } else {
             let status = AVCaptureDevice.authorizationStatus(for: .video)
             
             if status == .authorized {
-                close()
-                
+                if isCameraStarting {
+                    faceDetectTimer = nil
+                    mainView.linesRoundRotateAnimationView.setState(true)
+                    takePhoto()
+                } else {
+                    close()
+                }
             } else {
                 guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else { return }
                 
@@ -130,12 +141,29 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
         }
     }
     
+    @objc private func hasFaceDidChange() {
+        if faceDetected {
+            mainView.linesRoundRotateAnimationView.setState(true)
+            faceDetectTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(takePhoto), userInfo: nil, repeats: false)
+        } else if smallFace {
+            infoLabel = .smallFace
+        } else {
+            infoLabel = .noFace
+        }
+        
+        mainView.linesRoundRotateAnimationView.setState(faceDetected)
+    }
+    
+    @objc private func takePhoto() {
+        locked = true
+        mainView.camera.capturePhoto()
+    }
+    
     // MARK: - Private Methods
     
     private func removeEvents() {
         NotificationCenter.default.removeObserver(self)
     }
-    
     
     private func checkCameraAccess() {
         let status = AVCaptureDevice.authorizationStatus(for: .video)
@@ -144,19 +172,15 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
             AVCaptureDevice.requestAccess(for: .video) { [weak self] response in
                 if response {
                     DispatchQueue.main.async { [weak self] in
-                        self?.showCameraController()
+                        self?.openCamera()
                     }
                 }
             }
         } else if status == .authorized {
-            showCameraController()
+            openCamera()
         }
         
         updateButtonTitles()
-    }
-    
-    private func showCameraController() {
-        initCamera()
     }
     
     private func updateAvatar() {
@@ -168,7 +192,17 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
         mainView.backgroundImageView.alpha = 1
         isAvatarGenerated = true
         
-        StickerLoader.loadSticker(into: mainView.avatarImageView, with: layers ?? "")
+        StickerLoader.loadSticker(into: mainView.avatarImageView, with: layers ?? "") { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .failure:
+                self.layers = StickerLoader.defaultLayers
+                self.mainView.avatarImageView.image = UIImage(libraryNamed: "defaultAvatar")
+                
+            default: break
+            }
+        }
     }
     
     private func nextStep() {
@@ -192,61 +226,46 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
     }
     
     private func updateButtonTitles() {
-        let continueTitle: String
-        let allowTitle: String
+        let secondaryTitle: String
+        let mainTitle: String
         
         if isAvatarGenerated {
-            continueTitle = "setupAvatarGenerateNewTitle".libraryLocalized
-            allowTitle = "commonContinue".libraryLocalized
+            secondaryTitle = "setupAvatarGenerateNewTitle".libraryLocalized
+            mainTitle = "commonContinue".libraryLocalized
         } else {
             let status = AVCaptureDevice.authorizationStatus(for: .video)
             
-            allowTitle = status == .authorized ?
+            mainTitle = status == .authorized ?
             "setupAvatarGenerateTitle".libraryLocalized :
             "setupAvatarAllowTitle".libraryLocalized
             
-            continueTitle = "setupAvatarContinueTitle".libraryLocalized
+            secondaryTitle = "setupAvatarContinueTitle".libraryLocalized
         }
         
-        mainView.allowButton.setTitle(allowTitle, for: .normal)
-        mainView.continueButton.setTitle(continueTitle, for: .normal)
+        mainView.mainButton.setTitle(mainTitle, for: .normal)
+        mainView.secondaryButton.setTitle(secondaryTitle, for: .normal)
     }
     
-    func initCamera() {
+    private func initCamera() {
         mainView.avatarPlaceholderView.alpha = 1
         mainView.linesRoundRotateAnimationView.alpha = 1
         mainView.avatarImageView.alpha = 0
         mainView.backgroundImageView.alpha = 0
         mainView.camera.previewLayer.alpha = 1
+        
         mainView.linesRoundRotateAnimationView.setState(false)
-        mainView.linesRoundRotateAnimationView.loader(false, completion: {
+        mainView.linesRoundRotateAnimationView.loader(false, completion: { [weak self] in
+            guard let self = self else { return }
             let session = self.mainView.camera.session
             
-            DispatchQueue.global(qos: .background).async {
+            DispatchQueue.global(qos: .userInitiated).async {
                 session.startRunning()
+                self.isCameraStarting = true
             }
         })
     }
     
-    @objc func hasFaceDidChange() {
-        if faceDetected {
-            mainView.linesRoundRotateAnimationView.setState(true)
-            faceDetectTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(takePhoto), userInfo: nil, repeats: false)
-        } else if smallFace {
-            infoLabel = .smallFace
-        } else {
-            infoLabel = .noFace
-        }
-        
-        mainView.linesRoundRotateAnimationView.setState(faceDetected)
-    }
-    
-    @objc func takePhoto() {
-        locked = true
-        mainView.camera.capturePhoto()
-    }
-    
-    func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
+    private func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
         let size = image.size
         
         let widthRatio  = targetSize.width  / size.width
@@ -269,13 +288,13 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
         return newImage!
     }
     
-    func upload(_ image: Data) {
-        let defaultLayers = "1;28;35;67;69;159;160;16;13;37"
+    private func upload(_ image: Data) {
+        let defaultLayers = StickerLoader.defaultLayers
         let resizedImage = resizeImage(image: UIImage(data: image, scale:1.0)!, targetSize: CGSize(width: 600, height: 600))
         
         let imageData = UIImageJPEGRepresentation(resizedImage, 0.9)
         let urlString = "https://stickerface.io/api/process?platform=ios"
-        let session = URLSession(configuration: URLSessionConfiguration.default)
+        let session = URLSession(configuration: .default)
         
         let mutableURLRequest = NSMutableURLRequest(url: NSURL(string: urlString)! as URL)
         
@@ -298,24 +317,19 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
         mutableURLRequest.httpBody = uploadData as Data
         
         uploadTask = session.dataTask(with: mutableURLRequest as URLRequest, completionHandler: { [weak self] data, _, error in
-            guard let self = self else {
-                return
-            }
+            guard let self = self else { return }
             
             if error != nil {
                 self.setupLayers(defaultLayers)
-                
             } else if let data = data {
                 do {
                     guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
                         self.setupLayers(defaultLayers)
-                        
                         return
                     }
                     
                     guard json["error"] == nil else {
                         self.setupLayers(defaultLayers)
-                        
                         return
                     }
                     
@@ -330,28 +344,42 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
                         DispatchQueue.main.async {
                             self.setupLayers(layers)
                         }
+                    } else {
+                        self.setupLayers(defaultLayers)
                     }
                     
                 } catch {
                     self.setupLayers(defaultLayers)
                 }
+            } else {
+                self.setupLayers(defaultLayers)
             }
             
         })
         
         uploadTask?.resume()
+        
+        uploadTaskTimer = Timer.scheduledTimer(withTimeInterval: 15, repeats: false) { [weak self] _ in
+            self?.uploadTask?.suspend()
+            self?.setupLayers(defaultLayers)
+        }
     }
     
     private func setupLayers(_ layers: String) {
-        self.layers = layers
-        locked = false
-        smallFace = false
-        faceDetected = false
-        updateAvatar()
-        updateButtonTitles()
+        DispatchQueue.main.async {
+            self.layers = layers
+            self.locked = false
+            self.smallFace = false
+            self.faceDetected = false
+            self.uploadTaskTimer?.invalidate()
+            self.uploadTaskTimer = nil
+            
+            self.updateAvatar()
+            self.updateButtonTitles()
+        }
     }
     
-    func updateInfoLabel() {
+    private func updateInfoLabel() {
         var text: String
         switch infoLabel {
         case .waitingCameraAccess:

@@ -140,7 +140,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                 self.delegate?.stickerFaceEditorViewControllerDidLoadLayers(self)
             
             case .failure(let error):
-                self?.mainView.loaderView.showError(error.localizedDescription)
+//                self?.mainView.loaderView.showError(error.localizedDescription)
                 self?.loadingState = .failed
             }
         }

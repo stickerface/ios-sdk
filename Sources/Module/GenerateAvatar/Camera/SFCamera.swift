@@ -5,7 +5,6 @@ protocol SFCameraDelegate: AnyObject {
     func camera(_ camera: SFCamera, faceDidDetect frame: CGRect)
     func cameraFacesDidNotDetect(_ camera: SFCamera)
     func cameraFacesSmallDetect(_ camera: SFCamera)
-    
     func camera(_ camera: SFCamera, photoDidTake image: Data)
 }
 

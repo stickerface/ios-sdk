@@ -7,7 +7,7 @@ public class StickerLoader: NSObject {
        return StickerLoader()
     }()
     
-    public static let defaultLayers = "3;34;7;69;14;159;253;250;13;160;100;3040;265;224;1;76;3000;273;3200;81;22;90;28"
+    public static let defaultLayers = "69;159;253;250;13;160;100;3040;265;1;76;3000;273;3200;90;28;23;203;11;68;219;83;35;"
     public static let avatarPath = "http://stickerface.io/api/png/"
     public static let sectionPath = "http://stickerface.io/api/section/png/"
     
