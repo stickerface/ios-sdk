@@ -55,6 +55,8 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
         play()
         bindEvents()
         updateButtonTitles()
+        StickerLoader.loadSticker(into: mainView.avatarImageView, placeholderImage: UIImage(libraryNamed: "defaultAvatar"))
+        mainView.avatarImageView.alpha = 0
     }
     
     // MARK: - Private Actions
@@ -109,7 +111,7 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
         } else {
             shouldAutoOpenCamera = false
             layers = StickerLoader.defaultLayers
-            StickerLoader.loadSticker(into: mainView.avatarImageView, placeholderImage: UIImage(libraryNamed: "defaultAvatar"))
+//            StickerLoader.loadSticker(into: mainView.avatarImageView, placeholderImage: UIImage(libraryNamed: "defaultAvatar"))
             mainView.avatarImageView.alpha = 0
             close()
             isAvatarGenerated = true
