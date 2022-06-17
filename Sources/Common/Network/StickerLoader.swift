@@ -8,7 +8,7 @@ public class StickerLoader: NSObject {
     }()
     
     public static let defaultLayers = "69;159;253;250;13;160;100;3040;265;1;76;3000;273;3200;90;28;23;203;11;68;219;83;35;"
-    public static let defaultWomanLayers = ""
+    public static let defaultWomanLayers = "69;159;253;250;160;3040;265;76;3000;273;3200;90;83;0;25;133;224;132,134;10;39;15;32;101;"
     public static let avatarPath = "http://stickerface.io/api/png/"
     public static let sectionPath = "http://stickerface.io/api/section/png/"
     

@@ -181,16 +181,6 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         })
         
         if needSetDefault {
-            let defaultNames = ["head", "facelines", "hair", "beard", "bristle", "moustache", "eyes", "eyebrows", "nose", "mouth"]
-
-            sections.flatMap { $0.subsections }.forEach { subsection in
-                if defaultNames.contains(subsection.name) {
-                    if let layer = subsection.layers?.first {
-                        currentLayers += ";\(layer);"
-                    }
-                }
-            }
-            
             mainView.headerCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: true)
         }
 
@@ -488,42 +478,14 @@ extension StickerFaceEditorViewController: StickerFaceEditorDelegate {
         switch SFDefaults.gender {
         case .male:
             SFDefaults.gender = .female
-            var layersArray = currentLayers.components(separatedBy: ";")
-            if let index = layersArray.firstIndex(where: { $0 == "1" }) {
-                layersArray.remove(at: index)
-            }
-            currentLayers = layersArray.joined(separator: ";")
-            currentLayers += ";0;25"
+            currentLayers = StickerLoader.defaultWomanLayers
             
         case .female:
             SFDefaults.gender = .male
-            var layersArray = currentLayers.components(separatedBy: ";")
-            
-            if let index = layersArray.firstIndex(where: { $0 == "0" }) {
-                layersArray.remove(at: index)
-            }
-            
-            if let index = layersArray.firstIndex(where: { $0 == "25" }) {
-                layersArray.remove(at: index)
-            }
-            
-            currentLayers = layersArray.joined(separator: ";")
-            currentLayers += ";1;"
+            currentLayers = StickerLoader.defaultLayers
         }
-        
-        while currentLayers.contains(";;") {
-            currentLayers = currentLayers.replacingOccurrences(of: ";;", with: ";")
-        }
-        
-        let defaultNames = ["head", "facelines", "hair", "beard", "bristle", "moustache", "eyes", "eyebrows", "nose", "mouth"]
-        
-        for name in defaultNames {
-            let tuple = layersWithout(section: name, layers: currentLayers)
-            currentLayers = tuple.layers
-        }
-        
+                
         setupSections(needSetDefault: true)
-        
         delegate?.stickerFaceEditorViewController(self, didUpdate: currentLayers)
     }
 }
