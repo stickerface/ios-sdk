@@ -72,11 +72,11 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
             
         case .male:
             sender.setImageType(.female)
-            editorDelegate?.toggleGender()
+            editorDelegate?.setGender(.female)
             
         case .female:
             sender.setImageType(.male)
-            editorDelegate?.toggleGender()
+            editorDelegate?.setGender(.male)
             
         case .edit:
             mainView.tonBalanceView.isHidden = true
@@ -263,8 +263,9 @@ extension StickerFaceViewController: StickerFaceEditorViewControllerDelegate {
     }
     
     func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didSave layers: String) {
+        SFDefaults.gender = mainView.genderButton.imageType == .female ? .female : .male
         self.layers = layers
-                
+        
 //        let layersWitoutBack = editorDelegate?.layersWithout(section: "background", layers: layers).layers ?? ""
 //        mainView.mainViewController.updateLayers(layersWitoutBack)
 //        mainView.tonBalanceView.isHidden = false

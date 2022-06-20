@@ -15,7 +15,7 @@ protocol StickerFaceEditorViewControllerDelegate: AnyObject {
 }
 
 protocol StickerFaceEditorDelegate: AnyObject {
-    func toggleGender()
+    func setGender(_ gender: SFDefaults.Gender)
     func updateLayers(_ layers: String)
     func layersWithout(section: String, layers: String) -> (sectionLayer: String, layers: String)
     func replaceCurrentLayers(with layer: String, with color: String?, isCurrent: Bool) -> String
@@ -135,7 +135,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                 guard let self = self else { return }
                 
                 self.editor = editor
-                self.setupSections(needSetDefault: false)
+                self.setupSections(needSetDefault: false, SFDefaults.gender)
                 
                 self.delegate?.stickerFaceEditorViewControllerDidLoadLayers(self)
             
@@ -146,10 +146,10 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         }
     }
     
-    private func setupSections(needSetDefault: Bool) {
+    private func setupSections(needSetDefault: Bool, for gender: SFDefaults.Gender) {
         guard let editor = editor else { return }
 
-        let sections = SFDefaults.gender == .male ? editor.sections.man : editor.sections.woman
+        let sections = gender == .male ? editor.sections.man : editor.sections.woman
         
         headers = sections.flatMap({ $0.subsections }).compactMap({ subsection in
             
@@ -474,18 +474,10 @@ extension StickerFaceEditorViewController: StickerFaceEditorDelegate {
         return (sectionLayer: sectionLayer, layers: resultLayers)
     }
     
-    func toggleGender() {
-        switch SFDefaults.gender {
-        case .male:
-            SFDefaults.gender = .female
-            currentLayers = StickerLoader.defaultWomanLayers
-            
-        case .female:
-            SFDefaults.gender = .male
-            currentLayers = StickerLoader.defaultLayers
-        }
+    func setGender(_ gender: SFDefaults.Gender) {
+        currentLayers = gender == .male ? StickerLoader.defaultLayers : StickerLoader.defaultWomanLayers
                 
-        setupSections(needSetDefault: true)
+        setupSections(needSetDefault: true, for: gender)
         delegate?.stickerFaceEditorViewController(self, didUpdate: currentLayers)
     }
 }
