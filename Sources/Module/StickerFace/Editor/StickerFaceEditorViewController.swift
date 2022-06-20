@@ -135,7 +135,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                 guard let self = self else { return }
                 
                 self.editor = editor
-                self.setupSections(needSetDefault: false, SFDefaults.gender)
+                self.setupSections(needSetDefault: false, for: SFDefaults.gender)
                 
                 self.delegate?.stickerFaceEditorViewControllerDidLoadLayers(self)
             
