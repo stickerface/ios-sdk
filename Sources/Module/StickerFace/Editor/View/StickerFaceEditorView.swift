@@ -40,7 +40,7 @@ class StickerFaceEditorView: RootView {
         return view
     }()
     
-    private let separator: UIView = {
+    let separator: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(hex: 0xE5E5EA)
         
@@ -58,7 +58,40 @@ class StickerFaceEditorView: RootView {
         return button
     }()
     
-    let loaderView = LoaderView()
+    //TODO: TRANSLATE
+    let notConnectLabel: UILabel = {
+        let label = UILabel()
+        label.font = SFPalette.fontBold.withSize(24.0)
+        label.text = "Cannot connect to the StickerFace."
+        label.textColor = .sfTextPrimary
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        label.isHidden = true
+        
+        return label
+    }()
+    
+    //TODO: TRANSLATE
+    let notConnectButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Retry", for: .normal)
+        button.setTitleColor(.sfAccentBrand, for: .normal)
+        button.backgroundColor = .clear
+        button.titleLabel?.font = SFPalette.fontBold.withSize(16.0)
+        button.isHidden = true
+        
+        return button
+    }()
+    
+    let loaderView: LoaderView = {
+        let view = LoaderView()
+        view.isHidden = true
+        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        view.layer.cornerRadius = 23
+        view.layer.cornerCurve = .circular
+        
+        return view
+    }()
 
     override func setup() {
         backgroundColor = .clear
@@ -69,6 +102,8 @@ class StickerFaceEditorView: RootView {
         addSubview(separator)
         addSubview(pageViewController.view)
         addSubview(saveButton)
+        addSubview(notConnectLabel)
+        addSubview(notConnectButton)
         addSubview(loaderView)
         
         setupConstraints()
@@ -108,6 +143,21 @@ class StickerFaceEditorView: RootView {
             make.right.equalToSuperview().offset(-32.0)
             make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-1)
             make.height.equalTo(49.0)
+        }
+        
+        notConnectLabel.snp.makeConstraints { make in
+            make.centerY.equalToSuperview().offset(-50.0)
+            make.left.right.equalToSuperview().inset(24.0)
+        }
+        
+        notConnectButton.snp.makeConstraints { make in
+            make.top.equalTo(notConnectLabel.snp.bottom).offset(12.0)
+            make.height.equalTo(48.0)
+            make.centerX.equalTo(notConnectLabel.snp.centerX)
+        }
+        
+        loaderView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
     }
 
