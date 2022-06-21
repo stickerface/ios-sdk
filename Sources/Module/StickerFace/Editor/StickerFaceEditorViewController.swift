@@ -57,6 +57,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         super.viewDidLoad()
         
         mainView.saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
+        mainView.notConnectButton.addTarget(self, action: #selector(notConnectButtonTapped), for: .touchUpInside)
         
         headerAdapter.collectionView = mainView.headerCollectionView
         headerAdapter.dataSource = self
@@ -69,29 +70,18 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         
         loadEditor()
     }
-        
+    
     // MARK: Private actions
     
     @objc private func saveButtonTapped() {
         layers = currentLayers
         SFDefaults.wasEdited = true
         delegate?.stickerFaceEditorViewController(self, didSave: layers)
-        
-//        headers.enumerated().forEach { $0.element.isSelected = $0.offset == 0 }
-//        objects.forEach { $0.newLayersImages = nil }
-//        
-//        mainView.saveButton.isUserInteractionEnabled = false
-//        mainView.saveButton.backgroundColor = .sfDisabled
-//        
-//        headerAdapter.reloadData()
-//        adapter.reloadData()
-//        
-//        mainView.headerCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: true)
-//        
-//        if let vc = viewControllers?[0] as? StickerFaceEditorPageController {
-//            vc.mainView.collectionView.scrollToTop(animated: false)
-//            mainView.pageViewController.setViewControllers([vc], direction: .forward, animated: false)
-//        }
+    }
+    
+    @objc private func notConnectButtonTapped() {
+        mainView.loaderView.isHidden = false
+        loadEditor()
     }
     
     @objc private func changeSelectedTab(_ gestureRecognizer: UISwipeGestureRecognizer) {
@@ -130,9 +120,14 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     
     private func loadEditor() {
         provider.loadEditor { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let editor):
-                guard let self = self else { return }
+                self.mainView.separator.isHidden = false
+                self.mainView.saveButton.isHidden = false
+                self.mainView.notConnectButton.isHidden = true
+                self.mainView.notConnectLabel.isHidden = true
                 
                 self.editor = editor
                 self.setupSections(needSetDefault: false, for: SFDefaults.gender)
@@ -140,8 +135,15 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                 self.delegate?.stickerFaceEditorViewControllerDidLoadLayers(self)
             
             case .failure:
-//                self?.mainView.loaderView.showError(error.localizedDescription)
-                self?.loadingState = .failed
+                if self.loadingState == .failed {
+                    self.mainView.loaderView.showError("Error load editor")
+                }
+                
+                self.loadingState = .failed
+                self.mainView.separator.isHidden = true
+                self.mainView.saveButton.isHidden = true
+                self.mainView.notConnectButton.isHidden = false
+                self.mainView.notConnectLabel.isHidden = false
             }
         }
     }
@@ -346,7 +348,7 @@ extension StickerFaceEditorViewController: StickerFaceEditorPageDelegate {
             emptyView.caption = "commonNothingWasFound".libraryLocalized
             emptyView.buttonText = String()
             
-            return HolderView(view: emptyView)
+            return emptyView
         case .failed:
             let errorView = PlaceholderView(userId: 9)
             errorView.stickerId = .sticker21
@@ -360,7 +362,7 @@ extension StickerFaceEditorViewController: StickerFaceEditorPageDelegate {
                 
                 self.loadEditor()
             }
-            
+                
             return HolderView(view: errorView)
         }
     }

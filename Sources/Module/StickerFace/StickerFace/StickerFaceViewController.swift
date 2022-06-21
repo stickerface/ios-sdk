@@ -10,6 +10,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     
     private var needToRedieve: Bool = false
     private var requestId = 0
+    private var avatar: SFAvatar
     private var layers: String {
         didSet {
             SFDefaults.layers = layers
@@ -19,6 +20,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     // MARK: Initalization
     
     init(avatar: SFAvatar) {
+        self.avatar = avatar
         self.layers = avatar.layers
         super.init(nibName: nil, bundle: nil)
         
@@ -93,9 +95,12 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
             mainView.genderButton.setImageType(.settings)
             
         case .back:
+            if layers == mainView.editorViewController.layers {
+                receiveAvatar()
+                break
+            }
             layers = mainView.editorViewController.layers
             mainView.editorViewController.currentLayers = layers
-            mainView.editorViewController.updateSelectedLayers()
             renderAvatar()
             needToRedieve = true
             
@@ -207,8 +212,12 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     }
     
     private func receiveAvatar() {
-        let path = StickerLoader.avatarPath + layers
-        StickerLoader.shared.loadImage(url: path) { [weak self] image in
+        guard layers != avatar.layers else {
+            StickerFace.shared.receiveAvatar(avatar)
+            return
+        }
+        
+        StickerLoader.shared.loadImage(url: StickerLoader.avatarPath + layers) { [weak self] image in
             guard let self = self else { return }
             
             let avatarImage = UIImagePNGRepresentation(image) ?? Data()
