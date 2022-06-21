@@ -95,9 +95,12 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
             mainView.genderButton.setImageType(.settings)
             
         case .back:
+            if layers == mainView.editorViewController.layers {
+                receiveAvatar()
+                break
+            }
             layers = mainView.editorViewController.layers
             mainView.editorViewController.currentLayers = layers
-            mainView.editorViewController.updateSelectedLayers()
             renderAvatar()
             needToRedieve = true
             

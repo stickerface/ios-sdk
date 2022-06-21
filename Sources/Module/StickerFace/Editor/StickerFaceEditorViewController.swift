@@ -348,11 +348,7 @@ extension StickerFaceEditorViewController: StickerFaceEditorPageDelegate {
             emptyView.caption = "commonNothingWasFound".libraryLocalized
             emptyView.buttonText = String()
             
-            print("=== loded")
-            let view = UIView()
-            view.backgroundColor = .purple
-            
-            return view
+            return emptyView
         case .failed:
             let errorView = PlaceholderView(userId: 9)
             errorView.stickerId = .sticker21
@@ -366,15 +362,8 @@ extension StickerFaceEditorViewController: StickerFaceEditorPageDelegate {
                 
                 self.loadEditor()
             }
-            
-            print("=== faild")
-            
-//            return HolderView(view: errorView)
-            
-            let view = UIView()
-            view.backgroundColor = .yellow 
-            
-            return view
+                
+            return HolderView(view: errorView)
         }
     }
     
