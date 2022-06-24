@@ -212,7 +212,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     }
     
     private func receiveAvatar() {
-        guard layers != avatar.layers else {
+        guard layers != avatar.layers, avatar.avatarImage != nil else {
             StickerFace.shared.receiveAvatar(avatar)
             return
         }
