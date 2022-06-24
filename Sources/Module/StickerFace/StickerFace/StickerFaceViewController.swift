@@ -212,19 +212,18 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     }
     
     private func receiveAvatar() {
-        guard layers != avatar.layers, avatar.avatarImage != nil else {
-            StickerFace.shared.receiveAvatar(avatar)
-            return
-        }
-        
-        StickerLoader.shared.loadImage(url: StickerLoader.avatarPath + layers) { [weak self] image in
-            guard let self = self else { return }
-            
-            let avatarImage = UIImagePNGRepresentation(image) ?? Data()
-            let personImage = UIImagePNGRepresentation(self.mainView.avatarView.avatarImageView.image ?? UIImage())
-            let backgroundImage = UIImagePNGRepresentation(self.mainView.backgroundImageView.image ?? UIImage())
-            let avatar = SFAvatar(avatarImage: avatarImage, personImage: personImage, backgroundImage: backgroundImage, layers: self.layers)
-            
+        if layers != avatar.layers || avatar.avatarImage == nil {
+            StickerLoader.shared.loadImage(url: StickerLoader.avatarPath + layers) { [weak self] image in
+                guard let self = self else { return }
+                
+                let avatarImage = UIImagePNGRepresentation(image) ?? Data()
+                let personImage = UIImagePNGRepresentation(self.mainView.avatarView.avatarImageView.image ?? UIImage())
+                let backgroundImage = UIImagePNGRepresentation(self.mainView.backgroundImageView.image ?? UIImage())
+                let avatar = SFAvatar(avatarImage: avatarImage, personImage: personImage, backgroundImage: backgroundImage, layers: self.layers)
+                
+                StickerFace.shared.receiveAvatar(avatar)
+            }
+        } else {
             StickerFace.shared.receiveAvatar(avatar)
         }
     }
