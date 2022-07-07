@@ -4,7 +4,7 @@ class RootNavigationController: UINavigationController {
 
     static let shared = RootNavigationController()
     
-    override var childViewControllerForStatusBarStyle: UIViewController? {
+    override var childForStatusBarStyle: UIViewController? {
         return visibleViewController
     }
     

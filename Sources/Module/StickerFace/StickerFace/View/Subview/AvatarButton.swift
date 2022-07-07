@@ -44,7 +44,7 @@ class AvatarButton: UIButton {
         setupConstraints()
     }
     
-    convenience init(imageType: ImageType, type: UIButtonType = .system) {
+    convenience init(imageType: ImageType, type: UIButton.ButtonType = .system) {
         self.init(type: type)
         
         backgroundColor = .white

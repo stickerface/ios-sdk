@@ -51,7 +51,7 @@ class OnboardingView: RootView {
         label.isUserInteractionEnabled = true
         
         let a = Style("a")
-            .underlineStyle(.styleSingle)
+            .underlineStyle(.single)
             .underlineColor(label.textColor)
         
         label.attributedText = "onboardingPrivacyPolicyAndRules".libraryLocalized.style(tags: a)

@@ -62,9 +62,9 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         headerAdapter.collectionView = mainView.headerCollectionView
         headerAdapter.dataSource = self
         
-        addChildViewController(mainView.pageViewController)
+        addChild(mainView.pageViewController)
         
-        mainView.pageViewController.didMove(toParentViewController: self)
+        mainView.pageViewController.didMove(toParent: self)
         mainView.pageViewController.dataSource = self
         mainView.pageViewController.delegate = self
         
@@ -150,7 +150,14 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     
     private func setupSections(needSetDefault: Bool, for gender: SFDefaults.Gender) {
         guard let editor = editor else { return }
-
+        let needSetupGender = objects.isEmpty
+        
+        defer {
+            if needSetupGender {
+                setupSections(needSetDefault: false, for: SFDefaults.gender)
+            }
+        }
+        
         let sections = gender == .male ? editor.sections.man : editor.sections.woman
         
         headers = sections.flatMap({ $0.subsections }).compactMap({ subsection in
@@ -181,6 +188,13 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
             
             return model
         })
+        
+        if needSetupGender {
+            if layersWithout(section: "hair", layers: layers).sectionLayer == "0" {
+                SFDefaults.gender = SFDefaults.gender == .male ? .female : .male
+                return 
+            }
+        }
         
         if needSetDefault {
             mainView.headerCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: true)
@@ -288,12 +302,10 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
             }
         }
     }
-    
 }
 
 // MARK: - ListAdapterDataSource
 extension StickerFaceEditorViewController: ListAdapterDataSource {
-    
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
         return headers
     }
@@ -308,12 +320,10 @@ extension StickerFaceEditorViewController: ListAdapterDataSource {
     func emptyView(for listAdapter: ListAdapter) -> UIView? {
         return nil
     }
-    
 }
 
 // MARK: - EditorHeaderSectionControllerDelegate
 extension StickerFaceEditorViewController: EditorHeaderSectionControllerDelegate {
-    
     func editorHeaderSectionController(_ controller: EditorHeaderSectionController, didSelect header: String, in section: Int) {
         headers.enumerated().forEach { $0.element.isSelected = $0.element.title == header }
         headerAdapter.reloadData(completion: nil)
@@ -330,7 +340,6 @@ extension StickerFaceEditorViewController: EditorHeaderSectionControllerDelegate
             }
         }
     }
-    
 }
 
 // MARK: - StickerFaceEditorPageDelegate

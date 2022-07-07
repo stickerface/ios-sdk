@@ -19,11 +19,11 @@ class ModalWardrobeController: ModalScrollViewController {
         super.init()
         
         let wardrobe = SFDefaults.wardrobe
-        let currentLayers = SFDefaults.layers
+        let currentLayers = ""
         var selectedLayer: String? = nil
         
         for layer in wardrobe {
-            selectedLayer = currentLayers?.contains(layer) == true ? layer : nil
+            selectedLayer = currentLayers.contains(layer) ? layer : nil
         }
         
         mainView.subtitleLabel.isHidden = wardrobe.isEmpty

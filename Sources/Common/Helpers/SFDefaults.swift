@@ -10,16 +10,7 @@ public class SFDefaults {
     }
     
     public static let defaults = UserDefaults.standard
-    
-    public static var layers: String? {
-        get {
-            return defaults.string(forKey: SFDefaults.prefixName + #function)
-        }
-        set {
-            defaults.set(newValue, forKey: SFDefaults.prefixName + #function)
-        }
-    }
-                
+                    
     
     public static var tonBalance: Double? {
         get {

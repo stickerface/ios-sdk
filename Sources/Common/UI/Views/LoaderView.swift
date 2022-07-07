@@ -112,8 +112,8 @@ class LoaderView: UIView {
             make.height.equalTo(8.0)
         }
         
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChangeFrame), name: .UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChangeFrame), name: .UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChangeFrame), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChangeFrame), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -125,10 +125,10 @@ class LoaderView: UIView {
     }
     
     @objc private func keyboardWillChangeFrame(notification: NSNotification) {
-        guard let keyboardRect = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
+        guard let keyboardRect = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
         let offset = keyboardRect.size.height
         
-        if notification.name == .UIKeyboardWillHide {
+        if notification.name == UIResponder.keyboardWillHideNotification {
             keyboardHeight = 0
         } else {
             keyboardHeight = offset

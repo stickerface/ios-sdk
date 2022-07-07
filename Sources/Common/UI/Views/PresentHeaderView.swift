@@ -3,7 +3,7 @@ import UIKit
 class PresentHeaderView: UIView {
 
     override var intrinsicContentSize: CGSize {
-        return CGSize(width: UIViewNoIntrinsicMetric, height: 48.0)
+        return CGSize(width: UIView.noIntrinsicMetric, height: 48.0)
     }
     
     let closeButton: UIButton = {

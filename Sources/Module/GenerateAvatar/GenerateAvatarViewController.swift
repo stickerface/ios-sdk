@@ -62,8 +62,8 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
     // MARK: - Private Actions
     
     @objc private func bindEvents() {
-        NotificationCenter.default.addObserver(self, selector: #selector(pause), name: .UIApplicationWillResignActive, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(play), name: .UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(pause), name: UIApplication.willResignActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(play), name: UIApplication.didBecomeActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(close), name: .AVPlayerItemDidPlayToEndTime, object: nil)
     }
     
@@ -134,7 +134,7 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
                     close()
                 }
             } else {
-                guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else { return }
+                guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else { return }
                 
                 if UIApplication.shared.canOpenURL(settingsUrl) {
                     UIApplication.shared.open(settingsUrl, completionHandler: nil)
@@ -211,8 +211,8 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
         guard let layers = layers else { return }
         
         // TODO: сейчас у нас дефолтный бекграунд, потом нужно будет из аватара забрать сам аватар и бэкграунд
-        let background = UIImagePNGRepresentation(mainView.backgroundImageView.image ?? UIImage())
-        let person = UIImagePNGRepresentation(mainView.avatarImageView.image ?? UIImage())
+        let background = (mainView.backgroundImageView.image ?? UIImage()).pngData()
+        let person = (mainView.avatarImageView.image ?? UIImage()).pngData()
         
         let sfAvatar = SFAvatar(
             avatarImage: nil,
@@ -294,7 +294,7 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
         let defaultLayers = StickerLoader.defaultLayers
         let resizedImage = resizeImage(image: UIImage(data: image, scale:1.0)!, targetSize: CGSize(width: 600, height: 600))
         
-        let imageData = UIImageJPEGRepresentation(resizedImage, 0.9)
+        let imageData = resizedImage.jpegData(compressionQuality: 0.9)
         let urlString = "https://stickerface.io/api/process?platform=ios"
         let session = URLSession(configuration: .default)
         

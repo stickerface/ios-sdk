@@ -206,11 +206,11 @@ extension SFCamera: AVCaptureVideoDataOutputSampleBufferDelegate {
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         
         let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
-        let attachments = CMCopyDictionaryOfAttachments(kCFAllocatorDefault, sampleBuffer, kCMAttachmentMode_ShouldPropagate)
+        let attachments = CMCopyDictionaryOfAttachments(allocator: kCFAllocatorDefault, target: sampleBuffer, attachmentMode: kCMAttachmentMode_ShouldPropagate)
         
         let ciImage = CIImage(
             cvImageBuffer: pixelBuffer!,
-            options: attachments as? [String : Any]
+            options: attachments as? [CIImageOption : Any]
         )
         
         let options: [String : Any] = [
@@ -222,7 +222,7 @@ extension SFCamera: AVCaptureVideoDataOutputSampleBufferDelegate {
         let allFeatures = faceDetector?.features(in: ciImage, options: options)
         
         let formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer)
-        let cleanAperture = CMVideoFormatDescriptionGetCleanAperture(formatDescription!, false)
+        let cleanAperture = CMVideoFormatDescriptionGetCleanAperture(formatDescription!, originIsAtTopLeft: false)
         
         guard let features = allFeatures else { return }
         

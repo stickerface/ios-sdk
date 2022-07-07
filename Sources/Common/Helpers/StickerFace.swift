@@ -47,7 +47,6 @@ public class StickerFace {
     }
 
     public func logoutUser() {
-        SFDefaults.layers = nil
         SFDefaults.tonClient = nil
     }
 }

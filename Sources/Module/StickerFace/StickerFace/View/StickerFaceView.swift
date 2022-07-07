@@ -4,7 +4,6 @@ import WebKit
 class StickerFaceView: RootView {
 
     let editorViewController = StickerFaceEditorViewController()
-    let mainViewController = StickerFaceMainViewController()
     
     let renderWebView: WKWebView = {
         let webView = WKWebView()
@@ -77,7 +76,6 @@ class StickerFaceView: RootView {
         addSubview(backButton)
         addSubview(avatarView)
         addSubview(editorViewController.view)
-        addSubview(mainViewController.view)
         
         backgroundImageView.addSubview(blurView)
         
@@ -88,7 +86,6 @@ class StickerFaceView: RootView {
         super.layoutSubviews()
         
         editorViewController.view.frame = CGRect(x: 0, y: avatarView.frame.maxY, width: bounds.width, height: bounds.height - avatarView.frame.maxY)
-        mainViewController.view.frame = CGRect(x: 0, y: avatarView.frame.maxY, width: bounds.width, height: bounds.height - avatarView.frame.maxY)
     }
     
     private func setupConstraints() {
