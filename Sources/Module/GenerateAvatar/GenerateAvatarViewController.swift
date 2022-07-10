@@ -218,7 +218,9 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
             avatarImage: nil,
             personImage: person,
             backgroundImage: background,
-            layers: layers
+            layers: layers,
+            personLayers: nil,
+            backgroundLayer: nil
         )
         
         let vc = StickerFaceViewController(avatar: sfAvatar)
