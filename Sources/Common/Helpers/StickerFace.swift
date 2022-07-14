@@ -2,6 +2,7 @@ import UIKit
 
 public protocol StickerFaceDelegate: AnyObject {
     func stickerFace(viewController: UIViewController, didReceive avatar: SFAvatar)
+    func stickerFace(didCanceled viewController: UIViewController)
 }
 
 public class StickerFace {

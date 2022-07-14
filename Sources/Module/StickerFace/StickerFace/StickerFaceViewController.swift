@@ -103,13 +103,14 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
             
         case .back:
             if layers == mainView.editorViewController.layers {
-                receiveAvatar()
+                cancelChanges()
                 break
             }
             layers = mainView.editorViewController.layers
             mainView.editorViewController.currentLayers = layers
-            renderAvatar()
-            needToRedieve = true
+//            renderAvatar()
+//            needToRedieve = true
+            cancelChanges()
             
         case .logout:
             let alert = UIAlertController(title: "Are sure you want to log out?", message: "After logging out you will not be able to buy NFTs for your avatar", preferredStyle: .alert)
@@ -234,6 +235,20 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         } else {
             StickerFace.shared.receiveAvatar(avatar)
         }
+    }
+    
+    private func cancelChanges() {
+        let alert = UIAlertController(title: "Are you sure you want to leave?", message: "The changes you made won't be saved.", preferredStyle: .alert)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        let logoutAction = UIAlertAction(title: "Leave", style: .default) { _ in
+            StickerFace.shared.cancelChange()
+        }
+        
+        alert.addAction(cancelAction)
+        alert.addAction(logoutAction)
+        
+        present(alert, animated: true)
     }
 }
 

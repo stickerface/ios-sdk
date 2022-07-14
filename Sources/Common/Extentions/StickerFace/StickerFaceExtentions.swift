@@ -12,4 +12,7 @@ extension StickerFace {
         delegate?.stickerFace(viewController: RootNavigationController.shared, didReceive: avatar)
     }
     
+    func cancelChange() {
+        delegate?.stickerFace(didCanceled: RootNavigationController.shared)
+    }
 }
