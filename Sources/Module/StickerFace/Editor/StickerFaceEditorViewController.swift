@@ -162,12 +162,12 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         
         headers = sections.flatMap({ $0.subsections }).compactMap({ subsection in
             
-            if subsection.name != "background", subsection.name != "clothing", subsection.name != "glasses", subsection.name != "tattoos", subsection.name != "accessories", subsection.name != "masks" {
+//            if subsection.name != "background", subsection.name != "clothing", subsection.name != "glasses", subsection.name != "tattoos", subsection.name != "accessories", subsection.name != "masks" {
                 let model = EditorHeaderSectionModel(title: subsection.name)
                 return model
-            }
-            
-            return nil
+//            }
+//
+//            return nil
         })
         headers.first?.isSelected = true
         headerAdapter.reloadData(completion: nil)
