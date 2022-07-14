@@ -241,7 +241,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         let alert = UIAlertController(title: "Are you sure you want to leave?", message: "The changes you made won't be saved.", preferredStyle: .alert)
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-        let logoutAction = UIAlertAction(title: "Leave", style: .default) { _ in
+        let logoutAction = UIAlertAction(title: "Leave", style: .destructive) { _ in
             StickerFace.shared.cancelChange()
         }
         
