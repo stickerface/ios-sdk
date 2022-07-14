@@ -18,4 +18,13 @@ public struct SFAvatar: Codable {
     
     /// Background layer
     public let backgroundLayer: String?
+    
+    public init(avatarImage: Data?, personImage: Data?, backgroundImage: Data?, layers: String, personLayers: String?, backgroundLayer: String?) {
+        self.avatarImage = avatarImage
+        self.personImage = personImage
+        self.backgroundImage = backgroundImage
+        self.layers = layers
+        self.personLayers = personLayers
+        self.backgroundLayer = backgroundLayer
+    }
 }
