@@ -162,12 +162,13 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         
         headers = sections.flatMap({ $0.subsections }).compactMap({ subsection in
             
-//            if subsection.name != "background", subsection.name != "clothing", subsection.name != "glasses", subsection.name != "tattoos", subsection.name != "accessories", subsection.name != "masks" {
+//            subsection.name != "background"
+            if subsection.name != "clothing", subsection.name != "glasses", subsection.name != "tattoos", subsection.name != "accessories", subsection.name != "masks" {
                 let model = EditorHeaderSectionModel(title: subsection.name)
                 return model
-//            }
-//
-//            return nil
+            }
+
+            return nil
         })
         headers.first?.isSelected = true
         headerAdapter.reloadData(completion: nil)
@@ -177,16 +178,29 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         // TODO: убрать говнокод
         prices["271"] = 2
         
-        objects = sections.flatMap({ $0.subsections }).map({ subsection in
-            let newSubsection = EditorSubsection(
-                name: subsection.name,
-                layers: subsection.layers,
-                colors: subsection.colors?.reversed()
-            )
-            let model = EditorSubsectionSectionModel(editorSubsection: newSubsection, prices: prices)
-            model.selectedLayer = "0"
+        objects = sections.flatMap({ $0.subsections }).compactMap({ subsection in
+//            subsection.name != "background",
             
-            return model
+            if subsection.name != "clothing", subsection.name != "glasses", subsection.name != "tattoos", subsection.name != "accessories", subsection.name != "masks" {
+                
+                var layers = subsection.layers
+                
+                if subsection.name == "background" {
+                    layers = layers?.filter { prices[$0] == nil || prices[$0] == 0 }
+                }
+                
+                let newSubsection = EditorSubsection(
+                    name: subsection.name,
+                    layers: layers,
+                    colors: subsection.colors?.reversed()
+                )
+                let model = EditorSubsectionSectionModel(editorSubsection: newSubsection, prices: prices)
+                model.selectedLayer = "0"
+                
+                return model
+            }
+            
+            return nil
         })
         
         if needSetupGender {
