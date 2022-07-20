@@ -142,8 +142,6 @@ extension StickerFaceEditorPageController: StickerFaceEditorSectionControllerDel
 extension StickerFaceEditorPageController: AvatarRenderResponseHandlerDelegate {
     
     func onImageReady(base64: String) {
-        print("=== image ready")
-        
         decodingQueue.async {
             guard
                 let data = Data(base64Encoded: base64),
@@ -179,7 +177,6 @@ extension StickerFaceEditorPageController: WKNavigationDelegate {
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         isRenderReady = true
-        print("=== render ready")
         renderLayer()
     }
     
