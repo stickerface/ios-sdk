@@ -25,20 +25,19 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         mainView.editorViewController.currentLayers = avatar.layers
         mainView.editorViewController.layers = avatar.layers
         
-        decodingQueue.async {
-            guard
-                let personData = avatar.personImage,
-                let backgroundData = avatar.backgroundImage
-            else { return }
-            
-            let personImage = UIImage(data: personData)
-            let backgroundImage = UIImage(data: backgroundData)
-            
-            DispatchQueue.main.async {
-                self.mainView.avatarView.avatarImageView.image = personImage
-                self.mainView.backgroundImageView.image = backgroundImage
-            }
-        }
+        /// без decodingQueue потому что происходит мерцание
+        /// при открытии контроллера мб хранить картинку в кэше,
+        /// а то при ините картинки блочим мейн тред
+        guard
+            let personData = avatar.personImage,
+            let backgroundData = avatar.backgroundImage
+        else { return }
+        
+        let personImage = UIImage(data: personData)
+        let backgroundImage = UIImage(data: backgroundData)
+        
+        self.mainView.avatarView.avatarImageView.image = personImage
+        self.mainView.backgroundImageView.image = backgroundImage
     }
     
     required init?(coder: NSCoder) {
