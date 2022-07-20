@@ -227,7 +227,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         loadingState = .loaded
         
         if let viewController = viewControllers?[0] {
-            mainView.pageViewController.setViewControllers([viewController], direction: .reverse, animated: true)
+            mainView.pageViewController.setViewControllers([viewController], direction: .reverse, animated: false)
         }
     }
         
@@ -501,7 +501,7 @@ extension StickerFaceEditorViewController: StickerFaceEditorDelegate {
     
     func setGender(_ gender: SFDefaults.Gender) {
         currentLayers = gender == .male ? StickerLoader.defaultLayers : StickerLoader.defaultWomanLayers
-                
+        
         setupSections(needSetDefault: true, for: gender)
         delegate?.stickerFaceEditorViewController(self, didUpdate: currentLayers)
     }

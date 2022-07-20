@@ -7,10 +7,14 @@ class EditorLayerCollectionCell: UICollectionViewCell {
     var layerType: LayerType = .layers {
         didSet {
             contentView.layer.borderWidth = layerType == .background ? 0 : 1
-            titleLabel.isHidden = layerType == .layers
-            priceLabel.isHidden = layerType == .layers
-            priceSubtitleLabel.isHidden = layerType == .layers
-            buyButton.isHidden = layerType == .layers
+//            titleLabel.isHidden = layerType == .layers
+            titleLabel.isHidden = true
+//            priceLabel.isHidden = layerType == .layers
+            priceLabel.isHidden = true
+//            priceSubtitleLabel.isHidden = layerType == .layers
+            priceSubtitleLabel.isHidden = true
+//            buyButton.isHidden = layerType == .layers
+            buyButton.isHidden = true
             selectedBackgroundImageView.isHidden = layerType != .background
             layerBackgroundView.isHidden = layerType == .layers
             
@@ -134,8 +138,12 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         contentView.addSubview(checkmarkImageView)
         contentView.addSubview(noneImageView)
         contentView.addSubview(skeletonView)
+                
+        skeletonView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         
-        skeletonView.showGradientSkeleton(usingGradient: SkeletonGradient(baseColor: .clouds))
+        skeletonView.showGradientSkeleton(usingGradient: SkeletonGradient(baseColor: .clouds), transition: .crossDissolve(1))
         skeletonView.startSkeletonAnimation()
     }
     
@@ -242,7 +250,6 @@ class EditorLayerCollectionCell: UICollectionViewCell {
     
     private func layersLayout() {
         layerImageView.layer.cornerRadius = 0.0
-        skeletonView.pin.all()
         
         noneImageView.pin
             .center()
@@ -258,7 +265,6 @@ class EditorLayerCollectionCell: UICollectionViewCell {
     
     private func backgroundLayout() {
         layerImageView.layer.cornerRadius = 38.5
-        skeletonView.pin.all()
         
         selectedBackgroundImageView.pin
             .top()
@@ -299,8 +305,6 @@ class EditorLayerCollectionCell: UICollectionViewCell {
     }
     
     private func NFTLayout() {
-        skeletonView.pin.all()
-        
         layerImageView.pin
             .top(24.0)
             .left(24.0)

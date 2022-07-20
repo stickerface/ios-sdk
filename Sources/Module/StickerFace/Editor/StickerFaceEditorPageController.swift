@@ -17,12 +17,14 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
     weak var delegate: StickerFaceEditorPageDelegate?
     weak var editorDelegate: StickerFaceEditorDelegate?
     
+    let decodingQueue = DispatchQueue(label: "\(Bundle.main.bundleIdentifier!).decodingQueue")
+    
     var sectionModel: EditorSubsectionSectionModel
     var index = 0
     var requestId = 0
     var layersForRender = [LayerForRender]()
     var isRendering: Bool = false
-    var isRenderRedy: Bool = false
+    var isRenderReady: Bool = false
     
     lazy var adapter: ListAdapter = {
         return ListAdapter(updater: ListAdapterUpdater(), viewController: self, workingRangeSize: 0)
@@ -31,10 +33,6 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
     init(sectionModel: EditorSubsectionSectionModel) {
         self.sectionModel = sectionModel
         super.init(nibName: nil, bundle: nil)
-        
-        if let url = URL(string: "https://stickerface.io/render.html") {
-            mainView.renderWebView.load(URLRequest(url: url))
-        }
     }
     
     required init?(coder: NSCoder) {
@@ -53,10 +51,11 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
         handler.delegate = self
         
         mainView.renderWebView.configuration.userContentController.add(handler, name: handler.name)
+        mainView.renderWebView.load(URLRequest(url: URL(string: "https://stickerface.io/render.html")!))
     }
         
     private func renderLayer() {
-        guard let layer = layersForRender.first, !isRendering, isRenderRedy else {
+        guard let layer = layersForRender.first, !isRendering, isRenderReady else {
             adapter.reloadData()
             return
         }
@@ -143,34 +142,44 @@ extension StickerFaceEditorPageController: StickerFaceEditorSectionControllerDel
 extension StickerFaceEditorPageController: AvatarRenderResponseHandlerDelegate {
     
     func onImageReady(base64: String) {
-        if let data = Data(base64Encoded: base64, options: []), let layer = layersForRender.first {
-            let image = UIImage(data: data)
-            layersForRender.remove(at: 0)
+        print("=== image ready")
+        
+        decodingQueue.async {
+            guard
+                let data = Data(base64Encoded: base64),
+                let image = UIImage(data: data),
+                let layer = self.layersForRender.first
+            else { return }
             
-            if sectionModel.newLayersImages != nil {
-                sectionModel.newLayersImages?[layer.layer] = image
+            self.layersForRender.remove(at: 0)
+            
+            if self.sectionModel.newLayersImages != nil {
+                self.sectionModel.newLayersImages?[layer.layer] = image
             } else {
-                sectionModel.newLayersImages = [layer.layer: image ?? UIImage()]
+                self.sectionModel.newLayersImages = [layer.layer: image]
             }
             
-            if sectionModel.oldLayersImages != nil {
-                sectionModel.oldLayersImages?[layer.layer] = image
+            if self.sectionModel.oldLayersImages != nil {
+                self.sectionModel.oldLayersImages?[layer.layer] = image
             } else {
-                sectionModel.oldLayersImages = [layer.layer: image ?? UIImage()]
+                self.sectionModel.oldLayersImages = [layer.layer: image]
             }
             
-            isRendering = false
-            renderLayer()
+            self.isRendering = false
+            
+            DispatchQueue.main.async {
+                self.renderLayer()
+            }
         }
     }
-    
 }
 
 // MARK: - WKScriptMessageHandler
 extension StickerFaceEditorPageController: WKNavigationDelegate {
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        isRenderRedy = true
+        isRenderReady = true
+        print("=== render ready")
         renderLayer()
     }
     
