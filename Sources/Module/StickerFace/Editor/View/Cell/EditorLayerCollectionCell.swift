@@ -135,9 +135,9 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         contentView.addSubview(titleLabel)
         contentView.addSubview(priceStackView)
         contentView.addSubview(buyButton)
-        contentView.addSubview(checkmarkImageView)
         contentView.addSubview(noneImageView)
         contentView.addSubview(skeletonView)
+        contentView.addSubview(checkmarkImageView)
                 
         skeletonView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
