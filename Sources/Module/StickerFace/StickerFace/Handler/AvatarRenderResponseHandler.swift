@@ -2,7 +2,7 @@ import Foundation
 import WebKit
 
 protocol AvatarRenderResponseHandlerDelegate: AnyObject {
-    func onImageReady(base64: String)
+    func onImageReady(id: Int, base64: String)
 }
 
 class AvatarRenderResponseHandler: NSObject, WKScriptMessageHandler {
@@ -23,9 +23,9 @@ class AvatarRenderResponseHandler: NSObject, WKScriptMessageHandler {
               let body = bodyJSON as? [String: Any] else {
             return
         }
-                
-        if let base64String = body["data"] as? String {
-            delegate?.onImageReady(base64: base64String)
+               
+        if let base64String = body["data"] as? String, let id = body["id"] as? Int {
+            delegate?.onImageReady(id: id, base64: base64String)
         }
     }
     

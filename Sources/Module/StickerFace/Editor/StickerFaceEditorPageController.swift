@@ -24,7 +24,7 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
     var requestId = 0
     var layersForRender = [LayerForRender]()
     var isRendering: Bool = false
-    var isRenderReady: Bool = false
+    var isRenderReady: Bool = true
     
     lazy var adapter: ListAdapter = {
         return ListAdapter(updater: ListAdapterUpdater(), viewController: self, workingRangeSize: 0)
@@ -44,14 +44,6 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
         
         adapter.collectionView = mainView.collectionView
         adapter.dataSource = self
-        
-        mainView.renderWebView.navigationDelegate = self
-        
-        let handler = AvatarRenderResponseHandler()
-        handler.delegate = self
-        
-        mainView.renderWebView.configuration.userContentController.add(handler, name: handler.name)
-        mainView.renderWebView.load(URLRequest(url: URL(string: "https://stickerface.io/render.html")!))
     }
         
     private func renderLayer() {
@@ -61,13 +53,31 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
         }
         
         isRendering = true
-        let id = getNextRequestId()
-        let renderFunc = createRenderFunc(requestId: id, layers: layer.layer, size: Int(AvatarView.Layout.avatarImageViewHeight) * 4, section: layer.section)
-        
-        mainView.renderWebView.evaluateJavaScript(renderFunc)
+
+        let renderLayers = createRenderLayers(layers: layer.layer, section: layer.section)
+        StickerLoader.shared.renderLayer(renderLayers) { [weak self] image in
+            guard let self = self else { return }
+            
+            self.layersForRender.remove(at: 0)
+            
+            if self.sectionModel.newLayersImages != nil {
+                self.sectionModel.newLayersImages?[layer.layer] = image
+            } else {
+                self.sectionModel.newLayersImages = [layer.layer: image]
+            }
+            
+            if self.sectionModel.oldLayersImages != nil {
+                self.sectionModel.oldLayersImages?[layer.layer] = image
+            } else {
+                self.sectionModel.oldLayersImages = [layer.layer: image]
+            }
+            
+            self.isRendering = false
+            self.renderLayer()
+        }
     }
     
-    private func createRenderFunc(requestId: Int, layers: String, size: Int, section: String) -> String {
+    private func createRenderLayers(layers: String, section: String) -> String {
         var neededLayers = ""
         let allLayers = editorDelegate?.replaceCurrentLayers(with: layers, with: nil, isCurrent: true)
         let layersWitoutBack = editorDelegate?.layersWithout(section: "background", layers: allLayers ?? "")
@@ -86,17 +96,10 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
         neededLayers = neededLayers.replacingOccurrences(of: ";1;", with: ";")
         neededLayers = neededLayers.replacingOccurrences(of: ";0;", with: ";")
         neededLayers = neededLayers.replacingOccurrences(of: ";25;", with: ";")
+        neededLayers = neededLayers.replacingOccurrences(of: ";273;", with: ";")
         
-        return "renderPNG(\"\(neededLayers)\", \(requestId), \(size), {partial:true})"
+        return neededLayers
     }
-    
-    private func getNextRequestId() -> Int {
-        let current = requestId
-        requestId = (current + 1) % Int.max
-        
-        return current
-    }
-
 }
 
 // MARK: - ListAdapterDataSource
@@ -118,12 +121,12 @@ extension StickerFaceEditorPageController: ListAdapterDataSource {
 }
 
 // MARK: - StickerFaceEditorSectionControllerDelegate
-extension StickerFaceEditorPageController: StickerFaceEditorSectionControllerDelegate {
+extension StickerFaceEditorPageController: StickerFaceEditorSectionDelegate {
     func needUpdate() {
         adapter.reloadData()
     }
     
-    func stickerFaceEditorSectionController(_ controller: StickerFaceEditorSectionController, needRedner forLayer: String, section: String) {
+    func stickerFaceEditor(_ controller: StickerFaceEditorSectionController, needRedner forLayer: String, section: String) {
         let layerForRender = LayerForRender(section: section, layer: forLayer)
         if !layersForRender.contains(layerForRender) {
             layersForRender.append(layerForRender)
@@ -131,54 +134,9 @@ extension StickerFaceEditorPageController: StickerFaceEditorSectionControllerDel
         }
     }
     
-    func stickerFaceEditorSectionController(_ controller: StickerFaceEditorSectionController, didSelect layer: String, section: Int) {
+    func stickerFaceEditor(_ controller: StickerFaceEditorSectionController, didSelect layer: String, section: Int) {
         delegate?.stickerFaceEditorPageController(self, didSelect: layer, section: index)
     }
     
-    func stickerFaceEditorSectionController(_ controller: StickerFaceEditorSectionController, willDisplay header: String, in section: Int) { }
+    func stickerFaceEditor(_ controller: StickerFaceEditorSectionController, willDisplay header: String, in section: Int) { }    
 }
-
-// MARK: - AvatarRenderResponseHandlerDelegate
-extension StickerFaceEditorPageController: AvatarRenderResponseHandlerDelegate {
-    
-    func onImageReady(base64: String) {
-        decodingQueue.async {
-            guard
-                let data = Data(base64Encoded: base64),
-                let image = UIImage(data: data),
-                let layer = self.layersForRender.first
-            else { return }
-            
-            self.layersForRender.remove(at: 0)
-            
-            if self.sectionModel.newLayersImages != nil {
-                self.sectionModel.newLayersImages?[layer.layer] = image
-            } else {
-                self.sectionModel.newLayersImages = [layer.layer: image]
-            }
-            
-            if self.sectionModel.oldLayersImages != nil {
-                self.sectionModel.oldLayersImages?[layer.layer] = image
-            } else {
-                self.sectionModel.oldLayersImages = [layer.layer: image]
-            }
-            
-            self.isRendering = false
-            
-            DispatchQueue.main.async {
-                self.renderLayer()
-            }
-        }
-    }
-}
-
-// MARK: - WKScriptMessageHandler
-extension StickerFaceEditorPageController: WKNavigationDelegate {
-    
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        isRenderReady = true
-        renderLayer()
-    }
-    
-}
-

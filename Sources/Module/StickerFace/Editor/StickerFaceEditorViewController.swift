@@ -7,11 +7,12 @@ enum LayerType {
     case NFT
 }
 
-protocol StickerFaceEditorViewControllerDelegate: AnyObject {
-    func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didUpdate layers: String)
-    func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didSave layers: String)
-    func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didSelectPaid layer: String, layers withLayer: String, with price: Int, layerType: LayerType)
-    func stickerFaceEditorViewControllerDidLoadLayers(_ controller: StickerFaceEditorViewController)
+protocol StickerFaceEditorControllerDelegate: AnyObject {
+    func stickerFaceEditor(_ controller: StickerFaceEditorViewController, didUpdate layers: String)
+    func stickerFaceEditor(_ controller: StickerFaceEditorViewController, didUpdateBackground layers: String)
+    func stickerFaceEditor(_ controller: StickerFaceEditorViewController, didSave layers: String)
+    func stickerFaceEditor(_ controller: StickerFaceEditorViewController, didSelectPaid layer: String, layers withLayer: String, with price: Int, layerType: LayerType)
+    func stickerFaceEditor(didLoadLayers controller: StickerFaceEditorViewController)
 }
 
 protocol StickerFaceEditorDelegate: AnyObject {
@@ -27,7 +28,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         case loading, loaded, failed
     }
     
-    weak var delegate: StickerFaceEditorViewControllerDelegate?
+    weak var delegate: StickerFaceEditorControllerDelegate?
     
     var layers: String = ""
     var currentLayers: String = "" {
@@ -76,7 +77,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     @objc private func saveButtonTapped() {
         layers = currentLayers
         SFDefaults.wasEdited = true
-        delegate?.stickerFaceEditorViewController(self, didSave: layers)
+        delegate?.stickerFaceEditor(self, didSave: layers)
     }
     
     @objc private func notConnectButtonTapped() {
@@ -132,7 +133,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                 self.editor = editor
                 self.setupSections(needSetDefault: false, for: SFDefaults.gender)
                 
-                self.delegate?.stickerFaceEditorViewControllerDidLoadLayers(self)
+                self.delegate?.stickerFaceEditor(didLoadLayers: self)
             
             case .failure:
                 if self.loadingState == .failed {
@@ -397,10 +398,16 @@ extension StickerFaceEditorViewController: StickerFaceEditorPageDelegate {
             let newPaidLayers = replaceCurrentLayer(with: layer, section: section, isCurrent: true)
             let type: LayerType = objects[section].editorSubsection.name == "background" ? .background : .NFT
             
-            delegate?.stickerFaceEditorViewController(self, didSelectPaid: layer, layers: newPaidLayers, with: price, layerType: type)
+            delegate?.stickerFaceEditor(self, didSelectPaid: layer, layers: newPaidLayers, with: price, layerType: type)
         } else {
             currentLayers = replaceCurrentLayer(with: layer, section: section, isCurrent: true)
-            delegate?.stickerFaceEditorViewController(self, didUpdate: currentLayers)
+            
+            if objects[section].editorSubsection.name == "background" {
+                delegate?.stickerFaceEditor(self, didUpdateBackground: currentLayers)
+            } else {
+                delegate?.stickerFaceEditor(self, didUpdate: currentLayers)
+            }
+            
             updateSelectedLayers()
         }
     }
@@ -503,6 +510,6 @@ extension StickerFaceEditorViewController: StickerFaceEditorDelegate {
         currentLayers = gender == .male ? StickerLoader.defaultLayers : StickerLoader.defaultWomanLayers
         
         setupSections(needSetDefault: true, for: gender)
-        delegate?.stickerFaceEditorViewController(self, didUpdate: currentLayers)
+        delegate?.stickerFaceEditor(self, didUpdate: currentLayers)
     }
 }

@@ -58,15 +58,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         setupButtons()
         updateBalanceView()
         
-        mainView.renderWebView.navigationDelegate = self
-        
         NotificationCenter.default.addObserver(self, selector: #selector(tonClientDidUpdate), name: .tonClientDidUpdate, object: nil)
-        
-        let handler = AvatarRenderResponseHandler()
-        handler.delegate = self
-        
-        mainView.renderWebView.configuration.userContentController.add(handler, name: handler.name)
-        mainView.renderWebView.load(URLRequest(url: URL(string: "https://stickerface.io/render.html")!))
     }
     
     // MARK: Private Actions
@@ -174,34 +166,26 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     }
             
     private func renderAvatar() {
-        let tuple = editorDelegate?.layersWithout(section: "background", layers: layers)
-        let id = getNextRequestId()
-        let renderFunc = createRenderFunc(requestId: id, layers: tuple?.layers ?? "", size: Int(AvatarView.Layout.avatarImageViewHeight) * 4)
+        guard let editorDelegate = editorDelegate else { return }
+        let tuple = editorDelegate.layersWithout(section: "background", layers: layers)
         
-        mainView.renderWebView.evaluateJavaScript(renderFunc)
-        
-        // Render with webView
-        if let layer = tuple?.sectionLayer, layer != "0" {
-            StickerLoader.loadSticker(into: mainView.backgroundImageView, with: layer, stickerType: .section) { result in
-                switch result {
-                case .success: self.mainView.backgroundImageView.hideSkeleton()
-                case .failure: break
-                }
-            }
+        StickerLoader.shared.renderLayer(tuple.layers) { [weak self] image in
+            guard let self = self else { return }
+            self.mainView.avatarView.avatarImageView.image = image
         }
     }
     
-    private func createRenderFunc(requestId: Int, layers: String, size: Int) -> String {
-        return "renderPNG(\"\(layers)\", \(requestId), \(size))"
-    }
-    
-    private func getNextRequestId() -> Int {
-        let current = requestId
-        requestId = (current + 1) % Int.max
+    private func renderBackground() {
+        guard let editorDelegate = editorDelegate else { return }
+        let tuple = editorDelegate.layersWithout(section: "background", layers: layers)
         
-        return current
+        if tuple.sectionLayer != "0" {
+            StickerLoader.shared.renderLayer(tuple.sectionLayer) { [weak self] image in
+                guard let self = self else { return }
+                self.mainView.backgroundImageView.image = image
+            }
+        }
     }
-    
     private func updateCurrentLayers(_ layers: String) {
         self.layers = layers
         editorDelegate?.updateLayers(layers)
@@ -252,23 +236,26 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
 }
 
 // MARK: - StickerFaceEditorViewControllerDelegate
-extension StickerFaceViewController: StickerFaceEditorViewControllerDelegate {
-    func stickerFaceEditorViewControllerDidLoadLayers(_ controller: StickerFaceEditorViewController) {
-
-    }
+extension StickerFaceViewController: StickerFaceEditorControllerDelegate {
+    func stickerFaceEditor(didLoadLayers controller: StickerFaceEditorViewController) { }
     
-    func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didUpdate layers: String) {
+    func stickerFaceEditor(_ controller: StickerFaceEditorViewController, didUpdate layers: String) {
         self.layers = layers
         renderAvatar()
     }
     
-    func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didSave layers: String) {
+    func stickerFaceEditor(_ controller: StickerFaceEditorViewController, didUpdateBackground layers: String) {
+        self.layers = layers
+        renderBackground()
+    }
+    
+    func stickerFaceEditor(_ controller: StickerFaceEditorViewController, didSave layers: String) {
         SFDefaults.gender = mainView.genderButton.imageType == .female ? .female : .male
         self.layers = layers
         receiveAvatar()
     }
     
-    func stickerFaceEditorViewController(_ controller: StickerFaceEditorViewController, didSelectPaid layer: String, layers withLayer: String, with price: Int, layerType: LayerType) {
+    func stickerFaceEditor(_ controller: StickerFaceEditorViewController, didSelectPaid layer: String, layers withLayer: String, with price: Int, layerType: LayerType) {
         let modal = ModalNewLayerController(type: layerType)
         let balance = SFDefaults.tonBalance
         modal.updateView(layer: layer, layers: withLayer, balance: balance, price: price)
@@ -310,32 +297,5 @@ extension StickerFaceViewController: ModalWardrobeDelegate {
     
     func modalWardrobeController(_ controller: ModalWardrobeController, needLayers forLayer: String) -> String {
         return editorDelegate?.replaceCurrentLayers(with: forLayer, with: nil, isCurrent: true) ?? ""
-    }
-}
-
-// MARK: - AvatarRenderResponseHandlerDelegate
-extension StickerFaceViewController: AvatarRenderResponseHandlerDelegate {
-    func onImageReady(base64: String) {
-        decodingQueue.async {
-            guard
-                let data = Data(base64Encoded: base64, options: []),
-                let image = UIImage(data: data)
-            else { return  }
-            
-            DispatchQueue.main.async {
-                self.mainView.avatarView.avatarImageView.image = image
-                
-                if self.needToRedieve {
-                    self.receiveAvatar()
-                }
-            }
-        }
-    }
-}
-
-// MARK: - WKNavigationDelegate
-extension StickerFaceViewController: WKNavigationDelegate {
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        renderAvatar()
     }
 }

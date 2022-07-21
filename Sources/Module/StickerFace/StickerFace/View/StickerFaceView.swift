@@ -5,12 +5,6 @@ class StickerFaceView: RootView {
 
     let editorViewController = StickerFaceEditorViewController()
     
-    let renderWebView: WKWebView = {
-        let webView = WKWebView()
-        
-        return webView
-    }()
-    
     let avatarView: AvatarView = {
         let avatarView = AvatarView()
         avatarView.layer.masksToBounds = true
@@ -68,7 +62,6 @@ class StickerFaceView: RootView {
     override func setup() {
         backgroundColor = .white
         
-        addSubview(renderWebView)
         addSubview(backgroundImageView)
         addSubview(tonBalanceView)
         addSubview(genderButton)
@@ -117,11 +110,7 @@ class StickerFaceView: RootView {
             make.centerX.equalToSuperview()
             make.size.equalTo(AvatarView.Layout.avatarImageViewHeight)
         }
-        
-        renderWebView.snp.makeConstraints { make in
-            make.edges.equalTo(avatarView.snp.edges)
-        }
-        
+                
         backgroundImageView.snp.makeConstraints { make in
             make.left.right.top.equalToSuperview()
             make.bottom.equalTo(avatarView.snp.bottom).offset(12.0)

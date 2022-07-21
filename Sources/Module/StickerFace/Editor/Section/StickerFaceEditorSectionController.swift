@@ -2,10 +2,10 @@ import Foundation
 import IGListKit
 import SkeletonView
 
-protocol StickerFaceEditorSectionControllerDelegate: AnyObject {
-    func stickerFaceEditorSectionController(_ controller: StickerFaceEditorSectionController, didSelect layer: String, section: Int)
-    func stickerFaceEditorSectionController(_ controller: StickerFaceEditorSectionController, willDisplay header: String, in section: Int)
-    func stickerFaceEditorSectionController(_ controller: StickerFaceEditorSectionController, needRedner forLayer: String, section: String)
+protocol StickerFaceEditorSectionDelegate: AnyObject {
+    func stickerFaceEditor(_ controller: StickerFaceEditorSectionController, didSelect layer: String, section: Int)
+    func stickerFaceEditor(_ controller: StickerFaceEditorSectionController, willDisplay header: String, in section: Int)
+    func stickerFaceEditor(_ controller: StickerFaceEditorSectionController, needRedner forLayer: String, section: String)
 }
 
 class StickerFaceEditorSectionController: ListSectionController {
@@ -18,7 +18,7 @@ class StickerFaceEditorSectionController: ListSectionController {
         return ListAdapter(updater: ListAdapterUpdater(), viewController: viewController, workingRangeSize: 0)
     }()
     
-    weak var delegate: StickerFaceEditorSectionControllerDelegate?
+    weak var delegate: StickerFaceEditorSectionDelegate?
             
     override init() {
         super.init()
@@ -55,7 +55,7 @@ class StickerFaceEditorSectionController: ListSectionController {
         guard let layers = sectionModel.editorSubsection.layers else { return }
         
         if layers.count - 1 >= layerIndex, layerIndex >= 0 {
-            delegate?.stickerFaceEditorSectionController(self, didSelect: layers[layerIndex], section: section)
+            delegate?.stickerFaceEditor(self, didSelect: layers[layerIndex], section: section)
         }
     }
     
@@ -160,9 +160,9 @@ class StickerFaceEditorSectionController: ListSectionController {
             cell.skeletonView.hideSkeleton()
             cell.layerImageView.image = image
             
-            delegate?.stickerFaceEditorSectionController(self, needRedner: layer, section: sectionModel.editorSubsection.name)
+            delegate?.stickerFaceEditor(self, needRedner: layer, section: sectionModel.editorSubsection.name)
         } else {
-            delegate?.stickerFaceEditorSectionController(self, needRedner: layer, section: sectionModel.editorSubsection.name)
+            delegate?.stickerFaceEditor(self, needRedner: layer, section: sectionModel.editorSubsection.name)
         }
         
         let isPaid = SFDefaults.wardrobe.contains(layer) || SFDefaults.paidBackgrounds.contains(layer)
@@ -214,7 +214,7 @@ extension StickerFaceEditorSectionController: ListAdapterDataSource {
 extension StickerFaceEditorSectionController: LayerColorEmbeddedSectionControllerDelegate {
     
     func layerColorEmbeddedSectionController(_ controller: LayerColorEmbeddedSectionController, didSelect color: EditorColor) {
-        delegate?.stickerFaceEditorSectionController(self, didSelect: String(color.id), section: section)
+        delegate?.stickerFaceEditor(self, didSelect: String(color.id), section: section)
     }
     
 }
@@ -224,7 +224,7 @@ extension StickerFaceEditorSectionController: ListDisplayDelegate {
 
     func listAdapter(_ listAdapter: ListAdapter, willDisplay sectionController: ListSectionController, cell: UICollectionViewCell, at index: Int) {
         if index <= numberOfItems() / 2 {
-            delegate?.stickerFaceEditorSectionController(self, willDisplay: sectionModel.editorSubsection.name, in: section)
+            delegate?.stickerFaceEditor(self, willDisplay: sectionModel.editorSubsection.name, in: section)
         }
     }
 
