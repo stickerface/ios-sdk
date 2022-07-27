@@ -45,6 +45,15 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
         adapter.collectionView = mainView.collectionView
         adapter.dataSource = self
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if sectionModel.newLayersImages == nil {
+            sectionModel.oldLayersImages = nil
+            adapter.reloadData()
+        }
+    }
         
     private func renderLayer() {
         guard let layer = layersForRender.first, !isRendering, isRenderReady else {

@@ -294,7 +294,9 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
             object.selectedLayer = "0"
             
             if let header = headers.first(where: { $0.isSelected }), header.title.lowercased() != object.editorSubsection.name.lowercased() {
-                object.newLayersImages = nil
+                if header.title.lowercased() != "background", object.editorSubsection.name.lowercased() != "background" {
+                    object.newLayersImages = nil
+                }
             }
             
             if let editorLayers = object.editorSubsection.layers,
@@ -313,7 +315,10 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
             
             if let viewController = viewControllers?[index] as? StickerFaceEditorPageController {
                 viewController.sectionModel = object
-                viewController.needUpdate()
+                
+                if index == headers.firstIndex(where: { $0.isSelected }) {
+                    viewController.needUpdate()
+                }
             }
         }
     }
