@@ -106,9 +106,9 @@ class StickerFaceView: RootView {
         }
         
         avatarView.snp.makeConstraints { make in
-            make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(85.0)
+            make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(59.0)
             make.centerX.equalToSuperview()
-            make.size.equalTo(AvatarView.Layout.avatarImageViewHeight)
+            make.size.equalTo(232.0)
         }
                 
         backgroundImageView.snp.makeConstraints { make in
