@@ -19,7 +19,7 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
     
     let decodingQueue = DispatchQueue(label: "\(Bundle.main.bundleIdentifier!).decodingQueue")
     
-    var sectionModel: EditorSubsectionSectionModel
+    var sectionModel: ObjectsModelTest
     var index = 0
     var requestId = 0
     var layersForRender = [LayerForRender]()
@@ -30,7 +30,7 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
         return ListAdapter(updater: ListAdapterUpdater(), viewController: self, workingRangeSize: 0)
     }()
     
-    init(sectionModel: EditorSubsectionSectionModel) {
+    init(sectionModel: ObjectsModelTest) {
         self.sectionModel = sectionModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -49,10 +49,10 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if sectionModel.newLayersImages == nil {
-            sectionModel.oldLayersImages = nil
-            adapter.reloadData()
-        }
+//        if sectionModel.newLayersImages == nil {
+//            sectionModel.oldLayersImages = nil
+//            adapter.reloadData()
+//        }
     }
         
     private func renderLayer() {
@@ -64,21 +64,26 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
         isRendering = true
 
         let renderLayers = createRenderLayers(layers: layer.layer, section: layer.section)
+        
+        print("=== render", renderLayers)
+        
         StickerLoader.shared.renderLayer(renderLayers) { [weak self] image in
             guard let self = self else { return }
             
             self.layersForRender.remove(at: 0)
             
-            if self.sectionModel.newLayersImages != nil {
-                self.sectionModel.newLayersImages?[layer.layer] = image
-            } else {
-                self.sectionModel.newLayersImages = [layer.layer: image]
-            }
-            
-            if self.sectionModel.oldLayersImages != nil {
-                self.sectionModel.oldLayersImages?[layer.layer] = image
-            } else {
-                self.sectionModel.oldLayersImages = [layer.layer: image]
+            if let sectionModel = self.sectionModel.sections.first(where: { $0.editorSubsection.name == layer.section }) {
+                if sectionModel.newLayersImages != nil {
+                    sectionModel.newLayersImages?[layer.layer] = image
+                } else {
+                    sectionModel.newLayersImages = [layer.layer: image]
+                }
+
+                if sectionModel.oldLayersImages != nil {
+                    sectionModel.oldLayersImages?[layer.layer] = image
+                } else {
+                    sectionModel.oldLayersImages = [layer.layer: image]
+                }
             }
             
             self.isRendering = false
@@ -107,6 +112,8 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
         neededLayers = neededLayers.replacingOccurrences(of: ";25;", with: ";")
         neededLayers = neededLayers.replacingOccurrences(of: ";273;", with: ";")
         
+        print("=== all", allLayers)
+        
         return neededLayers
     }
 }
@@ -114,7 +121,7 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
 // MARK: - ListAdapterDataSource
 extension StickerFaceEditorPageController: ListAdapterDataSource {
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
-        return [sectionModel]
+        return sectionModel.sections
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {

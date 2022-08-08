@@ -51,9 +51,9 @@ class StickerFaceEditorSectionController: ListSectionController {
         } else {
             layerIndex = index - 1
         }
-        
+
         guard let layers = sectionModel.editorSubsection.layers else { return }
-        
+
         if layers.count - 1 >= layerIndex, layerIndex >= 0 {
             delegate?.stickerFaceEditor(self, didSelect: layers[layerIndex], section: section)
         }
@@ -153,6 +153,9 @@ class StickerFaceEditorSectionController: ListSectionController {
         }
          
         cell.layerImageView.image = nil
+        
+        print("===", sectionModel.newLayersImages)
+        
         if let image = sectionModel.newLayersImages?[layer] {
             cell.skeletonView.hideSkeleton()
             cell.layerImageView.image = image
