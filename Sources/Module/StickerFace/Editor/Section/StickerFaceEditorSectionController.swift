@@ -88,7 +88,7 @@ class StickerFaceEditorSectionController: ListSectionController {
         
         // size for titels
         if index == 0 || (layerColors.count > 0 && index == 2) {
-            return CGSize(width: collectionContext!.containerSize.width - 16 - 16, height: 30.0)
+            return CGSize(width: collectionContext!.containerSize.width - 16 - 16, height: 42.0)
         }
         
         // size for colors
@@ -153,8 +153,6 @@ class StickerFaceEditorSectionController: ListSectionController {
         }
          
         cell.layerImageView.image = nil
-        
-        print("===", sectionModel.newLayersImages)
         
         if let image = sectionModel.newLayersImages?[layer] {
             cell.skeletonView.hideSkeleton()

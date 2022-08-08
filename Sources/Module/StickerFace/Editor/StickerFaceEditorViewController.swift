@@ -1,16 +1,6 @@
 import UIKit
 import IGListKit
 
-class ObjectsModelTest {
-    let name: String
-    let sections: [EditorSubsectionSectionModel]
-    
-    init(name: String, sections: [EditorSubsectionSectionModel]) {
-        self.name = name
-        self.sections = sections
-    }
-}
-
 enum LayerType {
     case layers
     case background
@@ -43,18 +33,17 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     var layers: String = ""
     var currentLayers: String = "" {
         didSet {
-            mainView.saveButton.isUserInteractionEnabled = currentLayers != layers
-            mainView.saveButton.backgroundColor = currentLayers == layers ? .sfDisabled : .sfAccentBrand
+            mainView.saveButton.isUserInteractionEnabled = !compareLayers(currentLayers, layers)
+            mainView.saveButton.backgroundColor = compareLayers(currentLayers, layers) ? .sfDisabled : .sfAccentBrand
         }
     }
     
+    private let provider = StickerFaceEditorProvider()
     private var editor: Editor?
     private var loadingState = LoadingState.loading
-    private let provider = StickerFaceEditorProvider()
     private var prices: [String: Int] = [:]
     private var headers: [EditorHeaderSectionModel] = []
-//    private var objects: [EditorSubsectionSectionModel] = []
-    private var objects: [ObjectsModelTest] = []
+    private var objects: [EditorSectionModel] = []
     private var viewControllers: [UIViewController]? = []
     
     private lazy var headerAdapter: ListAdapter = {
@@ -128,164 +117,6 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         }
     }
     
-    // MARK: Private methods
-    
-    private func loadEditor() {
-        provider.loadEditor { [weak self] result in
-            guard let self = self else { return }
-            
-            switch result {
-            case .success(let editor):
-                self.mainView.separator.isHidden = false
-                self.mainView.saveButton.isHidden = false
-                self.mainView.notConnectButton.isHidden = true
-                self.mainView.notConnectLabel.isHidden = true
-                
-                self.editor = editor
-                self.setupSections(needSetDefault: false, for: SFDefaults.gender)
-                
-                self.delegate?.stickerFaceEditor(didLoadLayers: self)
-            
-            case .failure:
-                if self.loadingState == .failed {
-                    self.mainView.loaderView.showError("Error load editor")
-                }
-                
-                self.loadingState = .failed
-                self.mainView.separator.isHidden = true
-                self.mainView.saveButton.isHidden = true
-                self.mainView.notConnectButton.isHidden = false
-                self.mainView.notConnectLabel.isHidden = false
-            }
-        }
-    }
-    
-    private func setupSections(needSetDefault: Bool, for gender: SFDefaults.Gender) {
-        guard let editor = editor else { return }
-        let needSetupGender = objects.isEmpty
-        
-        defer {
-            if needSetupGender {
-                setupSections(needSetDefault: false, for: SFDefaults.gender)
-            }
-        }
-        
-        let sections = gender == .male ? editor.sections.man : editor.sections.woman
-        
-//        headers = sections.flatMap({ $0.subsections }).compactMap({ subsection in
-//
-////            subsection.name != "background"
-//            if subsection.name != "clothing", subsection.name != "glasses", subsection.name != "tattoos", subsection.name != "accessories", subsection.name != "masks" {
-//                let model = EditorHeaderSectionModel(title: subsection.name)
-//                return model
-//            }
-//
-//            return nil
-//        })
-        
-        headers = sections.compactMap { EditorHeaderSectionModel(title: $0.name) }
-        
-        headers.first?.isSelected = true
-        headerAdapter.reloadData(completion: nil)
-        
-        prices = editor.prices
-        
-//        objects = sections.flatMap({ $0.subsections }).compactMap({ subsection in
-//            subsection.name != "background",
-            
-//            if subsection.name != "clothing", subsection.name != "glasses", subsection.name != "tattoos", subsection.name != "accessories", subsection.name != "masks" {
-                
-//                var layers = subsection.layers
-//
-//                if subsection.name == "background" {
-//                    layers = layers?.filter { prices[$0] == nil || prices[$0] == 0 }
-//                }
-//
-//                let newSubsection = EditorSubsection(
-//                    name: subsection.name,
-//                    layers: layers,
-//                    colors: subsection.colors?.reversed()
-//                )
-//                let model = EditorSubsectionSectionModel(editorSubsection: newSubsection, prices: prices)
-//                model.selectedLayer = "0"
-//
-//                return model
-////            }
-//
-//            return nil
-//        })
-        
-        objects = sections.compactMap({ section in
-            
-            let models = section.subsections.map { subsection in
-                return EditorSubsectionSectionModel(editorSubsection: subsection, prices: prices)
-            }
-            
-            return ObjectsModelTest(name: section.name, sections: models)
-        })
-        
-        if needSetupGender {
-            if layersWithout(section: "hair", layers: layers).sectionLayer == "0" {
-                SFDefaults.gender = SFDefaults.gender == .male ? .female : .male
-                return 
-            }
-        }
-        
-        if needSetDefault {
-            mainView.headerCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: true)
-        }
-
-        viewControllers = objects.enumerated().map { index, object in
-            let controller = StickerFaceEditorPageController(sectionModel: object)
-            controller.delegate = self
-            controller.editorDelegate = self
-            controller.index = index
-            
-            return controller
-        }
-        
-        updateSelectedLayers()
-        loadingState = .loaded
-        
-        if let viewController = viewControllers?[0] {
-            mainView.pageViewController.setViewControllers([viewController], direction: .reverse, animated: false)
-        }
-    }
-    
-    private func replaceCurrentLayer(with replacementLayer: String, section: Int, isCurrent: Bool) -> String {
-        var layers = isCurrent ? currentLayers : layers
-        
-        if let range = layers.range(of: "/") {
-            layers.removeSubrange(range.lowerBound..<layers.endIndex)
-        }
-        
-        var layersArray = layers.components(separatedBy: ";")
-        
-        let subsection = objects.flatMap { $0.sections }.compactMap { $0.editorSubsection }.first(where: { $0.layers?.contains(replacementLayer) ?? false })
-        
-        if let editorLayers = subsection?.layers, editorLayers.contains(replacementLayer) {
-            editorLayers.forEach { editorLayer in
-                if let index = layersArray.firstIndex(where: { $0 == editorLayer }) {
-                    layersArray.remove(at: index)
-                }
-            }
-        } else if let colorLayers = subsection?.colors?.compactMap({ String($0.id) }), colorLayers.contains(replacementLayer) {
-            colorLayers.forEach { colorLayer in
-                if let index = layersArray.firstIndex(where: { $0 == colorLayer }) {
-                    layersArray.remove(at: index)
-                }
-            }
-        }
-        
-        layers = layersArray.joined(separator: ";")
-        if replacementLayer != "0" {
-            layers += ";\(replacementLayer);"
-        }
-        
-        print("=== replace", layers)
-        return layers
-    }
-        
     // MARK: Public methods
     
     func updateSelectedLayers() {
@@ -301,7 +132,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
             object.sections.forEach { subsection in
                 let prevColor = subsection.selectedColor
                 subsection.selectedColor = nil
-                subsection.selectedColor = "0"
+                subsection.selectedLayer = "0"
                 
                 if let header = headers.first(where: { $0.isSelected }), header.title.lowercased() != object.name.lowercased() {
                     if header.title.lowercased() != "background", subsection.editorSubsection.name.lowercased() != "background" {
@@ -363,6 +194,171 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
 //                }
 //            }
         }
+    }
+    
+    // MARK: Private methods
+    
+    private func loadEditor() {
+        provider.loadEditor { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let editor):
+                self.mainView.separator.isHidden = false
+                self.mainView.saveButton.isHidden = false
+                self.mainView.notConnectButton.isHidden = true
+                self.mainView.notConnectLabel.isHidden = true
+                
+                self.editor = editor
+                self.setupSections(needSetDefault: false, for: SFDefaults.gender)
+                
+                self.delegate?.stickerFaceEditor(didLoadLayers: self)
+            
+            case .failure:
+                if self.loadingState == .failed {
+                    self.mainView.loaderView.showError("Error load editor")
+                }
+                
+                self.loadingState = .failed
+                self.mainView.separator.isHidden = true
+                self.mainView.saveButton.isHidden = true
+                self.mainView.notConnectButton.isHidden = false
+                self.mainView.notConnectLabel.isHidden = false
+            }
+        }
+    }
+    
+    private func setupSections(needSetDefault: Bool, for gender: SFDefaults.Gender) {
+        guard let editor = editor else { return }
+        let needSetupGender = objects.isEmpty
+        
+        defer {
+            if needSetupGender {
+                setupSections(needSetDefault: false, for: SFDefaults.gender)
+            }
+        }
+        
+        let sections = gender == .male ? editor.sections.man : editor.sections.woman
+        
+//        headers = sections.flatMap({ $0.subsections }).compactMap({ subsection in
+//
+////            subsection.name != "background"
+//            if subsection.name != "clothing", subsection.name != "glasses", subsection.name != "tattoos", subsection.name != "accessories", subsection.name != "masks" {
+//                let model = EditorHeaderSectionModel(title: subsection.name)
+//                return model
+//            }
+//
+//            return nil
+//        })
+        
+        headers = sections.compactMap { section in
+            guard section.name != "Clothing", section.name != "Accessories" else { return nil }
+            return EditorHeaderSectionModel(title: section.name)
+        }
+        
+        headers.first?.isSelected = true
+        headerAdapter.reloadData(completion: nil)
+        
+        prices = editor.prices
+                
+        objects = sections.compactMap({ section in
+            guard section.name != "Clothing", section.name != "Accessories" else { return nil }
+            
+            let models = section.subsections.map { subsection -> EditorSubsectionSectionModel in
+                var layers = subsection.layers
+                if subsection.name == "background" {
+                    layers = layers?.filter { prices[$0] == nil || prices[$0] == 0 }
+                }
+
+                let editorSubsection = EditorSubsection(
+                    name: subsection.name,
+                    layers: layers,
+                    colors: subsection.colors?.reversed()
+                )
+                
+                let model = EditorSubsectionSectionModel(editorSubsection: editorSubsection, prices: prices)
+                model.selectedLayer = "0"
+                
+                return model
+            }
+            
+            return EditorSectionModel(name: section.name, sections: models)
+        })
+        
+        if needSetupGender {
+            if layersWithout(section: "hair", layers: layers).sectionLayer == "0" {
+                SFDefaults.gender = SFDefaults.gender == .male ? .female : .male
+                return 
+            }
+        }
+        
+        if needSetDefault {
+            mainView.headerCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: true)
+        }
+
+        viewControllers = objects.enumerated().map { index, object in
+            let controller = StickerFaceEditorPageController(sectionModel: object)
+            controller.delegate = self
+            controller.editorDelegate = self
+            controller.index = index
+            
+            return controller
+        }
+        
+        updateSelectedLayers()
+        loadingState = .loaded
+        
+        if let viewController = viewControllers?[0] {
+            mainView.pageViewController.setViewControllers([viewController], direction: .reverse, animated: false)
+        }
+    }
+    
+    private func replaceCurrentLayer(with replacementLayer: String, subsection: Int, isCurrent: Bool) -> String {
+        var layers = isCurrent ? currentLayers : layers
+        
+        if let range = layers.range(of: "/") {
+            layers.removeSubrange(range.lowerBound..<layers.endIndex)
+        }
+        
+        var layersArray = layers.components(separatedBy: ";")
+        
+//        let editorSubsection = objects.flatMap { $0.sections }.compactMap { $0.editorSubsection }
+//        let layersSubsection = editorSubsection.first(where: { $0.layers?.contains(replacementLayer) ?? false })
+//        let colorSubsection = editorSubsection.first { subsection in
+//            let colors = subsection.colors?.compactMap { String($0.id) }
+//            return colors?.contains(replacementLayer) ?? false
+//        }
+        
+        let section = headers.firstIndex(where: { $0.isSelected }) ?? 0
+        let editorSubsection = objects[section].sections[subsection].editorSubsection
+        
+        if let editorLayers = editorSubsection.layers, editorLayers.contains(replacementLayer) {
+            editorLayers.forEach { editorLayer in
+                if let index = layersArray.firstIndex(where: { $0 == editorLayer }) {
+                    layersArray.remove(at: index)
+                }
+            }
+        } else if let colorLayers = editorSubsection.colors?.compactMap({ String($0.id) }), colorLayers.contains(replacementLayer) {
+            colorLayers.forEach { colorLayer in
+                if let index = layersArray.firstIndex(where: { $0 == colorLayer }) {
+                    layersArray.remove(at: index)
+                }
+            }
+        }
+        
+        layers = layersArray.joined(separator: ";")
+        if replacementLayer != "0" {
+            layers += ";\(replacementLayer);"
+        }
+        
+        return layers
+    }
+    
+    private func compareLayers(_ lhs: String, _ rhs: String) -> Bool {
+        let lhsArray = lhs.split(separator: ";").sorted(by: <)
+        let rhsArray = rhs.split(separator: ";").sorted(by: <)
+        
+        return lhsArray == rhsArray
     }
 }
 
@@ -440,23 +436,25 @@ extension StickerFaceEditorViewController: StickerFaceEditorPageDelegate {
     
     func stickerFaceEditorPageController(_ controller: StickerFaceEditorPageController, didSelect layer: String, section: Int) {
         let isPaid = SFDefaults.wardrobe.contains(layer) || SFDefaults.paidBackgrounds.contains(layer)
+        let subsection = section
+        let section = headers.firstIndex(where: { $0.isSelected }) ?? 0
         
-//        if let price = prices["\(layer)"], !isPaid {
-//            let newPaidLayers = replaceCurrentLayer(with: layer, section: section, isCurrent: true)
-//            let type: LayerType = objects[section].editorSubsection.name == "background" ? .background : .NFT
-//
-//            delegate?.stickerFaceEditor(self, didSelectPaid: layer, layers: newPaidLayers, with: price, layerType: type)
-//        } else {
-            currentLayers = replaceCurrentLayer(with: layer, section: section, isCurrent: true)
+        if let price = prices["\(layer)"], !isPaid {
+            let newPaidLayers = replaceCurrentLayer(with: layer, subsection: subsection, isCurrent: true)
+            let type: LayerType = objects[section].name == "Background" ? .background : .NFT
+
+            delegate?.stickerFaceEditor(self, didSelectPaid: layer, layers: newPaidLayers, with: price, layerType: type)
+        } else {
+            currentLayers = replaceCurrentLayer(with: layer, subsection: subsection, isCurrent: true)
             
-//            if objects[section].editorSubsection.name == "background" {
-//                delegate?.stickerFaceEditor(self, didUpdateBackground: currentLayers)
-//            } else {
+            if objects[section].name == "Background" {
+                delegate?.stickerFaceEditor(self, didUpdateBackground: currentLayers)
+            } else {
                 delegate?.stickerFaceEditor(self, didUpdate: currentLayers)
-//            }
+            }
             
             updateSelectedLayers()
-//        }
+        }
     }
 }
 
@@ -495,31 +493,27 @@ extension StickerFaceEditorViewController: UIPageViewControllerDataSource, UIPag
 // MARK: - StickerFaceEditorDelegate
 extension StickerFaceEditorViewController: StickerFaceEditorDelegate {
     func replaceCurrentLayers(with layer: String, with color: String?, isCurrent: Bool) -> String {
-        let section = objects.firstIndex { sectionModel in
-//            return sectionModel.editorSubsection.layers?.contains(layer) ?? false
-            return false
+        guard
+            let section = headers.firstIndex(where: { $0.isSelected }),
+            let subsection = objects[section].sections.firstIndex(where: { $0.editorSubsection.layers?.contains(layer) ?? false })
+        else { return "" }
+        
+        var layers = replaceCurrentLayer(with: layer, subsection: subsection, isCurrent: isCurrent)
+        
+        if let color = color {
+            let tmpLayers = currentLayers
+            if isCurrent {
+                currentLayers = layers
+                layers = replaceCurrentLayer(with: color, subsection: subsection, isCurrent: isCurrent)
+                currentLayers = tmpLayers
+            } else {
+                self.layers = layers
+                layers = replaceCurrentLayer(with: color, subsection: subsection, isCurrent: isCurrent)
+                self.layers = tmpLayers
+            }
         }
         
-//        if let section = section {
-            var layers = replaceCurrentLayer(with: layer, section: 0, isCurrent: isCurrent)
-            
-            if let color = color {
-                let tmpLayers = currentLayers
-                if isCurrent {
-                    currentLayers = layers
-                    layers = replaceCurrentLayer(with: color, section: 0, isCurrent: isCurrent)
-                    currentLayers = tmpLayers
-                } else {
-                    self.layers = layers
-                    layers = replaceCurrentLayer(with: color, section: 0, isCurrent: isCurrent)
-                    self.layers = tmpLayers
-                }
-            }
-            
-            return layers
-//        }
-//
-//        return ""
+        return layers
     }
     
     func updateLayers(_ layers: String) {

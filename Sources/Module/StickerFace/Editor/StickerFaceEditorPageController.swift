@@ -19,7 +19,7 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
     
     let decodingQueue = DispatchQueue(label: "\(Bundle.main.bundleIdentifier!).decodingQueue")
     
-    var sectionModel: ObjectsModelTest
+    var sectionModel: EditorSectionModel
     var index = 0
     var requestId = 0
     var layersForRender = [LayerForRender]()
@@ -30,7 +30,7 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
         return ListAdapter(updater: ListAdapterUpdater(), viewController: self, workingRangeSize: 0)
     }()
     
-    init(sectionModel: ObjectsModelTest) {
+    init(sectionModel: EditorSectionModel) {
         self.sectionModel = sectionModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -64,8 +64,6 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
         isRendering = true
 
         let renderLayers = createRenderLayers(layers: layer.layer, section: layer.section)
-        
-        print("=== render", renderLayers)
         
         StickerLoader.shared.renderLayer(renderLayers) { [weak self] image in
             guard let self = self else { return }
@@ -112,8 +110,6 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
         neededLayers = neededLayers.replacingOccurrences(of: ";25;", with: ";")
         neededLayers = neededLayers.replacingOccurrences(of: ";273;", with: ";")
         
-        print("=== all", allLayers)
-        
         return neededLayers
     }
 }
@@ -151,7 +147,7 @@ extension StickerFaceEditorPageController: StickerFaceEditorSectionDelegate {
     }
     
     func stickerFaceEditor(_ controller: StickerFaceEditorSectionController, didSelect layer: String, section: Int) {
-        delegate?.stickerFaceEditorPageController(self, didSelect: layer, section: index)
+        delegate?.stickerFaceEditorPageController(self, didSelect: layer, section: section)
     }
     
     func stickerFaceEditor(_ controller: StickerFaceEditorSectionController, willDisplay header: String, in section: Int) { }    
