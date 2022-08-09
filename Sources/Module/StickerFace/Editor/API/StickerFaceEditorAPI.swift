@@ -25,10 +25,10 @@ class StickerFaceEditorAPI {
 
 struct Editor: Codable {
     let prices: [String: Int]
-    let sections: EditorGender
+    let sections: GenderSections
 }
 
-struct EditorGender: Codable {
+struct GenderSections: Codable {
     let man: [EditorSection]
     let woman: [EditorSection]
 }
@@ -47,4 +47,14 @@ struct EditorSubsection: Codable {
 struct EditorColor: Codable {
     let id: Int
     let hash: String
+}
+
+class EditorSectionModel {
+    let name: String
+    let sections: [EditorSubsectionSectionModel]
+    
+    init(name: String, sections: [EditorSubsectionSectionModel]) {
+        self.name = name
+        self.sections = sections
+    }
 }

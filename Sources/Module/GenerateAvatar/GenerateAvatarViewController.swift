@@ -111,7 +111,6 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
         } else {
             shouldAutoOpenCamera = false
             layers = StickerLoader.defaultLayers
-//            StickerLoader.loadSticker(into: mainView.avatarImageView, placeholderImage: UIImage(libraryNamed: "defaultAvatar"))
             mainView.avatarImageView.alpha = 0
             close()
             isAvatarGenerated = true
@@ -210,23 +209,26 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
     private func nextStep() {
         guard let layers = layers else { return }
         
-        // TODO: сейчас у нас дефолтный бекграунд, потом нужно будет из аватара забрать сам аватар и бэкграунд
         let background = (mainView.backgroundImageView.image ?? UIImage()).pngData()
         let person = (mainView.avatarImageView.image ?? UIImage()).pngData()
         
-        let sfAvatar = SFAvatar(
-            avatarImage: nil,
-            personImage: person,
-            backgroundImage: background,
-            layers: layers,
-            personLayers: nil,
-            backgroundLayer: nil
-        )
-        
-        let vc = StickerFaceViewController(avatar: sfAvatar)
-        vc.modalPresentationStyle = .fullScreen
-        
-        navigationController?.setViewControllers([vc], animated: true)
+        StickerLoader.shared.renderLayer("428;\(layers)") { [weak self] image in
+            guard let self = self else { return }
+            
+            let sfAvatar = SFAvatar(
+                avatarImage: image.pngData(),
+                personImage: person,
+                backgroundImage: background,
+                layers: "428;" + layers,
+                personLayers: layers,
+                backgroundLayer: "428"
+            )
+            
+            let vc = StickerFaceViewController(avatar: sfAvatar)
+            vc.modalPresentationStyle = .fullScreen
+            
+            self.navigationController?.setViewControllers([vc], animated: true)
+        }
     }
     
     private func updateButtonTitles() {
@@ -294,7 +296,7 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
     
     private func upload(_ image: Data) {
         let defaultLayers = StickerLoader.defaultLayers
-        let resizedImage = resizeImage(image: UIImage(data: image, scale:1.0)!, targetSize: CGSize(width: 600, height: 600))
+        let resizedImage = resizeImage(image: UIImage(data: image, scale: 1.0)!, targetSize: CGSize(width: 600, height: 600))
         
         let imageData = resizedImage.jpegData(compressionQuality: 0.9)
         let urlString = "https://stickerface.io/api/process?platform=ios"

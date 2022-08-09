@@ -14,6 +14,8 @@ class EditorSectionHeaderCell: UICollectionViewCell {
         super.init(frame: frame)
         
         addSubview(titleLabel)
+        
+        setupConstraints()
     }
     
     @available(*, unavailable)
@@ -21,14 +23,12 @@ class EditorSectionHeaderCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        layout()
-    }
-    
-    private func layout() {
-        titleLabel.pin.top(4.0).bottom().left().right(20.0)
+    private func setupConstraints() {
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(16.0)
+            make.right.equalToSuperview().offset(-20)
+            make.bottom.left.equalToSuperview()
+        }
     }
     
 }

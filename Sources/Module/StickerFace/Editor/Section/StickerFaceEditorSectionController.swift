@@ -51,9 +51,9 @@ class StickerFaceEditorSectionController: ListSectionController {
         } else {
             layerIndex = index - 1
         }
-        
+
         guard let layers = sectionModel.editorSubsection.layers else { return }
-        
+
         if layers.count - 1 >= layerIndex, layerIndex >= 0 {
             delegate?.stickerFaceEditor(self, didSelect: layers[layerIndex], section: section)
         }
@@ -88,7 +88,7 @@ class StickerFaceEditorSectionController: ListSectionController {
         
         // size for titels
         if index == 0 || (layerColors.count > 0 && index == 2) {
-            return CGSize(width: collectionContext!.containerSize.width - 16 - 16, height: 30.0)
+            return CGSize(width: collectionContext!.containerSize.width - 16 - 16, height: 42.0)
         }
         
         // size for colors
@@ -153,6 +153,7 @@ class StickerFaceEditorSectionController: ListSectionController {
         }
          
         cell.layerImageView.image = nil
+        
         if let image = sectionModel.newLayersImages?[layer] {
             cell.skeletonView.hideSkeleton()
             cell.layerImageView.image = image
