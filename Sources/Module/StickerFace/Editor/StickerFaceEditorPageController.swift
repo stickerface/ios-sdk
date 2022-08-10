@@ -140,6 +140,7 @@ extension StickerFaceEditorPageController: StickerFaceEditorSectionDelegate {
     
     func stickerFaceEditor(_ controller: StickerFaceEditorSectionController, needRedner forLayer: String, section: String) {
         let layerForRender = LayerForRender(section: section, layer: forLayer)
+        
         if !layersForRender.contains(layerForRender) {
             layersForRender.append(layerForRender)
             renderLayer()
@@ -150,5 +151,18 @@ extension StickerFaceEditorPageController: StickerFaceEditorSectionDelegate {
         delegate?.stickerFaceEditorPageController(self, didSelect: layer, section: section)
     }
     
-    func stickerFaceEditor(_ controller: StickerFaceEditorSectionController, willDisplay header: String, in section: Int) { }    
+    func stickerFaceEditor(_ controller: StickerFaceEditorSectionController, willDisplay header: String, in section: Int, at index: Int) {
+        guard
+            let layer = sectionModel.sections[section].editorSubsection.layers?[index],
+            sectionModel.sections[section].newLayersImages?[layer] == nil
+        else { return }
+        
+        let sectionName = sectionModel.sections[section].editorSubsection.name
+        let layerForRender = LayerForRender(section: sectionName, layer: layer)
+        
+        if !layersForRender.contains(layerForRender) {
+            layersForRender.append(layerForRender)
+            renderLayer()
+        }
+    }
 }
