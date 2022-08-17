@@ -21,6 +21,7 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
     private var faceDetectTimer: Timer?
     private var uploadTaskTimer: Timer?
     private var uploadTask: URLSessionDataTask?
+    private let decodingQueue = DispatchQueue(label: "\(Bundle.main.bundleIdentifier!).decodingQueue")
     
     private let player: AVPlayer = {
         let path = Bundle.resourceBundle.path(forResource: "onboardingAvatar", ofType: "mp4")!
@@ -114,7 +115,7 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
             mainView.avatarImageView.alpha = 0
             close()
             isAvatarGenerated = true
-            nextStep()
+            defaultLayersTapped()
         }
     }
     
@@ -202,6 +203,36 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
                 self.mainView.avatarImageView.image = UIImage(libraryNamed: "defaultAvatar")
                 
             default: break
+            }
+        }
+    }
+    
+    private func defaultLayersTapped() {
+        let avatarBase: String = .avatarBase64()
+        let personBase: String = .personBase64()
+        let backgroundBase: String = .backgraoundBase64()
+        
+        decodingQueue.async {
+            guard
+                let avatarData = Data(base64Encoded: avatarBase),
+                let personData = Data(base64Encoded: personBase),
+                let backgroundData = Data(base64Encoded: backgroundBase)
+            else { return  }
+            
+            let sfAvatar = SFAvatar(
+                avatarImage: avatarData,
+                personImage: personData,
+                backgroundImage: backgroundData,
+                layers: "428;" + StickerLoader.defaultLayers,
+                personLayers: StickerLoader.defaultLayers,
+                backgroundLayer: "428"
+            )
+            
+            let vc = StickerFaceViewController(avatar: sfAvatar)
+            vc.modalPresentationStyle = .fullScreen
+            
+            DispatchQueue.main.async {
+                self.navigationController?.setViewControllers([vc], animated: true)
             }
         }
     }
