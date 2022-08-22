@@ -254,17 +254,7 @@ extension StickerFaceViewController: StickerFaceEditorControllerDelegate {
     func stickerFaceEditor(_ controller: StickerFaceEditorViewController, didSave layers: String) {
         SFDefaults.gender = mainView.genderButton.imageType == .female ? .female : .male
         self.layers = layers
-//        receiveAvatar()
-        
-        let image = mainView.avatarView.avatarImageView.image!
-               
-               // set up activity view controller
-        let imageToShare = [image]
-        let activityViewController = UIActivityViewController(activityItems: imageToShare, applicationActivities: nil)
-        activityViewController.popoverPresentationController?.sourceView = self.view // so that iPads won't crash
-                    
-        // present the view controller
-        self.present(activityViewController, animated: true, completion: nil)
+        receiveAvatar()
     }
     
     func stickerFaceEditor(_ controller: StickerFaceEditorViewController, didSelectPaid layer: String, layers withLayer: String, with price: Int, layerType: LayerType) {
