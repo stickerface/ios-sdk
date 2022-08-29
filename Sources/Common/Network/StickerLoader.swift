@@ -5,7 +5,7 @@ import WebKit
 public class StickerLoader: NSObject {
     
     public static var shared: StickerLoader = {
-       return StickerLoader()
+        return StickerLoader()
     }()
     
     public static let defaultLayers = Layers.man
@@ -21,19 +21,20 @@ public class StickerLoader: NSObject {
     private var isRendering: Bool = false
     private var isRenderReady: Bool = false
     private var layersForRender: [RenderLayer] = []
+    private var timer = Timer()
     
     override init() {
         super.init()
-                
+        
         let handler = AvatarRenderResponseHandler()
         handler.delegate = self
         
         renderWebView.navigationDelegate = self
         
-        renderWebView.load(URLRequest(url: URL(string: "https://stickerface.io/render.html")!))
+        renderWebView.load(URLRequest(url: URL(string: "https://stickerface.io/render2.html")!))
         renderWebView.configuration.userContentController.add(handler, name: handler.name)
     }
-
+    
     @discardableResult
     public static func loadSticker(into imgView: UIImageView, with layers: String = StickerLoader.defaultLayers, stickerType: StickerType = .avatar, outlined: Bool = false, size: CGFloat = UIScreen.main.bounds.width, placeholderStyle: PlaceholderStyle = .dark, placeholderImage: UIImage? = nil, completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) -> DownloadTask? {
         
@@ -41,7 +42,7 @@ public class StickerLoader: NSObject {
             .loadDiskFileSynchronously,
             .transition(.fade(0.2)),
         ]
-
+        
         imgView.tintColor = placeholderStyle == .dark ? UIColor.black.withAlphaComponent(0.06) : UIColor.white.withAlphaComponent(0.24)
         
         let placeholder = placeholderImage ?? UIImage(libraryNamed: "placeholder_sticker_200")
@@ -50,7 +51,7 @@ public class StickerLoader: NSObject {
         
         return imgView.kf.setImage(with: stickerURL, placeholder: placeholder, options: options, completionHandler: completionHandler)
     }
-
+    
     @discardableResult
     public func loadImage(url: String, completion: @escaping (UIImage) -> ()) -> URLSessionDataTask? {
         let url = url as NSString
@@ -62,17 +63,17 @@ public class StickerLoader: NSObject {
             let task = session.dataTask(with: URL(string: url as String)!) { [weak self] (data, response, error) in
                 if error == nil, let data = data, let image = UIImage(data: data) {
                     self?.cache.setObject(image, forKey: url)
-
+                    
                     DispatchQueue.main.async {
                         completion(image)
                     }
                 }
             }
             task.resume()
-
+            
             return task
         }
-
+        
         return nil
     }
     
@@ -80,9 +81,21 @@ public class StickerLoader: NSObject {
         let id = getNextRequestId()
         let layer = RenderLayer(id: id, size: size, layer: layer, completion: completionHandler)
         
-        layersForRender.append(layer)
+        print("=== layer created")
+        
+        layersForRender.insert(layer, at: 0)
         renderIfNeeded()
     }
+    
+    public func clearRenderQueue() {
+        print("=== will clear")
+        isRendering = false
+        isRenderReady = false
+        layersForRender.removeAll()
+        renderWebView.load(URLRequest(url: URL(string: "https://stickerface.io/render2.html")!))
+    }
+    
+    // MARK: - Private methods
     
     private func getNextRequestId() -> Int {
         let current = requestId
@@ -91,35 +104,89 @@ public class StickerLoader: NSObject {
         return current
     }
     
+    var needToRerender = false
+    
     private func renderIfNeeded() {
         guard let layer = layersForRender.first, isRenderReady, !isRendering else {
             return
         }
         
+        needToRerender = true
         isRendering = true
-        renderWebView.evaluateJavaScript(layer.renderString)
+        
+        print("=== will render")
+        
+        renderWebView.evaluateJavaScript(layer.renderString) { anyO, error in
+            print("=== rerender will")
+            self.timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
+//                if self.needToRerender {
+                    print("=== rerender did")
+                    self.isRendering = false
+                    self.renderIfNeeded()
+//                }
+            }
+            print("=== js completion")
+            if let error = error {
+                print("=== error", error)
+            }
+            
+            if anyO == nil {
+                print("=== any is nil")
+            }
+        }
     }
 }
 
 // MARK: - WKNavigationDelegate
+
 extension StickerLoader: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        print("=== render ready")
+        
         isRenderReady = true
         renderIfNeeded()
     }
 }
 
 // MARK: - AvatarRenderResponseHandlerDelegate
+
 extension StickerLoader: AvatarRenderResponseHandlerDelegate {
     func onImageReady(id: Int, base64: String) {
+        timer.invalidate()
         decodingQueue.async {
+            print("=== did render")
             guard
                 let index = self.layersForRender.firstIndex(where: { $0.id == id }),
                 let data = Data(base64Encoded: base64),
                 let image = UIImage(data: data)
-            else { return }
+            else {
+                DispatchQueue.main.async {
+                    if let index = self.layersForRender.firstIndex(where: { $0.id == id }) {
+                        if let data = Data(base64Encoded: base64) {
+                            if let image = UIImage(data: data) {
+                                
+                            } else {
+                                print("=== error no image")
+                            }
+                        } else {
+                            print("=== error no data")
+                        }
+                    } else {
+                        if self.layersForRender.first != nil {
+//                            self.layersForRender.removeFirst()
+                        }
+                        print("=== error no index")
+                    }
+                    
+                    self.isRendering = false
+                    self.renderIfNeeded()
+                }
+                
+                return
+            }
             
             DispatchQueue.main.async {
+                print("=== will completion")
                 self.layersForRender.remove(at: index).completion(image)
                 self.isRendering = false
                 self.renderIfNeeded()
@@ -153,7 +220,7 @@ extension StickerLoader {
         let completion: ImageAction
         
         var renderString: String {
-            return "renderPNG(\"\(layer)\", \(id), \(size * 4), {partial: true})"
+            return "renderPNG(\"\(layer)\", \(id), \(size * Float(UIScreen.main.scale)), {partial: true})"
         }
     }
 }

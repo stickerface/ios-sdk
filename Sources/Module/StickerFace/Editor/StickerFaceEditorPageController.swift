@@ -24,7 +24,6 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
     var requestId = 0
     var layersForRender = [LayerForRender]()
     var isRendering: Bool = false
-    var isRenderReady: Bool = true
     
     lazy var adapter: ListAdapter = {
         return ListAdapter(updater: ListAdapterUpdater(), viewController: self, workingRangeSize: 0)
@@ -56,7 +55,7 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
     }
         
     private func renderLayer() {
-        guard let layer = layersForRender.first, !isRendering, isRenderReady else {
+        guard let layer = layersForRender.first, !isRendering else {
             adapter.reloadData()
             return
         }

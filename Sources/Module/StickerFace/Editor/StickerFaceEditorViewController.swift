@@ -288,7 +288,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         if needSetupGender {
             if layersWithout(section: "hair", layers: layers).sectionLayer == "0" {
                 SFDefaults.gender = SFDefaults.gender == .male ? .female : .male
-                return 
+                return
             }
         }
         
@@ -547,6 +547,7 @@ extension StickerFaceEditorViewController: StickerFaceEditorDelegate {
     }
     
     func setGender(_ gender: SFDefaults.Gender) {
+        StickerLoader.shared.clearRenderQueue()
         currentLayers = gender == .male ? StickerLoader.defaultLayers : StickerLoader.defaultWomanLayers
         
         setupSections(needSetDefault: true, for: gender)

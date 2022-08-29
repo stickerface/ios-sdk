@@ -231,7 +231,6 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
             DispatchQueue.main.async {
                 let vc = StickerFaceViewController(avatar: sfAvatar)
                 vc.modalPresentationStyle = .fullScreen
-                
                 self.navigationController?.setViewControllers([vc], animated: true)
             }
         }
