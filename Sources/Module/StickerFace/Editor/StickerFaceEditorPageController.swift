@@ -93,6 +93,7 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
         let allLayers = editorDelegate?.replaceCurrentLayers(with: layers, with: nil, isCurrent: true)
         let layersWitoutBack = editorDelegate?.layersWithout(section: "background", layers: allLayers ?? "")
         let layersWithoutClothing = editorDelegate?.layersWithout(section: "clothing", layers: layersWitoutBack?.layers ?? "")
+        let fireLayers = ["1", "0", "25", "273", layersWithoutClothing?.sectionLayer ?? ""]
         
         if layers == "0" || layers == "" {
             neededLayers = layers
@@ -104,12 +105,13 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
             neededLayers = layersWithoutClothing?.layers ?? ""
         }
 
-        neededLayers = neededLayers.replacingOccurrences(of: ";1;", with: ";")
-        neededLayers = neededLayers.replacingOccurrences(of: ";0;", with: ";")
-        neededLayers = neededLayers.replacingOccurrences(of: ";25;", with: ";")
-        neededLayers = neededLayers.replacingOccurrences(of: ";273;", with: ";")
+        let layersArray = neededLayers.split(separator: ";")
+        let neededArray = layersArray.compactMap { layer -> String? in
+            guard !fireLayers.contains(String(layer)) else { return nil }
+            return String(layer)
+        }
         
-        return neededLayers
+        return neededArray.joined(separator: ";")
     }
 }
 
