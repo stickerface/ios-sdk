@@ -33,9 +33,6 @@ class LayerColorEmbeddedSectionController: ListSectionController {
     
     private func configure(cell: LayerColorEmbeddedCell) -> LayerColorEmbeddedCell {
         cell.colorView.backgroundColor = UIColor(hex: sectionModel.color.hash)
-        
-        cell.colorSelectionIndicatorView.isHidden = !sectionModel.isSelected
-        cell.colorSelectionIndicatorView.tintColor = UIColor(hex: sectionModel.color.hash)
                 
         return cell
     }

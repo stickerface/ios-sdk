@@ -134,6 +134,12 @@ class StickerFaceEditorSectionController: ListSectionController {
     private func configure(cell: LayerColorSelectorEmbeddedCell) -> LayerColorSelectorEmbeddedCell {
         adapter.collectionView = cell.collectionView
         adapter.dataSource = self
+        adapter.scrollViewDelegate = self
+    
+        if let index = layerColors.firstIndex(where: { String($0.color.id) == sectionModel.selectedColor }) {
+            cell.colorSelectionIndicatorView.tintColor = UIColor(hex: layerColors[index].color.hash)
+            cell.collectionView.scrollToItem(at: IndexPath(item: 0, section: index), at: .centeredHorizontally, animated: true)
+        }
         
         return cell
     }
@@ -182,18 +188,36 @@ class StickerFaceEditorSectionController: ListSectionController {
         guard
             let collectionView = adapter.collectionView,
             let point = collectionView.superview?.convert(collectionView.center, to: collectionView)
-        else {
-            return nil
-        }
+        else { return nil }
         
         return collectionView.indexPathForItem(at: point)
     }
     
 }
 
+// MARK: - ScrollViewDelegate
+
+extension StickerFaceEditorSectionController: UIScrollViewDelegate {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        if let indexPath = centeredIndexPath(), layerColors.count > indexPath.section {
+            let color = layerColors[indexPath.section].color
+            delegate?.stickerFaceEditor(self, didSelect: String(color.id), section: section)
+        }
+    }
+}
+
+// MARK: - LayerColorEmbeddedSectionControllerDelegate
+
+extension StickerFaceEditorSectionController: LayerColorEmbeddedSectionControllerDelegate {
+    func layerColorEmbeddedSectionController(_ controller: LayerColorEmbeddedSectionController, didSelect color: EditorColor) {
+        
+        delegate?.stickerFaceEditor(self, didSelect: String(color.id), section: section)
+    }
+}
+
 // MARK: - ListAdapterDataSource
+
 extension StickerFaceEditorSectionController: ListAdapterDataSource {
-    
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
         return layerColors
     }
@@ -208,21 +232,11 @@ extension StickerFaceEditorSectionController: ListAdapterDataSource {
     func emptyView(for listAdapter: ListAdapter) -> UIView? {
         return nil
     }
-    
-}
-
-// MARK: - LayerColorEmbeddedSectionControllerDelegate
-extension StickerFaceEditorSectionController: LayerColorEmbeddedSectionControllerDelegate {
-    
-    func layerColorEmbeddedSectionController(_ controller: LayerColorEmbeddedSectionController, didSelect color: EditorColor) {
-        delegate?.stickerFaceEditor(self, didSelect: String(color.id), section: section)
-    }
-    
 }
 
 // MARK: - ListDisplayDelegate
-extension StickerFaceEditorSectionController: ListDisplayDelegate {
 
+extension StickerFaceEditorSectionController: ListDisplayDelegate {
     func listAdapter(_ listAdapter: ListAdapter, willDisplay sectionController: ListSectionController, cell: UICollectionViewCell, at index: Int) {
         let layerIndex: Int
         if layerColors.count > 0 {
@@ -243,5 +257,4 @@ extension StickerFaceEditorSectionController: ListDisplayDelegate {
     func listAdapter(_ listAdapter: ListAdapter, willDisplay sectionController: ListSectionController) {}
     func listAdapter(_ listAdapter: ListAdapter, didEndDisplaying sectionController: ListSectionController) {}
     func listAdapter(_ listAdapter: ListAdapter, didEndDisplaying sectionController: ListSectionController, cell: UICollectionViewCell, at index: Int) {}
-
 }
