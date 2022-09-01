@@ -21,7 +21,7 @@ public class StickerLoader: NSObject {
     private var isRendering: Bool = false
     private var isRenderReady: Bool = false
     private var layersForRender: [RenderLayer] = []
-    private var timer = Timer()
+    private var reRenderTimer = Timer()
     
     override init() {
         super.init()
@@ -111,19 +111,15 @@ public class StickerLoader: NSObject {
             return
         }
         
-        needToRerender = true
         isRendering = true
         
         print("=== will render")
         
         renderWebView.evaluateJavaScript(layer.renderString) { anyO, error in
             print("=== rerender will")
-            self.timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
-//                if self.needToRerender {
-                    print("=== rerender did")
-                    self.isRendering = false
-                    self.renderIfNeeded()
-//                }
+            self.reRenderTimer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
+                print("=== rerender did")
+                self.renderIfNeeded()
             }
             print("=== js completion")
             if let error = error {
@@ -152,7 +148,8 @@ extension StickerLoader: WKNavigationDelegate {
 
 extension StickerLoader: AvatarRenderResponseHandlerDelegate {
     func onImageReady(id: Int, base64: String) {
-        timer.invalidate()
+        reRenderTimer.invalidate()
+        
         decodingQueue.async {
             print("=== did render")
             guard
@@ -161,20 +158,15 @@ extension StickerLoader: AvatarRenderResponseHandlerDelegate {
                 let image = UIImage(data: data)
             else {
                 DispatchQueue.main.async {
-                    if let index = self.layersForRender.firstIndex(where: { $0.id == id }) {
+                    if self.layersForRender.firstIndex(where: { $0.id == id }) != nil {
                         if let data = Data(base64Encoded: base64) {
-                            if let image = UIImage(data: data) {
-                                
-                            } else {
+                            if UIImage(data: data) == nil {
                                 print("=== error no image")
                             }
                         } else {
                             print("=== error no data")
                         }
                     } else {
-                        if self.layersForRender.first != nil {
-//                            self.layersForRender.removeFirst()
-                        }
                         print("=== error no index")
                     }
                     
@@ -210,7 +202,7 @@ extension StickerLoader {
     
     enum Layers {
         static let man = "69;159;253;250;13;160;100;3040;265;1;76;3000;273;3200;90;28;23;203;11;68;219;83;35;"
-        static let woman = "69;159;253;250;160;3040;265;76;3000;273;3200;90;83;0;25;133;224;132,134;10;39;15;32;101;"
+        static let woman = "69;159;253;250;160;3040;265;76;3000;273;3200;90;83;0;0;0;25;133;224;132,134;10;39;15;32;101;"
     }
     
     struct RenderLayer {
