@@ -115,13 +115,13 @@ public class StickerLoader: NSObject {
         
         print("=== will render")
         
+        reRenderTimer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
+            print("=== rerender did")
+            self.isRendering = false
+            self.renderIfNeeded()
+        }
+        
         renderWebView.evaluateJavaScript(layer.renderString) { anyO, error in
-            print("=== rerender will")
-            self.reRenderTimer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
-                print("=== rerender did")
-                self.renderIfNeeded()
-            }
-            print("=== js completion")
             if let error = error {
                 print("=== error", error)
             }
@@ -141,6 +141,10 @@ extension StickerLoader: WKNavigationDelegate {
         
         isRenderReady = true
         renderIfNeeded()
+    }
+    
+    public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        print("=== webView error", error)
     }
 }
 

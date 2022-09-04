@@ -119,7 +119,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     
     // MARK: Public methods
     
-    func updateSelectedLayers() {
+    func updateSelectedLayers(_ selectedLayer: String? = nil) {
         var layers = currentLayers
         
         if let range = layers.range(of: "/") {
@@ -134,15 +134,13 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                 subsection.selectedColor = nil
                 subsection.selectedLayer = "0"
                 
-                if let header = headers.first(where: { $0.isSelected }), header.title.lowercased() != object.name.lowercased() {
-                    if header.title.lowercased() != "background", subsection.editorSubsection.name.lowercased() != "background" {
-                        subsection.newLayersImages = nil
-                    }
-                }
-                
                 if let editorLayers = subsection.editorSubsection.layers,
                    let layer = editorLayers.first(where: { layersArray.contains($0) }) {
                     subsection.selectedLayer = layer
+                }
+                
+                if subsection.selectedLayer != selectedLayer {
+                    subsection.newLayersImages = nil
                 }
                 
                 if let colorLayers = subsection.editorSubsection.colors?.compactMap({ String($0.id) }),
@@ -162,37 +160,6 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                     }
                 }
             }
-//            let prevColor = object.selectedColor
-//            object.selectedColor = nil
-//            object.selectedLayer = "0"
-//
-//            if let header = headers.first(where: { $0.isSelected }), header.title.lowercased() != object.editorSubsection.name.lowercased() {
-//                if header.title.lowercased() != "background", object.editorSubsection.name.lowercased() != "background" {
-//                    object.newLayersImages = nil
-//                }
-//            }
-//
-//            if let editorLayers = object.editorSubsection.layers,
-//               let layer = editorLayers.first(where: { layersArray.contains($0) }) {
-//                object.selectedLayer = layer
-//            }
-//
-//            if let colorLayers = object.editorSubsection.colors?.compactMap({ String($0.id) }),
-//               let colorId = layersArray.first(where: { colorLayers.contains($0) }) {
-//                object.selectedColor = colorId
-//
-//                if prevColor != colorId {
-//                    object.newLayersImages = nil
-//                }
-//            }
-//
-//            if let viewController = viewControllers?[index] as? StickerFaceEditorPageController {
-//                viewController.sectionModel = object
-//
-//                if index == headers.firstIndex(where: { $0.isSelected }) {
-//                    viewController.needUpdate()
-//                }
-//            }
         }
     }
     
@@ -239,18 +206,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         }
         
         let sections = gender == .male ? editor.sections.man : editor.sections.woman
-        
-//        headers = sections.flatMap({ $0.subsections }).compactMap({ subsection in
-//
-////            subsection.name != "background"
-//            if subsection.name != "clothing", subsection.name != "glasses", subsection.name != "tattoos", subsection.name != "accessories", subsection.name != "masks" {
-//                let model = EditorHeaderSectionModel(title: subsection.name)
-//                return model
-//            }
-//
-//            return nil
-//        })
-        
+                
         headers = sections.compactMap { section in
             guard section.name != "Clothing", section.name != "Accessories" else { return nil }
             return EditorHeaderSectionModel(title: section.name)
@@ -453,7 +409,7 @@ extension StickerFaceEditorViewController: StickerFaceEditorPageDelegate {
                 delegate?.stickerFaceEditor(self, didUpdate: currentLayers)
             }
             
-            updateSelectedLayers()
+            updateSelectedLayers(layer)
         }
     }
 }
