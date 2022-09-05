@@ -11,7 +11,7 @@
 // Onboarding
 "onboardingTitle" = "Welcome to StickerFace";
 "onboardingSubtitle" = "Design your awesome character and get the NFT to own your unique set";
-"onboardingPrivacyPolicyAndRules" = "By continuing you agree to our <a href='https://sticketfacelanding.herokuapp.com/policy'>Terms of Service</a> and <a href='https://sticketfacelanding.herokuapp.com/policy'>Privacy Policy</a>";
+"onboardingPrivacyPolicyAndRules" = "By continuing you agree to our <a href='https://stickerface.io/policy'>Terms of Service</a> and <a href='https://stickerface.io/policy'>Privacy Policy</a>";
 
 // Setup Avatar
 "setupAvatarTitle" = "Avatar";

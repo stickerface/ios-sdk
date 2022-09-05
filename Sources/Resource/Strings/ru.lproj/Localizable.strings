@@ -11,7 +11,7 @@
 // Onboarding
 "onboardingTitle" = "Добро пожаловать в StickerFace";
 "onboardingSubtitle" = "Создайте своего потрясающего персонажа и получите NFT, чтобы владеть вашим уникальным набором";
-"onboardingPrivacyPolicyAndRules" = "Продолжая, вы соглашаетесь с нашими <a href='TermsOFServiceURL'>Правилами</a> and <a href='PrivacyPolicyURL'>Политикой конфиденциальности</a>";
+"onboardingPrivacyPolicyAndRules" = "Продолжая, вы соглашаетесь с нашими <a href='https://stickerface.io/policy'>Правилами</a> and <a href='https://stickerface.io/policy'>Политикой конфиденциальности</a>";
 
 // Setup Avatar
 "setupAvatarTitle" = "Аватар";

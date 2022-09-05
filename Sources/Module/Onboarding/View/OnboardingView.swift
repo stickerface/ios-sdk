@@ -53,6 +53,7 @@ class OnboardingView: RootView {
         let a = Style("a")
             .underlineStyle(.single)
             .underlineColor(label.textColor)
+            .foregroundColor(label.textColor.withAlphaComponent(0.5), .highlighted)
         
         label.attributedText = "onboardingPrivacyPolicyAndRules".libraryLocalized.style(tags: a)
         
