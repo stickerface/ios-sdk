@@ -19,6 +19,7 @@ class StickerFaceEditorView: RootView {
         let view = UIImageView()
         view.image = UIImage(libraryNamed: "sections_fade_left")
         view.backgroundColor = .clear
+        view.alpha = 0
         
         return view
     }()
@@ -28,7 +29,7 @@ class StickerFaceEditorView: RootView {
         collectionViewLayout.scrollDirection = .horizontal
         
         let view = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
-        view.contentInset = UIEdgeInsets(top: 16.0, left: 16.0, bottom: 16.0, right: 16.0)
+        view.contentInset = UIEdgeInsets(top: 16.0, left: 0.0, bottom: 16.0, right: 0.0)
         view.alwaysBounceHorizontal = true
         view.showsHorizontalScrollIndicator = false
         view.backgroundColor = .white
@@ -128,7 +129,7 @@ class StickerFaceEditorView: RootView {
         }
         
         leftGradientView.snp.makeConstraints { make in
-            make.top.left.equalToSuperview()
+            make.left.equalToSuperview()
             make.height.equalTo(headerCollectionView.snp.height)
         }
         

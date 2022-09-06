@@ -25,9 +25,7 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
     var layersForRender = [LayerForRender]()
     var isRendering: Bool = false
     
-    lazy var adapter: ListAdapter = {
-        return ListAdapter(updater: ListAdapterUpdater(), viewController: self, workingRangeSize: 0)
-    }()
+    private lazy var adapter = ListAdapter(updater: ListAdapterUpdater(), viewController: self, workingRangeSize: 0)
     
     init(sectionModel: EditorSectionModel) {
         self.sectionModel = sectionModel
@@ -43,15 +41,6 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
         
         adapter.collectionView = mainView.collectionView
         adapter.dataSource = self
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-//        if sectionModel.newLayersImages == nil {
-//            sectionModel.oldLayersImages = nil
-//            adapter.reloadData()
-//        }
     }
         
     private func renderLayer() {

@@ -46,13 +46,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     private var objects: [EditorSectionModel] = []
     private var viewControllers: [UIViewController]? = []
     
-    private lazy var headerAdapter: ListAdapter = {
-        return ListAdapter(updater: ListAdapterUpdater(), viewController: self, workingRangeSize: 0)
-    }()
-    
-    private lazy var adapter: ListAdapter = {
-        return ListAdapter(updater: ListAdapterUpdater(), viewController: self, workingRangeSize: 0)
-    }()
+    private lazy var headerAdapter = ListAdapter(updater: ListAdapterUpdater(), viewController: self, workingRangeSize: 0)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,6 +56,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         
         headerAdapter.collectionView = mainView.headerCollectionView
         headerAdapter.dataSource = self
+        headerAdapter.scrollViewDelegate = self
         
         addChild(mainView.pageViewController)
         
@@ -83,38 +78,6 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     @objc private func notConnectButtonTapped() {
         mainView.loaderView.isHidden = false
         loadEditor()
-    }
-    
-    @objc private func changeSelectedTab(_ gestureRecognizer: UISwipeGestureRecognizer) {
-        guard let selectedIndex = headers.firstIndex(where: { $0.isSelected }) else {
-            return
-        }
-        
-        var newIndex = selectedIndex
-        if gestureRecognizer.direction == .left, selectedIndex + 1 < viewControllers?.count ?? 0 {
-            newIndex = selectedIndex + 1
-        } else if gestureRecognizer.direction == .right, selectedIndex - 1 >= 0 {
-            newIndex = selectedIndex - 1
-        }
-        
-        if let viewController = mainView.pageViewController.viewControllers?.first as? StickerFaceEditorPageController {
-            guard
-                let viewControllers = viewControllers,
-                viewControllers.count > newIndex,
-                let vc = viewControllers[newIndex] as? StickerFaceEditorPageController
-            else { return }
-            
-            if newIndex > viewController.index {
-                mainView.pageViewController.setViewControllers([vc], direction: .forward, animated: true)
-            } else if newIndex < viewController.index {
-                mainView.pageViewController.setViewControllers([vc], direction: .reverse, animated: true)
-            }
-            
-            headers.forEach { $0.isSelected = $0.title == vc.sectionModel.name }
-            headerAdapter.reloadData(completion: nil)
-            
-            mainView.headerCollectionView.scrollToItem(at: IndexPath(item: 0, section: vc.index), at: .centeredHorizontally, animated: true)
-        }
     }
     
     // MARK: Public methods
@@ -278,13 +241,6 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         
         var layersArray = layers.components(separatedBy: ";")
         
-//        let editorSubsection = objects.flatMap { $0.sections }.compactMap { $0.editorSubsection }
-//        let layersSubsection = editorSubsection.first(where: { $0.layers?.contains(replacementLayer) ?? false })
-//        let colorSubsection = editorSubsection.first { subsection in
-//            let colors = subsection.colors?.compactMap { String($0.id) }
-//            return colors?.contains(replacementLayer) ?? false
-//        }
-        
         let section = headers.firstIndex(where: { $0.isSelected }) ?? 0
         let editorSubsection = objects[section].sections[subsection].editorSubsection
         
@@ -320,9 +276,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
 
 // MARK: - ListAdapterDataSource
 extension StickerFaceEditorViewController: ListAdapterDataSource {
-    func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
-        return headers
-    }
+    func objects(for listAdapter: ListAdapter) -> [ListDiffable] { headers }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
         let editorHeaderSectionController = EditorHeaderSectionController()
@@ -331,9 +285,7 @@ extension StickerFaceEditorViewController: ListAdapterDataSource {
         return editorHeaderSectionController
     }
     
-    func emptyView(for listAdapter: ListAdapter) -> UIView? {
-        return nil
-    }
+    func emptyView(for listAdapter: ListAdapter) -> UIView? { nil }
 }
 
 // MARK: - EditorHeaderSectionControllerDelegate
@@ -508,5 +460,18 @@ extension StickerFaceEditorViewController: StickerFaceEditorDelegate {
         
         setupSections(needSetDefault: true, for: gender)
         delegate?.stickerFaceEditor(self, didUpdate: currentLayers)
+    }
+}
+
+// MARK: - UIScrollViewDelegate
+extension StickerFaceEditorViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        UIView.animate(withDuration: 0.15, delay: 0.0, options: .curveEaseInOut) {
+            let contentOffsetX = scrollView.contentOffset.x
+            self.mainView.leftGradientView.alpha = contentOffsetX < 10.0 ? 0 : 1
+            
+            let maxContentOffsetX = max(0, scrollView.maxContentOffset.x - 10.0)
+            self.mainView.rightGradientView.alpha = maxContentOffsetX < contentOffsetX ? 0 : 1
+        }
     }
 }
