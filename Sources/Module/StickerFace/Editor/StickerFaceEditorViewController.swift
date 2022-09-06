@@ -46,13 +46,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     private var objects: [EditorSectionModel] = []
     private var viewControllers: [UIViewController]? = []
     
-    private lazy var headerAdapter: ListAdapter = {
-        return ListAdapter(updater: ListAdapterUpdater(), viewController: self, workingRangeSize: 0)
-    }()
-    
-    private lazy var adapter: ListAdapter = {
-        return ListAdapter(updater: ListAdapterUpdater(), viewController: self, workingRangeSize: 0)
-    }()
+    private lazy var headerAdapter = ListAdapter(updater: ListAdapterUpdater(), viewController: self, workingRangeSize: 0)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,6 +56,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         
         headerAdapter.collectionView = mainView.headerCollectionView
         headerAdapter.dataSource = self
+        headerAdapter.scrollViewDelegate = self
         
         addChild(mainView.pageViewController)
         
@@ -85,41 +80,9 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         loadEditor()
     }
     
-    @objc private func changeSelectedTab(_ gestureRecognizer: UISwipeGestureRecognizer) {
-        guard let selectedIndex = headers.firstIndex(where: { $0.isSelected }) else {
-            return
-        }
-        
-        var newIndex = selectedIndex
-        if gestureRecognizer.direction == .left, selectedIndex + 1 < viewControllers?.count ?? 0 {
-            newIndex = selectedIndex + 1
-        } else if gestureRecognizer.direction == .right, selectedIndex - 1 >= 0 {
-            newIndex = selectedIndex - 1
-        }
-        
-        if let viewController = mainView.pageViewController.viewControllers?.first as? StickerFaceEditorPageController {
-            guard
-                let viewControllers = viewControllers,
-                viewControllers.count > newIndex,
-                let vc = viewControllers[newIndex] as? StickerFaceEditorPageController
-            else { return }
-            
-            if newIndex > viewController.index {
-                mainView.pageViewController.setViewControllers([vc], direction: .forward, animated: true)
-            } else if newIndex < viewController.index {
-                mainView.pageViewController.setViewControllers([vc], direction: .reverse, animated: true)
-            }
-            
-            headers.forEach { $0.isSelected = $0.title == vc.sectionModel.name }
-            headerAdapter.reloadData(completion: nil)
-            
-            mainView.headerCollectionView.scrollToItem(at: IndexPath(item: 0, section: vc.index), at: .centeredHorizontally, animated: true)
-        }
-    }
-    
     // MARK: Public methods
     
-    func updateSelectedLayers() {
+    func updateSelectedLayers(_ selectedLayer: String? = nil) {
         var layers = currentLayers
         
         if let range = layers.range(of: "/") {
@@ -134,15 +97,13 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                 subsection.selectedColor = nil
                 subsection.selectedLayer = "0"
                 
-                if let header = headers.first(where: { $0.isSelected }), header.title.lowercased() != object.name.lowercased() {
-                    if header.title.lowercased() != "background", subsection.editorSubsection.name.lowercased() != "background" {
-                        subsection.newLayersImages = nil
-                    }
-                }
-                
                 if let editorLayers = subsection.editorSubsection.layers,
                    let layer = editorLayers.first(where: { layersArray.contains($0) }) {
                     subsection.selectedLayer = layer
+                }
+                
+                if subsection.selectedLayer != selectedLayer {
+                    subsection.newLayersImages = nil
                 }
                 
                 if let colorLayers = subsection.editorSubsection.colors?.compactMap({ String($0.id) }),
@@ -162,37 +123,6 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                     }
                 }
             }
-//            let prevColor = object.selectedColor
-//            object.selectedColor = nil
-//            object.selectedLayer = "0"
-//
-//            if let header = headers.first(where: { $0.isSelected }), header.title.lowercased() != object.editorSubsection.name.lowercased() {
-//                if header.title.lowercased() != "background", object.editorSubsection.name.lowercased() != "background" {
-//                    object.newLayersImages = nil
-//                }
-//            }
-//
-//            if let editorLayers = object.editorSubsection.layers,
-//               let layer = editorLayers.first(where: { layersArray.contains($0) }) {
-//                object.selectedLayer = layer
-//            }
-//
-//            if let colorLayers = object.editorSubsection.colors?.compactMap({ String($0.id) }),
-//               let colorId = layersArray.first(where: { colorLayers.contains($0) }) {
-//                object.selectedColor = colorId
-//
-//                if prevColor != colorId {
-//                    object.newLayersImages = nil
-//                }
-//            }
-//
-//            if let viewController = viewControllers?[index] as? StickerFaceEditorPageController {
-//                viewController.sectionModel = object
-//
-//                if index == headers.firstIndex(where: { $0.isSelected }) {
-//                    viewController.needUpdate()
-//                }
-//            }
         }
     }
     
@@ -239,18 +169,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         }
         
         let sections = gender == .male ? editor.sections.man : editor.sections.woman
-        
-//        headers = sections.flatMap({ $0.subsections }).compactMap({ subsection in
-//
-////            subsection.name != "background"
-//            if subsection.name != "clothing", subsection.name != "glasses", subsection.name != "tattoos", subsection.name != "accessories", subsection.name != "masks" {
-//                let model = EditorHeaderSectionModel(title: subsection.name)
-//                return model
-//            }
-//
-//            return nil
-//        })
-        
+                
         headers = sections.compactMap { section in
             guard section.name != "Clothing", section.name != "Accessories" else { return nil }
             return EditorHeaderSectionModel(title: section.name)
@@ -288,7 +207,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         if needSetupGender {
             if layersWithout(section: "hair", layers: layers).sectionLayer == "0" {
                 SFDefaults.gender = SFDefaults.gender == .male ? .female : .male
-                return 
+                return
             }
         }
         
@@ -321,13 +240,6 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         }
         
         var layersArray = layers.components(separatedBy: ";")
-        
-//        let editorSubsection = objects.flatMap { $0.sections }.compactMap { $0.editorSubsection }
-//        let layersSubsection = editorSubsection.first(where: { $0.layers?.contains(replacementLayer) ?? false })
-//        let colorSubsection = editorSubsection.first { subsection in
-//            let colors = subsection.colors?.compactMap { String($0.id) }
-//            return colors?.contains(replacementLayer) ?? false
-//        }
         
         let section = headers.firstIndex(where: { $0.isSelected }) ?? 0
         let editorSubsection = objects[section].sections[subsection].editorSubsection
@@ -364,9 +276,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
 
 // MARK: - ListAdapterDataSource
 extension StickerFaceEditorViewController: ListAdapterDataSource {
-    func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
-        return headers
-    }
+    func objects(for listAdapter: ListAdapter) -> [ListDiffable] { headers }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
         let editorHeaderSectionController = EditorHeaderSectionController()
@@ -375,9 +285,7 @@ extension StickerFaceEditorViewController: ListAdapterDataSource {
         return editorHeaderSectionController
     }
     
-    func emptyView(for listAdapter: ListAdapter) -> UIView? {
-        return nil
-    }
+    func emptyView(for listAdapter: ListAdapter) -> UIView? { nil }
 }
 
 // MARK: - EditorHeaderSectionControllerDelegate
@@ -453,7 +361,7 @@ extension StickerFaceEditorViewController: StickerFaceEditorPageDelegate {
                 delegate?.stickerFaceEditor(self, didUpdate: currentLayers)
             }
             
-            updateSelectedLayers()
+            updateSelectedLayers(layer)
         }
     }
 }
@@ -547,9 +455,23 @@ extension StickerFaceEditorViewController: StickerFaceEditorDelegate {
     }
     
     func setGender(_ gender: SFDefaults.Gender) {
+        StickerLoader.shared.clearRenderQueue()
         currentLayers = gender == .male ? StickerLoader.defaultLayers : StickerLoader.defaultWomanLayers
         
         setupSections(needSetDefault: true, for: gender)
         delegate?.stickerFaceEditor(self, didUpdate: currentLayers)
+    }
+}
+
+// MARK: - UIScrollViewDelegate
+extension StickerFaceEditorViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        UIView.animate(withDuration: 0.15, delay: 0.0, options: .curveEaseInOut) {
+            let contentOffsetX = scrollView.contentOffset.x
+            self.mainView.leftGradientView.alpha = contentOffsetX < 10.0 ? 0 : 1
+            
+            let maxContentOffsetX = max(0, scrollView.maxContentOffset.x - 10.0)
+            self.mainView.rightGradientView.alpha = maxContentOffsetX < contentOffsetX ? 0 : 1
+        }
     }
 }

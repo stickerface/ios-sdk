@@ -105,15 +105,15 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
             
         case .logout:
             let alert = UIAlertController(title: "Are sure you want to log out?", message: "After logging out you will not be able to buy NFTs for your avatar", preferredStyle: .alert)
-            
+
             let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
             let logoutAction = UIAlertAction(title: "Log out", style: .default) { _ in
                 StickerFace.shared.logoutUser()
             }
-            
+
             alert.addAction(cancelAction)
             alert.addAction(logoutAction)
-            
+
             present(alert, animated: true)
         }
     }
@@ -168,8 +168,9 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     private func renderAvatar() {
         guard let editorDelegate = editorDelegate else { return }
         let tuple = editorDelegate.layersWithout(section: "background", layers: layers)
+        let size = Float(mainView.avatarView.frame.size.maxSide)
         
-        StickerLoader.shared.renderLayer(tuple.layers) { [weak self] image in
+        StickerLoader.shared.renderLayer(tuple.layers, size: size) { [weak self] image in
             guard let self = self else { return }
             self.mainView.avatarView.avatarImageView.image = image
         }
@@ -178,9 +179,10 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     private func renderBackground() {
         guard let editorDelegate = editorDelegate else { return }
         let tuple = editorDelegate.layersWithout(section: "background", layers: layers)
+        let size = Float(mainView.backgroundImageView.frame.size.maxSide)
         
         if tuple.sectionLayer != "0" {
-            StickerLoader.shared.renderLayer(tuple.sectionLayer) { [weak self] image in
+            StickerLoader.shared.renderLayer(tuple.sectionLayer, size: size) { [weak self] image in
                 guard let self = self else { return }
                 self.mainView.backgroundImageView.image = image
             }

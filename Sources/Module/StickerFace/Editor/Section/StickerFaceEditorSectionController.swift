@@ -4,7 +4,7 @@ import SkeletonView
 
 protocol StickerFaceEditorSectionDelegate: AnyObject {
     func stickerFaceEditor(_ controller: StickerFaceEditorSectionController, didSelect layer: String, section: Int)
-    func stickerFaceEditor(_ controller: StickerFaceEditorSectionController, willDisplay header: String, in section: Int)
+    func stickerFaceEditor(_ controller: StickerFaceEditorSectionController, willDisplay header: String, in section: Int, at index: Int)
     func stickerFaceEditor(_ controller: StickerFaceEditorSectionController, needRedner forLayer: String, section: String)
 }
 
@@ -134,6 +134,10 @@ class StickerFaceEditorSectionController: ListSectionController {
     private func configure(cell: LayerColorSelectorEmbeddedCell) -> LayerColorSelectorEmbeddedCell {
         adapter.collectionView = cell.collectionView
         adapter.dataSource = self
+    
+        if let index = layerColors.firstIndex(where: { String($0.color.id) == sectionModel.selectedColor }) {
+            cell.collectionView.scrollToItem(at: IndexPath(item: 0, section: index), at: .centeredHorizontally, animated: true)
+        }
         
         return cell
     }
@@ -224,8 +228,19 @@ extension StickerFaceEditorSectionController: LayerColorEmbeddedSectionControlle
 extension StickerFaceEditorSectionController: ListDisplayDelegate {
 
     func listAdapter(_ listAdapter: ListAdapter, willDisplay sectionController: ListSectionController, cell: UICollectionViewCell, at index: Int) {
-        if index <= numberOfItems() / 2 {
-            delegate?.stickerFaceEditor(self, willDisplay: sectionModel.editorSubsection.name, in: section)
+        let layerIndex: Int
+        if layerColors.count > 0 {
+            layerIndex = index - 3
+        } else if sectionModel.editorSubsection.name == "background" {
+            layerIndex = index
+        } else {
+            layerIndex = index - 1
+        }
+
+        guard let layers = sectionModel.editorSubsection.layers else { return }
+
+        if layers.count - 1 >= layerIndex, layerIndex >= 0 {
+            delegate?.stickerFaceEditor(self, willDisplay: sectionModel.editorSubsection.name, in: section, at: layerIndex)
         }
     }
 

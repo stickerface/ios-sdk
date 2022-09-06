@@ -13,6 +13,7 @@ extension StickerFace {
     }
     
     func cancelChange() {
+        StickerLoader.shared.clearRenderQueue()
         delegate?.stickerFace(didCanceled: RootNavigationController.shared)
     }
 }

@@ -2,7 +2,7 @@ import UIKit
 
 class LayerColorSelectorEmbeddedCell: UICollectionViewCell {
         
-    private(set) lazy var collectionView: UICollectionView = {
+    let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         

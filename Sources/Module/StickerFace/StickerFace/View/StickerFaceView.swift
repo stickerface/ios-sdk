@@ -113,7 +113,7 @@ class StickerFaceView: RootView {
                 
         backgroundImageView.snp.makeConstraints { make in
             make.left.right.top.equalToSuperview()
-            make.bottom.equalTo(avatarView.snp.bottom).offset(12.0)
+            make.bottom.equalTo(avatarView.snp.bottom).offset(25.0)
         }
         
         blurView.snp.makeConstraints { make in

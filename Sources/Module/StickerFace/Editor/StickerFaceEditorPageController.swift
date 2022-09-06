@@ -24,11 +24,8 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
     var requestId = 0
     var layersForRender = [LayerForRender]()
     var isRendering: Bool = false
-    var isRenderReady: Bool = true
     
-    lazy var adapter: ListAdapter = {
-        return ListAdapter(updater: ListAdapterUpdater(), viewController: self, workingRangeSize: 0)
-    }()
+    private lazy var adapter = ListAdapter(updater: ListAdapterUpdater(), viewController: self, workingRangeSize: 0)
     
     init(sectionModel: EditorSectionModel) {
         self.sectionModel = sectionModel
@@ -45,18 +42,9 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
         adapter.collectionView = mainView.collectionView
         adapter.dataSource = self
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-//        if sectionModel.newLayersImages == nil {
-//            sectionModel.oldLayersImages = nil
-//            adapter.reloadData()
-//        }
-    }
         
     private func renderLayer() {
-        guard let layer = layersForRender.first, !isRendering, isRenderReady else {
+        guard let layer = layersForRender.first, !isRendering else {
             adapter.reloadData()
             return
         }
@@ -94,6 +82,7 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
         let allLayers = editorDelegate?.replaceCurrentLayers(with: layers, with: nil, isCurrent: true)
         let layersWitoutBack = editorDelegate?.layersWithout(section: "background", layers: allLayers ?? "")
         let layersWithoutClothing = editorDelegate?.layersWithout(section: "clothing", layers: layersWitoutBack?.layers ?? "")
+        let fireLayers = ["1", "0", "25", "273", layersWithoutClothing?.sectionLayer ?? ""]
         
         if layers == "0" || layers == "" {
             neededLayers = layers
@@ -105,12 +94,13 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
             neededLayers = layersWithoutClothing?.layers ?? ""
         }
 
-        neededLayers = neededLayers.replacingOccurrences(of: ";1;", with: ";")
-        neededLayers = neededLayers.replacingOccurrences(of: ";0;", with: ";")
-        neededLayers = neededLayers.replacingOccurrences(of: ";25;", with: ";")
-        neededLayers = neededLayers.replacingOccurrences(of: ";273;", with: ";")
+        let layersArray = neededLayers.split(separator: ";")
+        let neededArray = layersArray.compactMap { layer -> String? in
+            guard !fireLayers.contains(String(layer)) else { return nil }
+            return String(layer)
+        }
         
-        return neededLayers
+        return neededArray.joined(separator: ";")
     }
 }
 
@@ -140,6 +130,7 @@ extension StickerFaceEditorPageController: StickerFaceEditorSectionDelegate {
     
     func stickerFaceEditor(_ controller: StickerFaceEditorSectionController, needRedner forLayer: String, section: String) {
         let layerForRender = LayerForRender(section: section, layer: forLayer)
+        
         if !layersForRender.contains(layerForRender) {
             layersForRender.append(layerForRender)
             renderLayer()
@@ -150,5 +141,18 @@ extension StickerFaceEditorPageController: StickerFaceEditorSectionDelegate {
         delegate?.stickerFaceEditorPageController(self, didSelect: layer, section: section)
     }
     
-    func stickerFaceEditor(_ controller: StickerFaceEditorSectionController, willDisplay header: String, in section: Int) { }    
+    func stickerFaceEditor(_ controller: StickerFaceEditorSectionController, willDisplay header: String, in section: Int, at index: Int) {
+        guard
+            let layer = sectionModel.sections[section].editorSubsection.layers?[index],
+            sectionModel.sections[section].newLayersImages?[layer] == nil
+        else { return }
+        
+        let sectionName = sectionModel.sections[section].editorSubsection.name
+        let layerForRender = LayerForRender(section: sectionName, layer: layer)
+        
+        if !layersForRender.contains(layerForRender) {
+            layersForRender.append(layerForRender)
+            renderLayer()
+        }
+    }
 }
