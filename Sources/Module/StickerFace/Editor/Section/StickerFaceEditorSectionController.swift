@@ -67,7 +67,6 @@ class StickerFaceEditorSectionController: ListSectionController {
             layerColors.forEach { layerColor in
                 layerColor.isSelected = String(layerColor.color.id) == sectionModel.selectedColor
             }
-            layerColors.sort(by: { $0.isSelected && !$1.isSelected })
             
             numberOfItems += 2
         }
