@@ -239,14 +239,16 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
             layers.removeSubrange(range.lowerBound..<layers.endIndex)
         }
         
-        var layersArray = layers.components(separatedBy: ";")
+        var layersArray = layers.components(separatedBy: ";").compactMap { layer -> String? in
+            return layer != "" ? layer : nil
+        }
         
         let section = headers.firstIndex(where: { $0.isSelected }) ?? 0
         let editorSubsection = objects[section].sections[subsection].editorSubsection
         
         if let editorLayers = editorSubsection.layers, editorLayers.contains(replacementLayer) {
             editorLayers.forEach { editorLayer in
-                if let index = layersArray.firstIndex(where: { $0 == editorLayer }) {
+                if let index = layersArray.firstIndex(where: { $0 == editorLayer }), layersArray[index] != "0" {
                     layersArray.remove(at: index)
                 }
             }
