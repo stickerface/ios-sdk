@@ -159,14 +159,16 @@ class StickerFaceEditorSectionController: ListSectionController {
         cell.layerImageView.image = nil
         
         if let image = sectionModel.newLayersImages?[layer] {
-            cell.skeletonView.hideSkeleton()
+            cell.skeletonView.isHidden = true
             cell.layerImageView.image = image
         } else if let image = sectionModel.oldLayersImages?[layer] {
-            cell.skeletonView.hideSkeleton()
+            cell.skeletonView.isHidden = true
             cell.layerImageView.image = image
             
             delegate?.stickerFaceEditor(self, needRedner: layer, section: sectionModel.editorSubsection.name)
         } else {
+            cell.skeletonView.isHidden = false
+            
             delegate?.stickerFaceEditor(self, needRedner: layer, section: sectionModel.editorSubsection.name)
         }
         
