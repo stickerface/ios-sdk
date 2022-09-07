@@ -19,9 +19,8 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
     private var smallFace: Bool = false
     private var locked: Bool = false
     private var faceDetectTimer: Timer?
-    private var uploadTaskTimer: Timer?
-    private var uploadTask: URLSessionDataTask?
     private let decodingQueue = DispatchQueue(label: "\(Bundle.main.bundleIdentifier!).decodingQueue")
+    private let provider = GenerateAvatarProvider()
     
     private let player: AVPlayer = {
         let path = Bundle.resourceBundle.path(forResource: "onboardingAvatar", ofType: "mp4")!
@@ -52,6 +51,8 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
         mainView.camera.delegate = self
         
         mainView.onboardingAvatarVideoView.playerLayer.player = player
+        
+        provider.delegate = self
         
         play()
         bindEvents()
@@ -325,80 +326,10 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
     }
     
     private func upload(_ image: Data) {
-        let defaultLayers = StickerLoader.defaultLayers
         let resizedImage = resizeImage(image: UIImage(data: image, scale: 1.0)!, targetSize: CGSize(width: 600, height: 600))
         
-        let imageData = resizedImage.jpegData(compressionQuality: 0.9)
-        let urlString = "https://stickerface.io/api/process?platform=ios"
-        let session = URLSession(configuration: .default)
-        
-        let mutableURLRequest = NSMutableURLRequest(url: NSURL(string: urlString)! as URL)
-        
-        mutableURLRequest.httpMethod = "POST"
-        
-        let boundaryConstant = "----------------12345";
-        let contentType = "multipart/form-data;boundary=" + boundaryConstant
-        mutableURLRequest.setValue(contentType, forHTTPHeaderField: "Content-Type")
-        
-        // create upload data to send
-        let uploadData = NSMutableData()
-        
-        // add image
-        uploadData.append("\r\n--\(boundaryConstant)\r\n".data(using: String.Encoding.utf8)!)
-        uploadData.append("Content-Disposition: form-data; name=\"file\"; filename=\"filename.jpg\"\r\n".data(using: .utf8)!)
-        uploadData.append("Content-Type: image\r\n\r\n".data(using: .utf8)!)
-        uploadData.append(imageData!)
-        uploadData.append("\r\n--\(boundaryConstant)--\r\n".data(using: String.Encoding.utf8)!)
-        
-        mutableURLRequest.httpBody = uploadData as Data
-        
-        uploadTask = session.dataTask(with: mutableURLRequest as URLRequest, completionHandler: { [weak self] data, _, error in
-            guard let self = self else { return }
-            
-            if error != nil {
-                self.setupLayers(defaultLayers)
-            } else if let data = data {
-                do {
-                    guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
-                        self.setupLayers(defaultLayers)
-                        return
-                    }
-                    
-                    guard json["error"] == nil else {
-                        self.setupLayers(defaultLayers)
-                        return
-                    }
-                    
-                    var stickers = [String]()
-                    if let stickersRaw = json["stickers"] as? [Int] {
-                        for i in stickersRaw {
-                            stickers.append("\(i)")
-                        }
-                    }
-                    
-                    if let layers = json["model"] as? String {
-                        DispatchQueue.main.async {
-                            self.setupLayers(layers)
-                        }
-                    } else {
-                        self.setupLayers(defaultLayers)
-                    }
-                    
-                } catch {
-                    self.setupLayers(defaultLayers)
-                }
-            } else {
-                self.setupLayers(defaultLayers)
-            }
-            
-        })
-        
-        uploadTask?.resume()
-        
-        uploadTaskTimer = Timer.scheduledTimer(withTimeInterval: 15, repeats: false) { [weak self] _ in
-            self?.uploadTask?.suspend()
-            self?.setupLayers(defaultLayers)
-        }
+        guard let imageData = resizedImage.jpegData(compressionQuality: 0.9) else { return }
+        provider.uploadImage(imageData: imageData)
     }
     
     private func setupLayers(_ layers: String) {
@@ -407,8 +338,6 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
             self.locked = false
             self.smallFace = false
             self.faceDetected = false
-            self.uploadTaskTimer?.invalidate()
-            self.uploadTaskTimer = nil
             
             self.updateAvatar()
             self.updateButtonTitles()
@@ -484,5 +413,16 @@ extension GenerateAvatarViewController: SFCameraDelegate {
         }
         
         mainView.camera.session.stopRunning()
+    }
+}
+
+// MARK: - GenerateAvatarProviderDelegate
+extension GenerateAvatarViewController: GenerateAvatarProviderDelegate {
+    func generateAvatarProvider(didSuccessWith response: GenerateAvatarResponse) {
+        setupLayers(response.model)
+    }
+    
+    func generateAvatarProvider(didFailWith error: Error) {
+        setupLayers(StickerLoader.defaultLayers)
     }
 }
