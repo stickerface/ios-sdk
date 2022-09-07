@@ -33,8 +33,8 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     var layers: String = ""
     var currentLayers: String = "" {
         didSet {
-            mainView.saveButton.isUserInteractionEnabled = !compareLayers(currentLayers, layers)
-            mainView.saveButton.backgroundColor = compareLayers(currentLayers, layers) ? .sfDisabled : .sfAccentBrand
+            mainView.saveButton.isUserInteractionEnabled = !Utils.compareLayers(currentLayers, layers)
+            mainView.saveButton.backgroundColor = Utils.compareLayers(currentLayers, layers) ? .sfDisabled : .sfAccentBrand
         }
     }
     
@@ -264,13 +264,6 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         }
         
         return layers
-    }
-    
-    private func compareLayers(_ lhs: String, _ rhs: String) -> Bool {
-        let lhsArray = lhs.split(separator: ";").sorted(by: <)
-        let rhsArray = rhs.split(separator: ";").sorted(by: <)
-        
-        return lhsArray == rhsArray
     }
 }
 

@@ -22,8 +22,8 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         self.layers = avatar.layers
         super.init(nibName: nil, bundle: nil)
         
-        mainView.editorViewController.currentLayers = avatar.layers
         mainView.editorViewController.layers = avatar.layers
+        mainView.editorViewController.currentLayers = avatar.layers
         
         /// без decodingQueue потому что происходит мерцание
         /// при открытии контроллера мб хранить картинку в кэше,

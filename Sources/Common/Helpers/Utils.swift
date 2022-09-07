@@ -32,4 +32,11 @@ class Utils {
         let safeArea = safeArea()
         return safeArea.top + safeArea.bottom
     }
+    
+    static func compareLayers(_ lhs: String, _ rhs: String) -> Bool {
+        let lhsArray = lhs.split(separator: ";").sorted(by: <)
+        let rhsArray = rhs.split(separator: ";").sorted(by: <)
+        
+        return lhsArray == rhsArray
+    }
 }
