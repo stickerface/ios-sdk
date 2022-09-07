@@ -7,13 +7,14 @@ class LayerColorEmbeddedCell: UICollectionViewCell {
         let view = UIImageView()
         view.image = UIImage(libraryNamed: "colorSelectionIndicator")
         view.isHidden = true
-
+        view.contentMode = .scaleAspectFit
+        
         return view
     }()
         
     let colorView: UIView = {
         let view = UIView()
-        view.layer.cornerRadius = 20.5
+        view.layer.cornerRadius = 38.0/2
         
         return view
     }()
@@ -36,8 +37,8 @@ class LayerColorEmbeddedCell: UICollectionViewCell {
     }
     
     private func layout() {
-        colorView.pin.center().size(41.0)
-        colorSelectionIndicatorView.pin.center(to: colorView.anchor.center).size(52.0)
+        colorView.pin.center().size(38.0)
+        colorSelectionIndicatorView.pin.center(to: colorView.anchor.center).size(50.0)
     }
     
 }
