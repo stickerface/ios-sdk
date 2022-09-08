@@ -174,6 +174,11 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
             guard let self = self else { return }
             self.mainView.avatarView.avatarImageView.image = image
         }
+        
+        StickerLoader.shared.renderLayer(Stickers.closedEyes.stringValue + tuple.layers, size: size) { [weak self] image in
+            guard let self = self else { return }
+            self.mainView.avatarView.avatarClosedEyesImageView.image = image
+        }
     }
     
     private func renderBackground() {
@@ -239,7 +244,9 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
 
 // MARK: - StickerFaceEditorViewControllerDelegate
 extension StickerFaceViewController: StickerFaceEditorControllerDelegate {
-    func stickerFaceEditor(didLoadLayers controller: StickerFaceEditorViewController) { }
+    func stickerFaceEditor(didLoadLayers controller: StickerFaceEditorViewController) {
+        renderAvatar()
+    }
     
     func stickerFaceEditor(_ controller: StickerFaceEditorViewController, didUpdate layers: String) {
         self.layers = layers

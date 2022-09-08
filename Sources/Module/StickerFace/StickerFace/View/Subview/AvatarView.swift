@@ -1,15 +1,15 @@
 import UIKit
 import SnapKit
 
-class AvatarView: UIView {
+public class AvatarView: UIView {
     
-    enum Layout {
-        static let avatarImageViewHeight: CGFloat = 207.0
+    public enum Layout {
+        public static let avatarImageViewHeight: CGFloat = 207.0
     }
     
-    let avatarClosedEyesImageView = UIImageView()
+    public let avatarClosedEyesImageView = UIImageView()
     
-    let avatarImageView: UIImageView = {
+    public let avatarImageView: UIImageView = {
         let view = UIImageView()
         view.clipsToBounds = true
         view.image = UIImage(libraryNamed: "placeholder_sticker_200")
@@ -18,13 +18,14 @@ class AvatarView: UIView {
         return view
     }()
 
-    override init(frame: CGRect) {
+    override public init(frame: CGRect) {
         super.init(frame: frame)
         
         addSubview(avatarImageView)
         addSubview(avatarClosedEyesImageView)
         
         setupConstraints()
+        showAvatarEyes()
     }
     
     required init?(coder: NSCoder) {
@@ -32,7 +33,6 @@ class AvatarView: UIView {
     }
     
     private func setupConstraints() {
-        
         avatarImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -40,7 +40,18 @@ class AvatarView: UIView {
         avatarClosedEyesImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        
+    }
+    
+    @objc private func showAvatarEyes() {
+        avatarClosedEyesImageView.isHidden = true
+        NSObject.cancelPreviousPerformRequests(withTarget: self)
+        perform(#selector(hideAvatarEyes), with: nil, afterDelay: Double.random(in: 3.0...5.0))
+    }
+
+    @objc private func hideAvatarEyes() {
+        avatarClosedEyesImageView.isHidden = false
+        NSObject.cancelPreviousPerformRequests(withTarget: self)
+        perform(#selector(showAvatarEyes), with: nil, afterDelay: 0.1)
     }
     
 }
