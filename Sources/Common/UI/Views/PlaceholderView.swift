@@ -198,12 +198,10 @@ fileprivate extension PlaceholderView {
     }
     
     func updateAvatarView() {
-//        guard let userLayers = UserSettings.layers else {
-//            return
-//        }
-//
-//        let layers = "s"  + String(describing: stickerId.rawValue) + ";" + userLayers
-        StickerLoader.loadSticker(into: avatarView.avatarImageView)
+//        guard let userLayers = UserSettings.layers else { return }
+//        let layers = stickerId.stringValue + userLayers
+//        StickerLoader.loadSticker(into: avatarView.avatarImageView)
+//        avatarView.layers = User
     }
     
     @objc func layersDidUpdate() {

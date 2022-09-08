@@ -25,19 +25,8 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         mainView.editorViewController.currentLayers = avatar.layers
         mainView.editorViewController.layers = avatar.layers
         
-        /// без decodingQueue потому что происходит мерцание
-        /// при открытии контроллера мб хранить картинку в кэше,
-        /// а то при ините картинки блочим мейн тред
-        guard
-            let personData = avatar.personImage,
-            let backgroundData = avatar.backgroundImage
-        else { return }
-        
-        let personImage = UIImage(data: personData)
-        let backgroundImage = UIImage(data: backgroundData)
-        
-        self.mainView.avatarView.avatarImageView.image = personImage
-        self.mainView.backgroundImageView.image = backgroundImage
+        mainView.avatarView.avatar = avatar
+        mainView.backgroundImageView.image = UIImage(data: avatar.backgroundImage ?? .init())
     }
     
     required init?(coder: NSCoder) {
@@ -168,17 +157,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     private func renderAvatar() {
         guard let editorDelegate = editorDelegate else { return }
         let tuple = editorDelegate.layersWithout(section: "background", layers: layers)
-        let size = Float(mainView.avatarView.frame.size.maxSide)
-        
-        StickerLoader.shared.renderLayer(tuple.layers, size: size) { [weak self] image in
-            guard let self = self else { return }
-            self.mainView.avatarView.avatarImageView.image = image
-        }
-        
-        StickerLoader.shared.renderLayer(Stickers.closedEyes.stringValue + tuple.layers, size: size) { [weak self] image in
-            guard let self = self else { return }
-            self.mainView.avatarView.avatarClosedEyesImageView.image = image
-        }
+        mainView.avatarView.layers = tuple.layers
     }
     
     private func renderBackground() {
@@ -193,6 +172,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
             }
         }
     }
+    
     private func updateCurrentLayers(_ layers: String) {
         self.layers = layers
         editorDelegate?.updateLayers(layers)
@@ -209,7 +189,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
                 guard let self = self else { return }
                 
                 let avatarImage = image.pngData() ?? Data()
-                let personImage = (self.mainView.avatarView.avatarImageView.image ?? UIImage()).pngData()
+                let personImage = self.mainView.avatarView.avatarData
                 let backgroundImage = (self.mainView.backgroundImageView.image ?? UIImage()).pngData()
                 let avatar = SFAvatar(
                     avatarImage: avatarImage,
