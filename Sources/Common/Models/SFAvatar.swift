@@ -1,11 +1,11 @@
 import UIKit
 
-public struct SFAvatar: Codable {
+public class SFAvatar: Codable {
     /// Avatar png data
     public let avatarImage: Data?
     
     /// Avatar png data without background layer
-    public let personImage: Data?
+    public var personImage: Data?
     
     /// Avatar background layer png data
     public let backgroundImage: Data?

@@ -24,17 +24,6 @@ public class AvatarView: UIView {
             update(avatar: avatar)
         }
     }
-    
-    public var layers: String? {
-        didSet {
-            guard let layers = layers else { return }
-            update(layers: layers)
-        }
-    }
-    
-    public var avatarData: Data? {
-        return avatarImageView.image?.pngData()
-    }
 
     override public init(frame: CGRect) {
         super.init(frame: frame)
@@ -43,6 +32,10 @@ public class AvatarView: UIView {
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+    }
+    
+    override public func awakeFromNib() {
+        super.awakeFromNib()
         commonInit()
     }
     
@@ -65,23 +58,21 @@ public class AvatarView: UIView {
     }
     
     private func update(avatar: SFAvatar) {
-        avatarImageView.image = UIImage(data: avatar.personImage ?? .init())
+        if let personImage = avatar.personImage {
+            avatarImageView.image = UIImage(data: personImage)
+        }
         
         if let personLayers = avatar.personLayers {
-            StickerLoader.shared.renderLayer(Stickers.closedEyes.stringValue + personLayers) { [weak self] image in
+            let size = Float(frame.size.maxSide)
+            
+            StickerLoader.shared.renderLayer(personLayers, size: size) { [weak self] image in
+                self?.avatar?.personImage = image.pngData()
+                self?.avatarImageView.image = image
+            }
+            
+            StickerLoader.shared.renderLayer(Stickers.closedEyes.stringValue + personLayers, size: size) { [weak self] image in
                 self?.avatarClosedEyesImageView.image = image
             }
-        }
-    }
-    
-    private func update(layers: String) {
-        let size = Float(frame.size.maxSide)
-        StickerLoader.shared.renderLayer(layers, size: size) { [weak self] image in
-            self?.avatarImageView.image = image
-        }
-        
-        StickerLoader.shared.renderLayer(Stickers.closedEyes.stringValue + layers, size: size) { [weak self] image in
-            self?.avatarClosedEyesImageView.image = image
         }
     }
     

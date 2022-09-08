@@ -157,7 +157,13 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     private func renderAvatar() {
         guard let editorDelegate = editorDelegate else { return }
         let tuple = editorDelegate.layersWithout(section: "background", layers: layers)
-        mainView.avatarView.layers = tuple.layers
+        let avatar = SFAvatar(avatarImage: nil,
+                              personImage: nil,
+                              backgroundImage: nil,
+                              layers: layers,
+                              personLayers: tuple.layers,
+                              backgroundLayer: tuple.sectionLayer)
+        mainView.avatarView.avatar = avatar
     }
     
     private func renderBackground() {
@@ -189,7 +195,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
                 guard let self = self else { return }
                 
                 let avatarImage = image.pngData() ?? Data()
-                let personImage = self.mainView.avatarView.avatarData
+                let personImage = self.mainView.avatarView.avatar?.personImage
                 let backgroundImage = (self.mainView.backgroundImageView.image ?? UIImage()).pngData()
                 let avatar = SFAvatar(
                     avatarImage: avatarImage,
