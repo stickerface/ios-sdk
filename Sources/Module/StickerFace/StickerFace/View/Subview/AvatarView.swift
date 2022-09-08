@@ -6,9 +6,7 @@ public class AvatarView: UIView {
     public enum Layout {
         public static let avatarImageViewHeight: CGFloat = 207.0
     }
-    
-    private let decodingQueue = DispatchQueue(label: "\(Bundle.main.bundleIdentifier!).decodingQueue")
-    
+        
     private let avatarClosedEyesImageView = UIImageView()
     
     private let avatarImageView: UIImageView = {
@@ -67,14 +65,6 @@ public class AvatarView: UIView {
     }
     
     private func update(avatar: SFAvatar) {
-//        decodingQueue.async {
-//            let avatarImage = UIImage(data: avatar.personImage ?? Data())
-//
-//            DispatchQueue.main.async {
-//                self.avatarImageView.image = avatarImage
-//                self.backgroundImageView.image = backgoundImage
-//            }
-//        }
         avatarImageView.image = UIImage(data: avatar.personImage ?? .init())
         
         if let personLayers = avatar.personLayers {
