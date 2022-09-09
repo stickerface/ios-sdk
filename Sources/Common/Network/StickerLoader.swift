@@ -13,9 +13,7 @@ public class StickerLoader: NSObject {
     public static let avatarPath = "http://stickerface.io/api/png/"
     public static let sectionPath = "http://stickerface.io/api/section/png/"
     public let renderWebView: WKWebView = .init()
-    
-    var cache = NSCache<NSString, UIImage>()
-    
+        
     private let decodingQueue: DispatchQueue = .init(label: "\(Bundle.main.bundleIdentifier!).decodingQueue")
     private var requestId: Int = 0
     private var isRendering: Bool = false
@@ -166,7 +164,6 @@ extension StickerLoader: AvatarRenderResponseHandlerDelegate {
             
             DispatchQueue.main.async {
                 DataCache.instance.write(image: image, forKey: self.layersForRender[index].layer)
-                self.cache.setObject(image, forKey: self.layersForRender[index].layer as NSString)
                 self.layersForRender.remove(at: index).completion(image)
                 self.isRendering = false
                 self.renderIfNeeded()
