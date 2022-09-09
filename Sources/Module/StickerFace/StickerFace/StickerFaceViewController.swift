@@ -169,7 +169,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     private func renderBackground() {
         guard let editorDelegate = editorDelegate else { return }
         let tuple = editorDelegate.layersWithout(section: "background", layers: layers)
-        let size = Float(mainView.backgroundImageView.frame.size.maxSide)
+        let size = mainView.backgroundImageView.frame.size.maxSide
         
         if tuple.sectionLayer != "0" {
             StickerLoader.shared.renderLayer(tuple.sectionLayer, size: size) { [weak self] image in
@@ -230,9 +230,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
 
 // MARK: - StickerFaceEditorViewControllerDelegate
 extension StickerFaceViewController: StickerFaceEditorControllerDelegate {
-    func stickerFaceEditor(didLoadLayers controller: StickerFaceEditorViewController) {
-//        renderAvatar()
-    }
+    func stickerFaceEditor(didLoadLayers controller: StickerFaceEditorViewController) { }
     
     func stickerFaceEditor(_ controller: StickerFaceEditorViewController, didUpdate layers: String) {
         self.layers = layers

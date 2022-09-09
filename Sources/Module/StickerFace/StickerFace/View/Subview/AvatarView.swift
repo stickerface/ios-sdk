@@ -63,7 +63,7 @@ public class AvatarView: UIView {
         }
         
         if let personLayers = avatar.personLayers {
-            let size = Float(frame.size.maxSide)
+            let size = frame.size.maxSide
             
             StickerLoader.shared.renderLayer(personLayers, size: size) { [weak self] image in
                 self?.avatar?.personImage = image.pngData()

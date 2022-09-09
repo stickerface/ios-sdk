@@ -77,7 +77,7 @@ public class StickerLoader: NSObject {
         return nil
     }
     
-    public func renderLayer(_ layer: String, size: Float = 207.0, completionHandler: @escaping ImageAction) {
+    public func renderLayer(_ layer: String, size: CGFloat = 207.0, completionHandler: @escaping ImageAction) {
         let id = getNextRequestId()
         let layer = RenderLayer(id: id, size: size, layer: layer, completion: completionHandler)
         
@@ -211,12 +211,12 @@ extension StickerLoader {
     
     struct RenderLayer {
         let id: Int
-        let size: Float
+        let size: CGFloat
         let layer: String
         let completion: ImageAction
         
         var renderString: String {
-            return "renderPNG(\"\(layer)\", \(id), \(size * Float(UIScreen.main.scale)), {partial: true})"
+            return "renderPNG(\"\(layer)\", \(id), \(size * UIScreen.main.scale), {partial: true})"
         }
     }
 }

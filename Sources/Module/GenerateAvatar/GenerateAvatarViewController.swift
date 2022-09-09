@@ -189,22 +189,17 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
     private func updateAvatar() {
         mainView.camera.previewLayer.alpha = 0
         mainView.avatarPlaceholderView.alpha = 0
-        mainView.linesRoundRotateAnimationView.alpha = 0
-        mainView.descriptionLabel.alpha = 0
-        mainView.avatarImageView.alpha = 1
-        mainView.backgroundImageView.alpha = 1
-        isAvatarGenerated = true
         
-        StickerLoader.loadSticker(into: mainView.avatarImageView, with: layers ?? "") { [weak self] result in
+        let size = mainView.avatarImageView.frame.size.maxSide
+        StickerLoader.shared.renderLayer(layers ?? "", size: size) { [weak self] image in
             guard let self = self else { return }
             
-            switch result {
-            case .failure:
-                self.layers = StickerLoader.defaultLayers
-                self.mainView.avatarImageView.image = UIImage(libraryNamed: "defaultAvatar")
-                
-            default: break
-            }
+            self.mainView.avatarImageView.image = image
+            self.mainView.avatarImageView.alpha = 1
+            self.mainView.backgroundImageView.alpha = 1
+            self.mainView.descriptionLabel.alpha = 0
+            self.mainView.linesRoundRotateAnimationView.alpha = 0
+            self.isAvatarGenerated = true
         }
     }
     
@@ -419,7 +414,13 @@ extension GenerateAvatarViewController: SFCameraDelegate {
 // MARK: - GenerateAvatarProviderDelegate
 extension GenerateAvatarViewController: GenerateAvatarProviderDelegate {
     func generateAvatarProvider(didSuccessWith response: GenerateAvatarResponse) {
-        setupLayers(response.model)
+        var layers = response.model
+        
+        if let range = layers.range(of: "/") {
+            layers.removeSubrange(range.lowerBound..<layers.endIndex)
+        }
+        
+        setupLayers(layers)
     }
     
     func generateAvatarProvider(didFailWith error: Error) {
