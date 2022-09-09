@@ -1,77 +1,77 @@
 // Common
-"commonContinue" = "Продолжить";
-"commonColorCups" = "ЦВЕТ";
-"commonFree" = "Бесплатно";
-"commonKeyboard" = "Клавиатура";
-"commonConnect" = "Подключить";
-"commonOther" = "Другое";
-"commonPaid" = "Оплачено";
-"commonBalance" = "Баланс";
+"commonContinue" = "Continue";
+"commonColorCups" = "COLOR";
+"commonFree" = "Free";
+"commonKeyboard" = "Keyboard";
+"commonConnect" = "Connect";
+"commonOther" = "Other";
+"commonPaid" = "Paid";
+"commonBalance" = "Balance";
 
 // Onboarding
-"onboardingTitle" = "Добро пожаловать в StickerFace";
-"onboardingSubtitle" = "Создайте своего потрясающего персонажа и получите NFT, чтобы владеть вашим уникальным набором";
-"onboardingPrivacyPolicyAndRules" = "Продолжая, вы соглашаетесь с нашими <a href='https://stickerface.io/policy'>Правилами</a> and <a href='https://stickerface.io/policy'>Политикой конфиденциальности</a>";
+"onboardingTitle" = "Welcome to StickerFace";
+"onboardingSubtitle" = "Design your awesome character and get the NFT to own your unique set";
+"onboardingPrivacyPolicyAndRules" = "By continuing you agree to our <a href='https://stickerface.io/policy'>Terms of Service</a> and <a href='https://stickerface.io/policy'>Privacy Policy</a>";
 
 // Setup Avatar
-"setupAvatarTitle" = "Аватар";
-"setupAvatarSubtitle" = "Создай своего аватара с помощью селфи";
-"setupAvatarDescription" = "Фотографии не хранятся и используются один раз для генерации AI-аватара";
-"setupAvatarContinueTitle" = "Продолжить без камеры";
-"setupAvatarAllowTitle" = "Разрешить доступ к камере";
-"setupAvatarGenerateTitle" = "Создать аватар";
-"setupAvatarGenerateNewTitle" = "Создать новый аватар";
-"setupAvatarWaitingCameraAccess" = "Ожидание доступа…";
-"setupAvatarNoFace" = "Сделайте селфи, чтобы сделать стикер";
-"setupAvatarSmallFace" = "Приблизьте лицо";
-"setupAvaterTakingPhoto" = "Улыбнись! Сейчас вылетит птичка…";
+"setupAvatarTitle" = "Avatar";
+"setupAvatarSubtitle" = "Let’s start creating your avatar";
+"setupAvatarDescription" = "Pics are not stored and used one time for the AI avatar generation";
+"setupAvatarContinueTitle" = "Continue without camera";
+"setupAvatarAllowTitle" = "Allow camera access";
+"setupAvatarGenerateTitle" = "Generate avatar";
+"setupAvatarGenerateNewTitle" = "Generate new avatar";
+"setupAvatarWaitingCameraAccess" = "Waiting for access…";
+"setupAvatarNoFace" = "Take a selfie to make stickers";
+"setupAvatarSmallFace" = "Move the face closer";
+"setupAvaterTakingPhoto" = "Stay focused! Taking a photo…";
 
 // Connect Wallet
-"connectWalletTitle" = "Подключить свой криптокошелек";
-"connectWalletSubtitle" = "Для продолжения вам необходимо иметь криптовалютный кошелек Tonkeeper.";
-"connectWalletWithoutWallet" = "Продолжить без кошелька";
-"connectWalletConnectTitle" = "Подключить Tonkeeper";
+"connectWalletTitle" = "Connect your crypto wallet";
+"connectWalletSubtitle" = "To continue you need to have a cryptocurrency wallet Tonkeeper";
+"connectWalletWithoutWallet" = "Continue without wallet";
+"connectWalletConnectTitle" = "Connect with Tonkeeper";
 
 // Editor
-"editorSave" = "Сохранить и продолжить";
+"editorSave" = "Save and continue";
 
 // New Layer
-"newLayerPurchase" = "Покупка";
-"newLayerBackPurchase" = "Если вам нравится новый фон\nоформите покупку";
-"newLayerNFTPurchase" = "Один шаг до покупки";
-"newLayerBuyNFT" = "Купить NFT";
-"newLayerInsufficientFunds" = "Недостаточно средств";
-"newLayerAddMinimum" = "Пожалуйста, добавьте минимум %@ TON в кошелек для покупки";
-"newLayerReplenish" = "Пополнить баланс";
-"newLayerConnectWallet" = "Подключить криптокошелек";
-"newLyaerBackConnectTonkeeper" = "Чтобы купить фоновый цвет,\nподключите Tonkepeer";
-"newLyaerNFTConnectTonkeeper" = "Чтобы купить NFT, подключите Tonkepeer";
-"newLayerFitting" = "Примерка";
-"newLayerLookGood" = "Кажется, хорошо выглядит!";
-"newLayerDress" = "Надеть";
+"newLayerPurchase" = "Purchase";
+"newLayerBackPurchase" = "If you like a new background\nmake a purchase";
+"newLayerNFTPurchase" = "One step to buy";
+"newLayerBuyNFT" = "Buy NFT";
+"newLayerInsufficientFunds" = "Insufficient funds";
+"newLayerAddMinimum" = "Please add minimum <bold>%@ TON</bold>\nto wallet for purchase";
+"newLayerReplenish" = "Replenish the balance";
+"newLayerConnectWallet" = "Connect crypto wallet";
+"newLyaerBackConnectTonkeeper" = "To buy a background color\nconnect the Tonkepeer";
+"newLyaerNFTConnectTonkeeper" = "To buy a NFT connect the Tonkepeer";
+"newLayerFitting" = "Fitting";
+"newLayerLookGood" = "Seems to look good!";
+"newLayerDress" = "Dress";
 
 // Export
-"exportTitle" = "Экспорт";
-"exportSubtitle" = "Используйте все стикеры в Telegram, WhatsApp или клавиатуре";
+"exportTitle" = "Export";
+"exportSubtitle" = "Use all stickers in Telegram, WhatsApp\nor native keyboard";
 
 // Settings
-"settingsTitle" = "Настройки";
-"settingsConnectToBuy" = "Подключить, чтобы купить NFT";
-"settingsLanguage" = "Язык";
-"settingsRate" = "Оцените нас";
-"settingsAbout" = "О приложении";
+"settingsTitle" = "Settings";
+"settingsConnectToBuy" = "Connect to buy NFTs";
+"settingsLanguage" = "Language";
+"settingsRate" = "Rate us";
+"settingsAbout" = "About app";
 
 // Share
-"shareTitle" = "Поделиться";
-"shareSubtitle" = "Отправить стикер друзьям";
+"shareTitle" = "Share";
+"shareSubtitle" = "Send sticker to friends";
 
 // Wardrobe
-"wardrobeEmptyTitle" = "Все покупки NFT будут\nхраниться здесь";
-"wardrobeTitle" = "Гардероб";
-"wardrobeSubtitle" = "Все ваши покупки здесь";
+"wardrobeEmptyTitle" = "All NFTs’ purchases will\nbe stored here";
+"wardrobeTitle" = "Wardrobe";
+"wardrobeSubtitle" = "All your purchases is here";
 
 // Main
-"mainStickers" = "Стикеры";
-"mainExport" = "Экспорт стикеров";
-"mainStoreButton" = "В магазин";
-"mainStoreTitle" = "NFT одежда\nи аксессуары";
+"mainStickers" = "Stickers";
+"mainExport" = "Export stickers";
+"mainStoreButton" = "Go to store";
+"mainStoreTitle" = "NFTs’ clothes\nand accessories";

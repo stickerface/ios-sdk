@@ -33,8 +33,9 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     var layers: String = ""
     var currentLayers: String = "" {
         didSet {
-            mainView.saveButton.isUserInteractionEnabled = !Utils.compareLayers(currentLayers, layers)
-            mainView.saveButton.backgroundColor = Utils.compareLayers(currentLayers, layers) ? .sfDisabled : .sfAccentBrand
+            let isEnabled = !SFDefaults.wasEdited || !Utils.compareLayers(currentLayers, layers)
+            mainView.saveButton.isUserInteractionEnabled = isEnabled
+            mainView.saveButton.backgroundColor = isEnabled ? .sfAccentBrand : .sfDisabled
         }
     }
     

@@ -83,7 +83,7 @@ public class StickerLoader: NSObject {
         
         print("=== layer created")
         
-        layersForRender.insert(layer, at: 0)
+        layersForRender.append(layer)
         renderIfNeeded()
     }
     

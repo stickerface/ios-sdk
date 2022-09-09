@@ -24,9 +24,6 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         
         mainView.editorViewController.layers = avatar.layers
         mainView.editorViewController.currentLayers = avatar.layers
-        
-        mainView.avatarView.avatar = avatar
-        mainView.backgroundImageView.image = UIImage(data: avatar.backgroundImage ?? .init())
     }
     
     required init?(coder: NSCoder) {
@@ -41,7 +38,10 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-             
+        
+        mainView.avatarView.avatar = avatar
+        mainView.backgroundImageView.image = UIImage(data: avatar.backgroundImage ?? .init())
+        
         setupEditor()
         setupActions()
         setupButtons()
@@ -231,7 +231,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
 // MARK: - StickerFaceEditorViewControllerDelegate
 extension StickerFaceViewController: StickerFaceEditorControllerDelegate {
     func stickerFaceEditor(didLoadLayers controller: StickerFaceEditorViewController) {
-        renderAvatar()
+//        renderAvatar()
     }
     
     func stickerFaceEditor(_ controller: StickerFaceEditorViewController, didUpdate layers: String) {
