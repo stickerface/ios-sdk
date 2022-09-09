@@ -22,11 +22,8 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         self.layers = avatar.layers
         super.init(nibName: nil, bundle: nil)
         
-        mainView.editorViewController.currentLayers = avatar.layers
         mainView.editorViewController.layers = avatar.layers
-        
-        mainView.avatarView.avatar = avatar
-        mainView.backgroundImageView.image = UIImage(data: avatar.backgroundImage ?? .init())
+        mainView.editorViewController.currentLayers = avatar.layers
     }
     
     required init?(coder: NSCoder) {
@@ -41,7 +38,10 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-             
+        
+        mainView.avatarView.avatar = avatar
+        mainView.backgroundImageView.image = UIImage(data: avatar.backgroundImage ?? .init())
+        
         setupEditor()
         setupActions()
         setupButtons()
@@ -169,7 +169,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     private func renderBackground() {
         guard let editorDelegate = editorDelegate else { return }
         let tuple = editorDelegate.layersWithout(section: "background", layers: layers)
-        let size = Float(mainView.backgroundImageView.frame.size.maxSide)
+        let size = mainView.backgroundImageView.frame.size.maxSide
         
         if tuple.sectionLayer != "0" {
             StickerLoader.shared.renderLayer(tuple.sectionLayer, size: size) { [weak self] image in
@@ -230,9 +230,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
 
 // MARK: - StickerFaceEditorViewControllerDelegate
 extension StickerFaceViewController: StickerFaceEditorControllerDelegate {
-    func stickerFaceEditor(didLoadLayers controller: StickerFaceEditorViewController) {
-        renderAvatar()
-    }
+    func stickerFaceEditor(didLoadLayers controller: StickerFaceEditorViewController) { }
     
     func stickerFaceEditor(_ controller: StickerFaceEditorViewController, didUpdate layers: String) {
         self.layers = layers

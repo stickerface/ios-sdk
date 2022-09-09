@@ -77,13 +77,13 @@ public class StickerLoader: NSObject {
         return nil
     }
     
-    public func renderLayer(_ layer: String, size: Float = 207.0, completionHandler: @escaping ImageAction) {
+    public func renderLayer(_ layer: String, size: CGFloat = 207.0, completionHandler: @escaping ImageAction) {
         let id = getNextRequestId()
         let layer = RenderLayer(id: id, size: size, layer: layer, completion: completionHandler)
         
         print("=== layer created")
         
-        layersForRender.insert(layer, at: 0)
+        layersForRender.append(layer)
         renderIfNeeded()
     }
     
@@ -206,17 +206,17 @@ extension StickerLoader {
     
     enum Layers {
         static let man = "69;159;253;250;13;160;100;3040;265;1;76;3000;273;3200;90;28;23;203;11;68;219;83;35;"
-        static let woman = "69;159;253;250;160;3040;265;76;3000;273;3200;90;83;0;0;0;25;133;224;132,134;10;39;15;32;101;"
+        static let woman = "69;159;253;250;160;3040;265;76;3000;273;3200;90;83;0;0;25;133;224;132,134;10;39;15;32;101;"
     }
     
     struct RenderLayer {
         let id: Int
-        let size: Float
+        let size: CGFloat
         let layer: String
         let completion: ImageAction
         
         var renderString: String {
-            return "renderPNG(\"\(layer)\", \(id), \(size * Float(UIScreen.main.scale)), {partial: true})"
+            return "renderPNG(\"\(layer)\", \(id), \(size * UIScreen.main.scale), {partial: true})"
         }
     }
 }

@@ -117,6 +117,8 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         let view = UIView()
         view.backgroundColor = .clear
         view.isSkeletonable = true
+        view.showGradientSkeleton(usingGradient: SkeletonGradient(baseColor: .clouds), transition: .crossDissolve(1))
+//        view.startSkeletonAnimation()
         
         return view
     }()
@@ -142,9 +144,6 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         skeletonView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        
-        skeletonView.showGradientSkeleton(usingGradient: SkeletonGradient(baseColor: .clouds), transition: .crossDissolve(1))
-        skeletonView.startSkeletonAnimation()
     }
     
     required init?(coder: NSCoder) {
