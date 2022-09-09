@@ -26,6 +26,8 @@ public class StickerLoader: NSObject {
     override init() {
         super.init()
         
+        DataCache.instance.maxDiskCacheSize = 1024 * 1024 * 100 // 100 mb
+        
         let handler = AvatarRenderResponseHandler()
         handler.delegate = self
         
@@ -54,15 +56,13 @@ public class StickerLoader: NSObject {
     
     @discardableResult
     public func loadImage(url: String, completion: @escaping (UIImage) -> ()) -> URLSessionDataTask? {
-        let url = url as NSString
-        
-        if let image = cache.object(forKey: url) {
+        if let image = DataCache.instance.readImage(forKey: url) {
             completion(image)
         } else {
             let session = URLSession(configuration: URLSessionConfiguration.default)
-            let task = session.dataTask(with: URL(string: url as String)!) { [weak self] (data, response, error) in
+            let task = session.dataTask(with: URL(string: url)!) { data, response, error in
                 if error == nil, let data = data, let image = UIImage(data: data) {
-                    self?.cache.setObject(image, forKey: url)
+                    DataCache.instance.write(image: image, forKey: url)
                     
                     DispatchQueue.main.async {
                         completion(image)
@@ -79,16 +79,17 @@ public class StickerLoader: NSObject {
     
     public func renderLayer(_ layer: String, size: CGFloat = 207.0, completionHandler: @escaping ImageAction) {
         let id = getNextRequestId()
-        let layer = RenderLayer(id: id, size: size, layer: layer, completion: completionHandler)
+        let renderLayer = RenderLayer(id: id, size: size, layer: layer, completion: completionHandler)
         
-        print("=== layer created")
-        
-        layersForRender.append(layer)
-        renderIfNeeded()
+        if let image = DataCache.instance.readImage(forKey: layer) {
+            completionHandler(image)
+        } else {
+            layersForRender.append(renderLayer)
+            renderIfNeeded()
+        }
     }
     
     public func clearRenderQueue() {
-        print("=== will clear")
         isRendering = false
         isRenderReady = false
         layersForRender.removeAll()
@@ -112,11 +113,8 @@ public class StickerLoader: NSObject {
         }
         
         isRendering = true
-        
-        print("=== will render")
-        
+                
         reRenderTimer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
-            print("=== rerender did")
             self.isRendering = false
             self.renderIfNeeded()
         }
@@ -137,8 +135,6 @@ public class StickerLoader: NSObject {
 
 extension StickerLoader: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        print("=== render ready")
-        
         isRenderReady = true
         renderIfNeeded()
     }
@@ -155,25 +151,12 @@ extension StickerLoader: AvatarRenderResponseHandlerDelegate {
         reRenderTimer.invalidate()
         
         decodingQueue.async {
-            print("=== did render")
             guard
                 let index = self.layersForRender.firstIndex(where: { $0.id == id }),
                 let data = Data(base64Encoded: base64),
                 let image = UIImage(data: data)
             else {
                 DispatchQueue.main.async {
-                    if self.layersForRender.firstIndex(where: { $0.id == id }) != nil {
-                        if let data = Data(base64Encoded: base64) {
-                            if UIImage(data: data) == nil {
-                                print("=== error no image")
-                            }
-                        } else {
-                            print("=== error no data")
-                        }
-                    } else {
-                        print("=== error no index")
-                    }
-                    
                     self.isRendering = false
                     self.renderIfNeeded()
                 }
@@ -182,7 +165,8 @@ extension StickerLoader: AvatarRenderResponseHandlerDelegate {
             }
             
             DispatchQueue.main.async {
-                print("=== will completion")
+                DataCache.instance.write(image: image, forKey: self.layersForRender[index].layer)
+                self.cache.setObject(image, forKey: self.layersForRender[index].layer as NSString)
                 self.layersForRender.remove(at: index).completion(image)
                 self.isRendering = false
                 self.renderIfNeeded()
