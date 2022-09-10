@@ -30,7 +30,7 @@ public class TonNetwork {
     
     static func updateBalance() {
         guard let address = SFDefaults.tonClient?.address else { return }
-        let path = "https://beta.stickerface.io/api/tonkeeper/balance?wallet=\(address)"
+        let path = "https://stickerface.io/api/tonkeeper/balance?wallet=\(address)"
         
         AF.request(path, method: .get).response { responseData in
             if let data = responseData.data {
