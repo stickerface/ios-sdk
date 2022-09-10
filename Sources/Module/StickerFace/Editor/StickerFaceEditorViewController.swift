@@ -141,6 +141,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                 self.mainView.notConnectLabel.isHidden = true
                 
                 self.editor = editor
+                SFDefaults.avatarMintPrice = Double(editor.nft.avatarMintPrice) / 1000000000.0
                 self.setupSections(needSetDefault: false, for: SFDefaults.gender)
                 
                 self.delegate?.stickerFaceEditor(didLoadLayers: self)

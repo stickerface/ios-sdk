@@ -76,4 +76,13 @@ public class SFDefaults {
             try? defaults.set(object: newValue, forKey: SFDefaults.prefixName + #function)
         }
     }
+    
+    public static var avatarMintPrice: Double {
+        get {
+            return defaults.double(forKey: SFDefaults.prefixName + #function)
+        }
+        set {
+            defaults.set(newValue, forKey: SFDefaults.prefixName + #function)
+        }
+    }
 }
