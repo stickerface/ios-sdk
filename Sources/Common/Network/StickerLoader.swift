@@ -10,8 +10,8 @@ public class StickerLoader: NSObject {
     
     public static let defaultLayers = Layers.man
     public static let defaultWomanLayers = Layers.woman
-    public static let avatarPath = "http://stickerface.io/api/png/"
-    public static let sectionPath = "http://stickerface.io/api/section/png/"
+    public static let avatarPath = "\(Constants.apiUrl)/png/"
+    public static let sectionPath = "\(Constants.apiUrl)/section/png/"
     public let renderWebView: WKWebView = .init()
         
     private let decodingQueue: DispatchQueue = .init(label: "\(Bundle.main.bundleIdentifier!).decodingQueue")
@@ -31,7 +31,7 @@ public class StickerLoader: NSObject {
         
         renderWebView.navigationDelegate = self
         
-        renderWebView.load(URLRequest(url: URL(string: "https://stickerface.io/render2.html")!))
+        renderWebView.load(URLRequest(url: URL(string: Constants.renderUrl)!))
         renderWebView.configuration.userContentController.add(handler, name: handler.name)
     }
     
@@ -46,7 +46,7 @@ public class StickerLoader: NSObject {
         imgView.tintColor = placeholderStyle == .dark ? UIColor.black.withAlphaComponent(0.06) : UIColor.white.withAlphaComponent(0.24)
         
         let placeholder = placeholderImage ?? UIImage(libraryNamed: "placeholder_sticker_200")
-        let path = "http://stickerface.io/api/\(stickerType.rawValue)/" + layers + "?size=" + String(describing: size) + "&outline=\(outlined)"
+        let path = "\(Constants.renderUrl)/\(stickerType.rawValue)/" + layers + "?size=" + String(describing: size) + "&outline=\(outlined)"
         let stickerURL = URL(string: path)
         
         return imgView.kf.setImage(with: stickerURL, placeholder: placeholder, options: options, completionHandler: completionHandler)
@@ -91,7 +91,7 @@ public class StickerLoader: NSObject {
         isRendering = false
         isRenderReady = false
         layersForRender.removeAll()
-        renderWebView.load(URLRequest(url: URL(string: "https://stickerface.io/render2.html")!))
+        renderWebView.load(URLRequest(url: URL(string: Constants.renderUrl)!))
     }
     
     // MARK: - Private methods
