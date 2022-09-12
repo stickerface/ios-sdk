@@ -51,13 +51,13 @@ struct EditorSection: Codable {
     let subsections: [EditorSubsection]
 }
 
-struct EditorSubsection: Codable {
+struct EditorSubsection: Codable, Equatable {
     let name: String
-    let layers: [String]?
+    var layers: [String]?
     let colors: [EditorColor]?
 }
 
-struct EditorColor: Codable {
+struct EditorColor: Codable, Equatable {
     let id: Int
     let hash: String
 }
