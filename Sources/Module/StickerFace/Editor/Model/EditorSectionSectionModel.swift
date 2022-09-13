@@ -3,7 +3,7 @@ import IGListDiffKit
 
 class EditorSubsectionSectionModel {
     
-    var editorSubsection: EditorSubsection
+    let editorSubsection: EditorSubsection
     var prices: [String: Int]
     var selectedLayer: String?
     var selectedColor: String?

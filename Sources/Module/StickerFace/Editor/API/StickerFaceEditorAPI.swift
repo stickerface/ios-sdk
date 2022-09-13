@@ -53,7 +53,7 @@ struct EditorSection: Codable {
 
 struct EditorSubsection: Codable, Equatable {
     let name: String
-    var layers: [String]?
+    let layers: [String]?
     let colors: [EditorColor]?
 }
 
