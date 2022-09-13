@@ -8,7 +8,7 @@ PODS:
   - PinLayout (1.10.3)
   - SkeletonView (1.25.2)
   - SnapKit (5.6.0)
-  - StickerFaceSDK (0.10.4):
+  - StickerFaceSDK (0.10.5):
     - Alamofire
     - Atributika
     - IGListKit
@@ -47,9 +47,9 @@ SPEC CHECKSUMS:
   PinLayout: 0090ccbf29ae69af6ae5a15eaeaf27ed7b2c4d83
   SkeletonView: 820b2bbd180d7408f3f03b6462cfc3cac39d2ef2
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
-  StickerFaceSDK: 55892fc3383fbe6cdf3992febe6c64983067d441
+  StickerFaceSDK: 1386d1a6a8e3314e47908e37c0373e59f4d2a203
   TelegramStickersImport: e0e79a382bd41ff748fa107f3604c25f0a934ee5
 
 PODFILE CHECKSUM: 4adb15f298cf63eb6d644efedb0f1cb089eed1f0
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.11.3
