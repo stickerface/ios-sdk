@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name = 'StickerFaceSDK'
-  s.version = '0.10.4'
+  s.version = '0.10.5'
   s.summary = 'SDK StickerFace for IOS'
   
   # This description is used to generate tags and improve search results.
