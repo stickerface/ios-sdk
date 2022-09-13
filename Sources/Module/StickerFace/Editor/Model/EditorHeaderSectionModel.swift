@@ -25,6 +25,7 @@ extension EditorHeaderSectionModel: ListDiffable {
         }
         
         return object.title == title
+        && object.isSelected == isSelected
     }
     
 }

@@ -29,7 +29,12 @@ extension EditorSubsectionSectionModel: ListDiffable {
             return false
         }
         
-        return object.editorSubsection.layers == editorSubsection.layers
+        return object.editorSubsection == editorSubsection
+        && object.prices == prices
+        && object.selectedLayer == selectedLayer
+        && object.selectedColor == selectedColor
+        && object.newLayersImages == newLayersImages
+        && object.oldLayersImages == oldLayersImages
     }
     
 }
