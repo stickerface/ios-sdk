@@ -189,7 +189,9 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
             let models = section.subsections.map { subsection -> EditorSubsectionSectionModel in
                 var layers = subsection.layers
                 if subsection.name == "background" {
-                    layers = layers?.filter { prices[$0] == nil || prices[$0] == 0 }
+                    layers = layers?
+                        .filter { prices[$0] == nil || prices[$0] == 0 }
+                        .filter { $0 != "0" }
                 }
 
                 let editorSubsection = EditorSubsection(
