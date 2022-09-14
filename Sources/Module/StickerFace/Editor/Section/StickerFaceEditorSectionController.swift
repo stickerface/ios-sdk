@@ -82,8 +82,7 @@ class StickerFaceEditorSectionController: ListSectionController {
     override func sizeForItem(at index: Int) -> CGSize {
         // size for background layers
         if sectionModel.editorSubsection.name == "background" {
-//            return CGSize(width: 100.0, height: 144.0)
-            return CGSize(side: 100.0)
+            return CGSize(side: collectionContext!.containerSize.width / 3 - (16.0 * 2))
         }
         
         // size for titels
