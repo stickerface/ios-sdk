@@ -10,8 +10,8 @@ public class StickerLoader: NSObject {
     
     public static let defaultLayers = Layers.man
     public static let defaultWomanLayers = Layers.woman
-    public static let avatarPath = "\(Constants.apiUrl)/png/"
-    public static let sectionPath = "\(Constants.apiUrl)/section/png/"
+    public static let avatarPath = "\(Constants.apiPath)/png/"
+    public static let sectionPath = "\(Constants.apiPath)/section/png/"
     public let renderWebView: WKWebView = .init()
         
     private let decodingQueue: DispatchQueue = .init(label: "\(Bundle.main.bundleIdentifier!).decodingQueue")

@@ -4,7 +4,7 @@ import Alamofire
 class StickerFaceEditorProvider {
     
     func loadEditor(completion: @escaping(Result<Editor, Error>) -> Void) {
-        let url = "\(Constants.apiUrl)/v2/editor"
+        let url = "\(Constants.apiPath)/v2/editor"
         
         AF.request(url, method: .get).response { responseData in
             if let data = responseData.data {
