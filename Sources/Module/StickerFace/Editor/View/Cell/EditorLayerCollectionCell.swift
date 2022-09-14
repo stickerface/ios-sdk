@@ -97,7 +97,6 @@ class EditorLayerCollectionCell: UICollectionViewCell {
     
     let selectedBackgroundImageView: UIImageView = {
         let view = UIImageView()
-        view.layer.cornerRadius = 50.0
         view.contentMode = .scaleAspectFill
         view.image = nil
         view.clipsToBounds = true
@@ -108,7 +107,6 @@ class EditorLayerCollectionCell: UICollectionViewCell {
     let layerBackgroundView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
-        view.layer.cornerRadius = 45.5
         
         return view
     }()
@@ -263,22 +261,29 @@ class EditorLayerCollectionCell: UICollectionViewCell {
     }
     
     private func backgroundLayout() {
-        layerImageView.layer.cornerRadius = 38.5
-        
         selectedBackgroundImageView.pin
             .top()
-            .hCenter()
-            .size(100.0)
+            .left()
+            .right()
+        selectedBackgroundImageView.pin
+            .height(selectedBackgroundImageView.frame.width)
+        selectedBackgroundImageView.layer.cornerRadius = selectedBackgroundImageView.frame.width / 2
         
         layerBackgroundView.pin
-            .top(4.5)
-            .hCenter()
-            .size(91.0)
+            .top(4.0)
+            .left(4.0)
+            .right(4.0)
+        layerBackgroundView.pin
+            .height(layerBackgroundView.frame.width)
+        layerBackgroundView.layer.cornerRadius = layerBackgroundView.frame.width / 2
         
         layerImageView.pin
-            .size(77.0)
-            .hCenter(to: layerBackgroundView.edge.hCenter)
-            .vCenter(to: layerBackgroundView.edge.vCenter)
+            .top(12.0)
+            .left(12.0)
+            .right(12.0)
+        layerImageView.pin
+            .height(layerImageView.frame.width)
+        layerImageView.layer.cornerRadius = layerImageView.frame.width / 2
         
         titleLabel.pin
             .left()
