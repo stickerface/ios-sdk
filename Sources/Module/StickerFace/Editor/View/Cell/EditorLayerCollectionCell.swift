@@ -115,8 +115,8 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         let view = UIView()
         view.backgroundColor = .clear
         view.isSkeletonable = true
-        view.showGradientSkeleton(usingGradient: SkeletonGradient(baseColor: .clouds), transition: .crossDissolve(1))
-//        view.startSkeletonAnimation()
+        view.showAnimatedGradientSkeleton(usingGradient: SkeletonGradient(baseColor: .clouds),
+                                          transition: .none)
         
         return view
     }()
@@ -138,10 +138,6 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         contentView.addSubview(noneImageView)
         contentView.addSubview(skeletonView)
         contentView.addSubview(checkmarkImageView)
-                
-        skeletonView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
     }
     
     required init?(coder: NSCoder) {
@@ -183,7 +179,6 @@ class EditorLayerCollectionCell: UICollectionViewCell {
             UIColor.sfAccentBrand.cgColor :
             UIColor.sfSeparatorLight.cgColor
         }
-        
     }
     
     func setPrice(_ price: Int?, isPaid: Bool) {
@@ -234,15 +229,13 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         
     private func setNeededLayout() {
         switch layerType {
-        case .layers:
-            layersLayout()
-            
-        case .background:
-            backgroundLayout()
-            
-        case .NFT:
-            NFTLayout()
+        case .layers: layersLayout()
+        case .background: backgroundLayout()
+        case .NFT: NFTLayout()
         }
+        
+        skeletonView.pin
+            .all()
     }
     
     private func layersLayout() {
