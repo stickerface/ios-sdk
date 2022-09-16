@@ -190,7 +190,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         let personLayers = tupleLayers?.layers
         let backgroundLayer = tupleLayers?.sectionLayer
         
-        if layers != avatar.layers || avatar.avatarImage == nil {
+        if !Utils.compareLayers(layers, avatar.layers) || avatar.avatarImage == nil {
             StickerLoader.shared.loadImage(url: StickerLoader.avatarPath + layers) { [weak self] image in
                 guard let self = self else { return }
                 
