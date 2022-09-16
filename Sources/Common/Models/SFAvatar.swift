@@ -1,6 +1,7 @@
 import UIKit
 
 public class SFAvatar: Codable {
+    
     /// Avatar png data
     public let avatarImage: Data?
     
@@ -26,5 +27,16 @@ public class SFAvatar: Codable {
         self.layers = layers
         self.personLayers = personLayers
         self.backgroundLayer = backgroundLayer
+    }
+}
+
+extension SFAvatar: Equatable {
+    public static func == (lhs: SFAvatar, rhs: SFAvatar) -> Bool {
+        return lhs.avatarImage == rhs.avatarImage
+        && lhs.personImage == rhs.personImage
+        && lhs.backgroundImage == rhs.backgroundImage
+        && lhs.layers == rhs.layers
+        && lhs.personLayers == rhs.personLayers
+        && lhs.backgroundLayer == rhs.backgroundLayer
     }
 }
