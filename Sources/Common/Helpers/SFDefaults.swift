@@ -95,6 +95,15 @@ public class SFDefaults {
         }
     }
     
+    public static var wearablesCollection: String? {
+        get {
+            return defaults.string(forKey: SFDefaults.prefixName + #function)
+        }
+        set {
+            defaults.set(newValue, forKey: SFDefaults.prefixName + #function)
+        }
+    }
+    
     public static var isDev: Bool {
         get {
             return defaults.bool(forKey: SFDefaults.prefixName + #function)

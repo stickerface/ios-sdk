@@ -11,5 +11,5 @@ public enum Constants {
     public static let devTonPath = "https://testnet.tonapi.io/v1"
     
     // MARK: - Render
-    public static var renderUrl: String { (SFDefaults.isDev ? devPath : prodPath) + "render2.html" }
+    public static var renderUrl: String { prodPath + "render2.html" }
 }

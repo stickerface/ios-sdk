@@ -142,6 +142,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                 
                 self.editor = editor
                 SFDefaults.avatarCollection = editor.nft.avatarCollection
+                SFDefaults.wearablesCollection = editor.nft.wearablesCollection
                 SFDefaults.avatarMintPrice = Double(editor.nft.avatarMintPrice) / 1000000000.0
                 self.setupSections(needSetDefault: false, for: SFDefaults.gender)
                 
