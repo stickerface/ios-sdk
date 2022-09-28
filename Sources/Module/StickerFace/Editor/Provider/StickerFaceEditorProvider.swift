@@ -1,6 +1,5 @@
 import Foundation
 import Alamofire
-import Moya
 
 class StickerFaceEditorProvider {
     
