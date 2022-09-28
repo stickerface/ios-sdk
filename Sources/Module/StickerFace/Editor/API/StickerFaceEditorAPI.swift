@@ -26,7 +26,7 @@ class StickerFaceEditorAPI {
 struct Editor: Codable {
     let nft: EditorNFT
     let prices: [String: Int]
-    let sections: GenderSections
+    var sections: GenderSections
 }
 
 struct EditorNFT: Codable {
@@ -42,18 +42,18 @@ struct EditorNFT: Codable {
 }
 
 struct GenderSections: Codable {
-    let man: [EditorSection]
-    let woman: [EditorSection]
+    var man: [EditorSection]
+    var woman: [EditorSection]
 }
 
 struct EditorSection: Codable {
     let name: String
-    let subsections: [EditorSubsection]
+    var subsections: [EditorSubsection]
 }
 
 struct EditorSubsection: Codable, Equatable {
     let name: String
-    let layers: [String]?
+    var layers: [String]?
     let colors: [EditorColor]?
 }
 
