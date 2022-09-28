@@ -44,7 +44,9 @@ class StickerFaceEditorProvider {
         AF.request(url, method: .get, parameters: parameters).response { responseData in
             if let data = responseData.data {
                 do {
-                    let object = try JSONDecoder().decode(WalletNft.self, from: data)
+                    let decoder = JSONDecoder()
+                    decoder.keyDecodingStrategy = .convertFromSnakeCase
+                    let object = try decoder.decode(WalletNft.self, from: data)
                     completion(.success(object))
                 } catch {
                     completion(.failure(error))
