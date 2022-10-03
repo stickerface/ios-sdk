@@ -13,6 +13,7 @@ public class StickerFace {
     
     public init() {
         StickerFaceFonts.setup()
+        EditorHelper.shared.loadEditor()
     }
     
     public func createAvatarController() -> UIViewController {
@@ -33,6 +34,10 @@ public class StickerFace {
         let viewController = Utils.getRootViewController()
 
         viewController?.present(createAvatarController(), animated: animated)
+    }
+    
+    public func removeLayer(in subsection: String, from layers: String) -> String {
+        return EditorHelper.shared.removeLayer(in: subsection, from: layers)
     }
         
     public func handle(userActivity: NSUserActivity) {

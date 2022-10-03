@@ -45,6 +45,11 @@ public struct NFTAttribute: Codable {
 public struct NFTOwner: Codable, Equatable {
     public let address: String?
     public let isScam: Bool?
+    
+    public init(address: String?, isScam: Bool?) {
+        self.address = address
+        self.isScam = isScam
+    }
 }
 
 public struct NFTPreview: Codable {

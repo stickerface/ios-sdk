@@ -172,7 +172,6 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                 guard var editor = self.editor else { return }
                 
                 let metadata = wardrobe.nftItems?.compactMap({ $0.metadata })
-                print("!!!metadata", metadata)
                 metadata?.forEach { data in
                     guard let section = data.attributes?.first(where: { $0.traitType == .section })?.value,
                           let subsection = data.attributes?.first(where: { $0.traitType == .subsection })?.value,
