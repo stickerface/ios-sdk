@@ -2,7 +2,6 @@ import Foundation
 import IGListDiffKit
 
 class EditorSubsectionSectionModel {
-    
     let editorSubsection: EditorSubsection
     var prices: [String: Int]
     var selectedLayer: String?
@@ -14,12 +13,10 @@ class EditorSubsectionSectionModel {
         self.editorSubsection = editorSubsection
         self.prices = prices
     }
-    
 }
 
 // MARK: - ListDiffable
 extension EditorSubsectionSectionModel: ListDiffable {
-    
     func diffIdentifier() -> NSObjectProtocol {
         return editorSubsection.name as NSObjectProtocol
     }
@@ -36,5 +33,4 @@ extension EditorSubsectionSectionModel: ListDiffable {
         && object.newLayersImages == newLayersImages
         && object.oldLayersImages == oldLayersImages
     }
-    
 }

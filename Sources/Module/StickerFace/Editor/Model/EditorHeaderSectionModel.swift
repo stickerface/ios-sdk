@@ -2,19 +2,16 @@ import Foundation
 import IGListDiffKit
 
 class EditorHeaderSectionModel {
-    
     let title: String
     var isSelected = false
     
     init(title: String) {
         self.title = title
     }
-    
 }
 
 // MARK: - ListDiffable
 extension EditorHeaderSectionModel: ListDiffable {
-    
     func diffIdentifier() -> NSObjectProtocol {
         return title as NSObjectProtocol
     }
@@ -27,5 +24,4 @@ extension EditorHeaderSectionModel: ListDiffable {
         return object.title == title
         && object.isSelected == isSelected
     }
-    
 }
