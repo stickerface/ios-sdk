@@ -55,9 +55,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     @objc private func avatarButtonTapped(_ sender: AvatarButton) {
         switch sender.imageType {
         case .settings:
-            let viewController = ModalSettingsController()
-            
-            present(viewController, animated: true)
+            #warning("deplicated")
             
         case .male:
             sender.setImageType(.female)
@@ -73,10 +71,8 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
             mainView.genderButton.setImageType(.male)
             
         case .hanger:
-            let viewController = ModalWardrobeController()
-            viewController.delegate = self
-            
-            present(viewController, animated: true)
+            #warning("deplicated")
+            break
             
         case .close:
             mainView.genderButton.setImageType(.settings)
@@ -248,47 +244,8 @@ extension StickerFaceViewController: StickerFaceEditorControllerDelegate {
         receiveAvatar()
     }
     
+    #warning("deplicated")
     func stickerFaceEditor(_ controller: StickerFaceEditorViewController, didSelectPaid layer: String, layers withLayer: String, with price: Int, layerType: LayerType) {
-        let modal = ModalNewLayerController(type: layerType)
-        let balance = SFDefaults.tonBalance
-        modal.updateView(layer: layer, layers: withLayer, balance: balance, price: price)
-        modal.delegate = self
         
-        present(modal, animated: true)
-    }
-}
-
-// MARK: - ModalNewLayerDelegate
-extension StickerFaceViewController: ModalNewLayerDelegate {
-    func modalNewLayerController(_ controller: ModalNewLayerController, didBuy layer: String, layerType: LayerType, allLayers: String) {
-        if layerType == .NFT {
-            var wardrobe = SFDefaults.wardrobe
-            wardrobe.append(layer)
-            mainView.hangerButton.setCount(wardrobe.count)
-            SFDefaults.wardrobe = wardrobe
-        }
-        
-        if layerType == .background {
-            var backgounds = SFDefaults.paidBackgrounds
-            backgounds.append(layer)
-            SFDefaults.paidBackgrounds = backgounds
-        }
-        
-        updateCurrentLayers(allLayers)
-        
-        controller.dismiss(animated: true)
-    }
-    
-    func modalNewLayerController(_ controller: ModalNewLayerController, didSave layer: String, allLayers: String) { }
-}
-
-// MARK: - ModalWardrobeDelegate
-extension StickerFaceViewController: ModalWardrobeDelegate {
-    func modalWardrobeController(_ controller: ModalWardrobeController, didSave layers: String) {
-        updateCurrentLayers(layers)
-    }
-    
-    func modalWardrobeController(_ controller: ModalWardrobeController, needLayers forLayer: String) -> String {
-        return editorDelegate?.replaceCurrentLayers(with: forLayer, with: nil, isCurrent: true) ?? ""
     }
 }
