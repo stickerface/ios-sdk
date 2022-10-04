@@ -1,77 +1,29 @@
 // Common
-"commonContinue" = "Continue";
-"commonColorCups" = "COLOR";
-"commonFree" = "Free";
-"commonKeyboard" = "Keyboard";
-"commonConnect" = "Connect";
-"commonOther" = "Other";
-"commonPaid" = "Paid";
-"commonBalance" = "Balance";
-
-// Onboarding
-"onboardingTitle" = "Welcome to StickerFace";
-"onboardingSubtitle" = "Design your awesome character and get the NFT to own your unique set";
-"onboardingPrivacyPolicyAndRules" = "By continuing you agree to our <a href='https://stickerface.io/policy'>Terms of Service</a> and <a href='https://stickerface.io/policy'>Privacy Policy</a>";
+"commonContinue" = "Продолжить";
+"commonColorCups" = "ЦВЕТ";
+"commonFree" = "Бесплатно";
+"commonConnect" = "Подключить";
+"commonPaid" = "Платно";
+"commonBalance" = "Баланс";
 
 // Setup Avatar
-"setupAvatarTitle" = "Avatar";
-"setupAvatarSubtitle" = "Let’s start creating your avatar";
-"setupAvatarDescription" = "Pics are not stored and used one time for the AI avatar generation";
-"setupAvatarContinueTitle" = "Continue without camera";
-"setupAvatarAllowTitle" = "Allow camera access";
-"setupAvatarGenerateTitle" = "Generate avatar";
-"setupAvatarGenerateNewTitle" = "Generate new avatar";
-"setupAvatarWaitingCameraAccess" = "Waiting for access…";
-"setupAvatarNoFace" = "Take a selfie to make stickers";
-"setupAvatarSmallFace" = "Move the face closer";
-"setupAvaterTakingPhoto" = "Stay focused! Taking a photo…";
+"setupAvatarTitle" = "Аватар";
+"setupAvatarSubtitle" = "Начинаем создавать аватар";
+"setupAvatarDescription" = "Мы не храним изображения и используем их только для генерации аватара";
+"setupAvatarContinueTitle" = "Продолжить без камеры";
+"setupAvatarAllowTitle" = "Разрешить доступ к камере";
+"setupAvatarGenerateTitle" = "Создать аватар";
+"setupAvatarGenerateNewTitle" = "Создать новый аватар";
+"setupAvatarWaitingCameraAccess" = "Ждем доступ…";
+"setupAvatarNoFace" = "Сделайте селфи, чтобы создать стикеры";
+"setupAvatarSmallFace" = "Чуть ближе к камере";
+"setupAvaterTakingPhoto" = "Не двигайтесь, делаем селфи…";
 
 // Connect Wallet
-"connectWalletTitle" = "Connect your crypto wallet";
-"connectWalletSubtitle" = "To continue you need to have a cryptocurrency wallet Tonkeeper";
-"connectWalletWithoutWallet" = "Continue without wallet";
-"connectWalletConnectTitle" = "Connect with Tonkeeper";
+"connectWalletTitle" = "Подключить криптокошелек";
+"connectWalletSubtitle" = "Чтобы создать NFT аватар, нужен кошелек Tonkeeper. Вы можете подключить его позже.";
+"connectWalletWithoutWallet" = "Продолжить без кошелька";
+"connectWalletConnectTitle" = "Подключить Tonkeeper";
 
 // Editor
-"editorSave" = "Save and continue";
-
-// New Layer
-"newLayerPurchase" = "Purchase";
-"newLayerBackPurchase" = "If you like a new background\nmake a purchase";
-"newLayerNFTPurchase" = "One step to buy";
-"newLayerBuyNFT" = "Buy NFT";
-"newLayerInsufficientFunds" = "Insufficient funds";
-"newLayerAddMinimum" = "Please add minimum <bold>%@ TON</bold>\nto wallet for purchase";
-"newLayerReplenish" = "Replenish the balance";
-"newLayerConnectWallet" = "Connect crypto wallet";
-"newLyaerBackConnectTonkeeper" = "To buy a background color\nconnect the Tonkepeer";
-"newLyaerNFTConnectTonkeeper" = "To buy a NFT connect the Tonkepeer";
-"newLayerFitting" = "Fitting";
-"newLayerLookGood" = "Seems to look good!";
-"newLayerDress" = "Dress";
-
-// Export
-"exportTitle" = "Export";
-"exportSubtitle" = "Use all stickers in Telegram, WhatsApp\nor native keyboard";
-
-// Settings
-"settingsTitle" = "Settings";
-"settingsConnectToBuy" = "Connect to buy NFTs";
-"settingsLanguage" = "Language";
-"settingsRate" = "Rate us";
-"settingsAbout" = "About app";
-
-// Share
-"shareTitle" = "Share";
-"shareSubtitle" = "Send sticker to friends";
-
-// Wardrobe
-"wardrobeEmptyTitle" = "All NFTs’ purchases will\nbe stored here";
-"wardrobeTitle" = "Wardrobe";
-"wardrobeSubtitle" = "All your purchases is here";
-
-// Main
-"mainStickers" = "Stickers";
-"mainExport" = "Export stickers";
-"mainStoreButton" = "Go to store";
-"mainStoreTitle" = "NFTs’ clothes\nand accessories";
+"editorSave" = "Сохранить и продолжить";
