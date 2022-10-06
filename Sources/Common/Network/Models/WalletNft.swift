@@ -33,7 +33,7 @@ public struct NFTMetadata: Codable {
 }
 
 public enum TraitType: String, Codable {
-    case layer, section, subsection
+    case layer, section, subsection, special
 }
 
 public struct NFTAttribute: Codable {
