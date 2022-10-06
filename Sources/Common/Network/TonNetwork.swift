@@ -10,15 +10,15 @@ public class TonNetwork {
         AF.request(path, method: .get).response { responseData in
             if let data = responseData.data {
                 do {
-                    let login = try JSONDecoder().decode(TonLoginModel.self, from: data)
+                    let decoder = JSONDecoder()
+                    decoder.keyDecodingStrategy = .convertFromSnakeCase
+                    let login = try decoder.decode(TonLoginModel.self, from: data)
                     
                     let id = login.clientId ?? ""
                     let address = login.payload?.first?.address ?? ""
                     let client = TonClient(clientId: id, address: address)
                     
-                    SFDefaults.tonClient = client
-                    
-                    TonNetwork.updateBalance()
+                    TonNetwork.updateBalance(client: client)
                 } catch {
                     print(error)
                 }
@@ -28,20 +28,17 @@ public class TonNetwork {
         }
     }
     
-    static func updateBalance() {
-        guard let address = SFDefaults.tonClient?.address else { return }
-        let path = "\(Constants.apiPath)/tonkeeper/balance?wallet=\(address)"
+    static func updateBalance(client: TonClient) {
+        var client = client
+        let path = "\(Constants.apiPath)/tonkeeper/balance?wallet=\(client.address)"
         
         AF.request(path, method: .get).response { responseData in
             if let data = responseData.data {
                 do {
                     let balance = try JSONDecoder().decode(TonBalance.self, from: data)
                     
-                    var client = SFDefaults.tonClient
-                    client?.balance = balance.balance
-                    client?.usd = balance.usd
-                    
-                    SFDefaults.tonClient = client
+                    client.balance = balance.balance
+                    client.usd = balance.usd
                 } catch {
                     print(error)
                 }
@@ -49,7 +46,8 @@ public class TonNetwork {
                 print(responseData)
             }
             
-            NotificationCenter.default.post(name: .tonClientDidUpdate, object: SFDefaults.tonClient)
+            SFDefaults.tonClient = client
+            NotificationCenter.default.post(name: .tonClientDidUpdate, object: client)
         }
     }
     

@@ -14,6 +14,9 @@ class EditorHelper {
         provider.loadEditor { result in
             switch result {
             case .success(let editor):
+                SFDefaults.avatarCollection = editor.nft.avatarCollection
+                SFDefaults.wearablesCollection = editor.nft.wearablesCollection
+                SFDefaults.avatarMintPrice = Double(editor.nft.avatarMintPrice) / 1000000000.0
                 self.editor = editor
                 self.loadWardrobe()
                 
