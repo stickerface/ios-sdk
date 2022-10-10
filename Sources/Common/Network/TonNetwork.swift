@@ -30,7 +30,7 @@ public class TonNetwork {
     
     static func updateBalance() {
         guard let address = SFDefaults.tonClient?.address else { return }
-        let path = "\(Constants.apiPath)/tonkeeper/balance?wallet=\(address)"
+        let path = "\(Constants.apiPath)/tonkeeper/balance?wallet=\(address)&testnet=\(SFDefaults.isDev ? 1 : 0)"
         
         AF.request(path, method: .get).response { responseData in
             if let data = responseData.data {
