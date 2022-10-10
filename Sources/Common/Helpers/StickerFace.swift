@@ -26,6 +26,7 @@ public class StickerFace {
     public func editorController(avatar: SFAvatar) -> UIViewController {
         let rootViewController = RootNavigationController.shared
         rootViewController.openEditor(avatar: avatar)
+        rootViewController.modalPresentationStyle = .overFullScreen
         
         return rootViewController
     }
