@@ -200,6 +200,8 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
             self.mainView.descriptionLabel.alpha = 0
             self.mainView.linesRoundRotateAnimationView.alpha = 0
             self.isAvatarGenerated = true
+            
+            self.updateButtonTitles()
         }
     }
     
@@ -335,7 +337,6 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
             self.faceDetected = false
             
             self.updateAvatar()
-            self.updateButtonTitles()
         }
     }
     
