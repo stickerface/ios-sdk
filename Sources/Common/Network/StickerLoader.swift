@@ -87,6 +87,12 @@ public class StickerLoader: NSObject {
         }
     }
     
+    public func preloadLayers(_ layers: [String]) {
+        let renderLayer = RenderLayer(layers: layers)
+        layersForRender.insert(renderLayer, at: 0)
+        renderIfNeeded()
+    }
+    
     public func clearRenderQueue() {
         isRendering = false
         isRenderReady = false
@@ -120,6 +126,14 @@ public class StickerLoader: NSObject {
         renderWebView.evaluateJavaScript(layer.renderString) { anyO, error in
             if let error = error {
                 print("=== error", error)
+            }
+            
+            if layer.id == -1 {
+                guard let index = self.layersForRender.firstIndex(where: { $0.id == -1 }) else { return }
+                self.isRendering = false
+                self.reRenderTimer.invalidate()
+                self.layersForRender.remove(at: index)
+                self.renderIfNeeded()
             }
             
             if anyO == nil {
@@ -195,9 +209,25 @@ extension StickerLoader {
         let size: CGFloat
         let layer: String
         let completion: ImageAction
+        let renderString: String
         
-        var renderString: String {
-            return "renderPNG(\"\(layer)\", \(id), \(size * UIScreen.main.scale), {partial: true})"
+        init(id: Int, size: CGFloat, layer: String, completion: @escaping ImageAction) {
+            self.id = id
+            self.size = size
+            self.layer = layer
+            self.completion = completion
+            
+            renderString = "renderPNG(\"\(layer)\", \(id), \(size * UIScreen.main.scale), {partial: true})"
+        }
+        
+        init(layers: [String]) {
+            id = -1
+            size = -1
+            layer = ""
+            completion = { _ in }
+            
+            let preloadLayers = layers.joined(separator: ";")
+            renderString = "preloadLayers(\"\(preloadLayers)\")"
         }
     }
 }

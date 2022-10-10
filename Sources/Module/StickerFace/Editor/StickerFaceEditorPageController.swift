@@ -39,6 +39,9 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let layers = sectionModel.sections.flatMap { $0.editorSubsection.layers ?? [] }
+        StickerLoader.shared.preloadLayers(layers)
+        
         adapter.collectionView = mainView.collectionView
         adapter.dataSource = self
     }
