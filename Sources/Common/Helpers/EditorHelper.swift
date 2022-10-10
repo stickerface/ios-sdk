@@ -83,18 +83,45 @@ class EditorHelper {
                           let layer = data.attributes?.first(where: { $0.traitType == .layer })?.value
                     else { return }
                     
-                    if let sectionIndex = editor.sections.man.firstIndex(where: { $0.name == section }),
-                       let subsectionIndex = editor.sections.man[sectionIndex].subsections.firstIndex(where: { $0.name == subsection }) {
-                        editor.sections.man[sectionIndex].subsections[subsectionIndex].layers?.insert(layer, at: 0)
+                    let manSections = editor.sections.man
+                    let sectionIndex = manSections.firstIndex(where: { $0.name.lowercased() == section.lowercased() })
+                    
+                    let womenSections = editor.sections.woman
+                    let wSectionIndex = womenSections.firstIndex(where: { $0.name.lowercased() == section.lowercased() })
+                    
+                    if let sectionIndex = sectionIndex {
+                        var subsections = manSections[sectionIndex].subsections
+                        let subsectionIndex = subsections.firstIndex(where: { $0.name.lowercased() == subsection.lowercased() })
                         
-                    } else if let sectionIndex = editor.sections.woman.firstIndex(where: { $0.name == section }),
-                              let subsectionIndex = editor.sections.woman[sectionIndex].subsections.firstIndex(where: { $0.name == subsection }) {
-                        editor.sections.woman[sectionIndex].subsections[subsectionIndex].layers?.insert(layer, at: 0)
+                        if let subsectionIndex = subsectionIndex {
+                            subsections[subsectionIndex].layers?.insert(layer, at: 0)
+                        } else {
+                            let subsection = EditorSubsection(name: subsection, layers: [layer, "0"], colors: nil)
+                            subsections.append(subsection)
+                        }
                         
+                        editor.sections.man[sectionIndex].subsections = subsections
                     } else {
                         let subsections = EditorSubsection(name: subsection, layers: [layer, "0"], colors: nil)
                         let section = EditorSection(name: section, subsections: [subsections])
                         editor.sections.man.append(section)
+                    }
+                    
+                    if let sectionIndex = wSectionIndex {
+                        var subsections = womenSections[sectionIndex].subsections
+                        let subsectionIndex = subsections.firstIndex(where: { $0.name.lowercased() == subsection.lowercased() })
+                        
+                        if let subsectionIndex = subsectionIndex {
+                            subsections[subsectionIndex].layers?.insert(layer, at: 0)
+                        } else {
+                            let subsection = EditorSubsection(name: subsection, layers: [layer, "0"], colors: nil)
+                            subsections.append(subsection)
+                        }
+                        
+                        editor.sections.woman[sectionIndex].subsections = subsections
+                    } else {
+                        let subsections = EditorSubsection(name: subsection, layers: [layer, "0"], colors: nil)
+                        let section = EditorSection(name: section, subsections: [subsections])
                         editor.sections.woman.append(section)
                     }
                 }
