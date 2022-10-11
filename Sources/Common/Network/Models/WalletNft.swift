@@ -33,13 +33,12 @@ public struct NFTMetadata: Codable {
 }
 
 public enum TraitType: String, Codable {
-    case layer, section, subsection, special
+    case layer, layers, section, subsection, special
 }
 
 public struct NFTAttribute: Codable {
     public let traitType: TraitType?
     public let value: String?
-    public let layers: String?
 }
 
 public struct NFTOwner: Codable, Equatable {
