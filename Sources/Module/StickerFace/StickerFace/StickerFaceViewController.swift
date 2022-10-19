@@ -54,8 +54,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     
     @objc private func avatarButtonTapped(_ sender: AvatarButton) {
         switch sender.imageType {
-        case .settings:
-            #warning("deplicated")
+        case .settings: #warning("deplicated")
             
         case .male:
             sender.setImageType(.female)
@@ -70,9 +69,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
             mainView.backButton.isHidden = false
             mainView.genderButton.setImageType(.male)
             
-        case .hanger:
-            #warning("deplicated")
-            break
+        case .hanger: #warning("deplicated")
             
         case .close:
             mainView.genderButton.setImageType(.settings)
@@ -187,9 +184,8 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         let backgroundLayer = tupleLayers?.sectionLayer
         
         if !Utils.compareLayers(layers, avatar.layers) || avatar.avatarImage == nil {
-            StickerLoader.shared.loadImage(url: StickerLoader.avatarPath + layers) { [weak self] image in
-                guard let self = self else { return }
-                
+            let size = mainView.avatarView.frame.size.maxSide
+            StickerLoader.shared.renderLayer(layers, size: size) { image in
                 let avatarImage = image.pngData() ?? Data()
                 let personImage = self.mainView.avatarView.avatar?.personImage
                 let backgroundImage = (self.mainView.backgroundImageView.image ?? UIImage()).pngData()

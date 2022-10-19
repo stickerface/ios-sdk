@@ -95,7 +95,7 @@ class StickerFaceEditorView: RootView {
     }()
 
     override func setup() {
-        backgroundColor = .clear
+        backgroundColor = .white
         
         addSubview(headerCollectionView)
         addSubview(rightGradientView)
