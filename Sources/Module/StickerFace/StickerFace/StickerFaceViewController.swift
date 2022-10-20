@@ -22,6 +22,8 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         self.layers = avatar.layers
         super.init(nibName: nil, bundle: nil)
         
+        recognizeGender()
+        
         mainView.editorViewController.layers = avatar.layers
         mainView.editorViewController.currentLayers = avatar.layers
     }
@@ -217,6 +219,11 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         alert.addAction(logoutAction)
         
         present(alert, animated: true)
+    }
+    
+    private func recognizeGender() {
+        let layersArray = layers.components(separatedBy: ";")
+        SFDefaults.gender = layersArray.contains("1") ? .male : .female
     }
 }
 

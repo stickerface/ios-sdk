@@ -232,14 +232,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     
     private func setupSections(needSetDefault: Bool, for gender: SFDefaults.Gender) {
         guard let editor = editor else { return }
-        let needSetupGender = objects.isEmpty
-        
-        defer {
-            if needSetupGender {
-                setupSections(needSetDefault: false, for: SFDefaults.gender)
-            }
-        }
-        
+                
         let sections = gender == .male ? editor.sections.man : editor.sections.woman
                 
         headers = sections.compactMap { section in
@@ -277,14 +270,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
             
             return EditorSectionModel(name: section.name, sections: models)
         })
-        
-        if needSetupGender {
-            if layersWithout(section: "hair", layers: layers).sectionLayer == "0" {
-                SFDefaults.gender = SFDefaults.gender == .male ? .female : .male
-                return
-            }
-        }
-        
+                
         if needSetDefault {
             mainView.headerCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: true)
         }
