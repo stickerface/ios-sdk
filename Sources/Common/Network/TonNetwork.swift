@@ -47,6 +47,7 @@ public class TonNetwork {
             }
             
             SFDefaults.tonClient = client
+            EditorHelper.shared.loadWardrobe()
             NotificationCenter.default.post(name: .tonClientDidUpdate, object: client)
         }
     }

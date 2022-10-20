@@ -68,9 +68,7 @@ class EditorHelper {
         return allLayers.joined(separator: ";")
     }
     
-    // MARK: - Private mehtods
-    
-    private func loadWardrobe() {
+    func loadWardrobe() {
         provider.loadWardrobe(onSale: true, offset: 0) { [weak self] result in
             guard let self = self else { return }
             
@@ -97,7 +95,9 @@ class EditorHelper {
                         let subsectionIndex = subsections.firstIndex(where: { $0.name.lowercased() == subsection.lowercased() })
                         
                         if let subsectionIndex = subsectionIndex {
-                            subsections[subsectionIndex].layers?.insert(layer, at: 0)
+                            if subsections[subsectionIndex].layers?.contains(layer) == false {
+                                subsections[subsectionIndex].layers?.insert(layer, at: 0)
+                            }
                         } else {
                             let subsection = EditorSubsection(name: subsection, layers: [layer, "0"], colors: nil)
                             subsections.append(subsection)
@@ -115,7 +115,9 @@ class EditorHelper {
                         let subsectionIndex = subsections.firstIndex(where: { $0.name.lowercased() == subsection.lowercased() })
                         
                         if let subsectionIndex = subsectionIndex {
-                            subsections[subsectionIndex].layers?.insert(layer, at: 0)
+                            if subsections[subsectionIndex].layers?.contains(layer) == false {
+                                subsections[subsectionIndex].layers?.insert(layer, at: 0)
+                            }
                         } else {
                             let subsection = EditorSubsection(name: subsection, layers: [layer, "0"], colors: nil)
                             subsections.append(subsection)
