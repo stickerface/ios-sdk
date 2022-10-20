@@ -222,11 +222,15 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                 }
                 
                 self.editor = editor
-                self.setupSections(needSetDefault: false, for: SFDefaults.gender)
             
             case .failure(let error):
-                self.mainView.loaderView.showError("Error load wardrobe: \(error.localizedDescription)")
+                //TODO: нужно ли отображать ошибку загрузки гардероба?
+//                self.mainView.loaderView.showError("Error load wardrobe: \(error.localizedDescription)")
+                print(error)
+                
             }
+            
+            self.setupSections(needSetDefault: false, for: SFDefaults.gender)
         }
     }
     

@@ -31,7 +31,7 @@ class StickerFaceEditorProvider {
               let collection = SFDefaults.wearablesCollection
         else {
             completion(.failure(NSError(domain: "no address or collection", code: -1)))
-            return 
+            return
         }
         
         let path = "/nft/searchItems"
