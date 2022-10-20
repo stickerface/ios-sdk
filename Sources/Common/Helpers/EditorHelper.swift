@@ -68,8 +68,8 @@ class EditorHelper {
         return allLayers.joined(separator: ";")
     }
     
-    func loadWardrobe() {
-        provider.loadWardrobe(onSale: true, offset: 0) { [weak self] result in
+    func loadWardrobe(owner: String? = SFDefaults.tonClient?.address) {
+        provider.loadWardrobe(owner: owner, onSale: true, offset: 0) { [weak self] result in
             guard let self = self else { return }
             
             switch result {

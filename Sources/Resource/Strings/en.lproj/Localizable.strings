@@ -18,6 +18,7 @@
 "setupAvatarNoFace" = "Take a selfie to make stickers";
 "setupAvatarSmallFace" = "Bring the face closer";
 "setupAvaterTakingPhoto" = "Stay still! Taking a photo…";
+"setupAvatarSubtitleContinue" = "It’s ready! Tap “Continue” if you like new avatar";
 
 // Connect Wallet
 "connectWalletTitle" = "Connect crypto wallet";

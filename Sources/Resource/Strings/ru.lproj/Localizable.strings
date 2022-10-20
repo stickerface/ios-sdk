@@ -18,6 +18,7 @@
 "setupAvatarNoFace" = "Сделайте селфи, чтобы создать стикеры";
 "setupAvatarSmallFace" = "Чуть ближе к камере";
 "setupAvaterTakingPhoto" = "Не двигайтесь, делаем селфи…";
+"setupAvatarSubtitleContinue" = "It’s ready! Tap “Continue” if you like new avatar";
 
 // Connect Wallet
 "connectWalletTitle" = "Подключить криптокошелек";

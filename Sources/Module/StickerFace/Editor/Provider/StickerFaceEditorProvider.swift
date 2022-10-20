@@ -26,9 +26,11 @@ class StickerFaceEditorProvider {
         }
     }
     
-    func loadWardrobe(onSale: Bool, offset: Int, completion: @escaping(Result<WalletNft, Error>) -> Void) {
-        guard let owner = SFDefaults.tonClient?.address,
-              let collection = SFDefaults.wearablesCollection
+    func loadWardrobe(owner: String? = SFDefaults.tonClient?.address, onSale: Bool, offset: Int, completion: @escaping(Result<WalletNft, Error>) -> Void) {
+        
+        guard
+            let owner = owner,
+            let collection = SFDefaults.wearablesCollection
         else {
             completion(.failure(NSError(domain: "no address or collection", code: -1)))
             return
@@ -60,6 +62,7 @@ class StickerFaceEditorProvider {
                 completion(.failure(NSError()))
             }
         }
+        
     }
     
 }

@@ -262,10 +262,12 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
     private func updateButtonTitles() {
         let secondaryTitle: String
         let mainTitle: String
+        let mainSubtitle: String
         
         if isAvatarGenerated {
             secondaryTitle = "setupAvatarGenerateNewTitle".libraryLocalized
             mainTitle = "commonContinue".libraryLocalized
+            mainSubtitle = "It’s ready! Tap “Continue” if you like new avatar"
         } else {
             let status = AVCaptureDevice.authorizationStatus(for: .video)
             
@@ -274,10 +276,12 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
             "setupAvatarAllowTitle".libraryLocalized
             
             secondaryTitle = "setupAvatarContinueTitle".libraryLocalized
+            mainSubtitle = "setupAvatarSubtitle".libraryLocalized
         }
         
         mainView.mainButton.setTitle(mainTitle, for: .normal)
         mainView.secondaryButton.setTitle(secondaryTitle, for: .normal)
+        mainView.subtitleLabel.text = mainSubtitle
     }
     
     private func initCamera() {
