@@ -154,7 +154,7 @@ class StickerFaceEditorSectionController: ListSectionController {
         } else {
             cell.layerType = .layers
         }
-         
+        
         cell.layerImageView.image = nil
         if let image = sectionModel.newLayersImages?[layer] {
             cell.skeletonView.isHidden = true
@@ -165,7 +165,7 @@ class StickerFaceEditorSectionController: ListSectionController {
             cell.layerImageView.image = image
             delegate?.stickerFaceEditor(self, needRedner: layer, section: sectionModel.editorSubsection.name)
             
-        } else {
+        } else if layer != "0" {
             cell.skeletonView.isHidden = false
             delegate?.stickerFaceEditor(self, needRedner: layer, section: sectionModel.editorSubsection.name)
         }
@@ -177,6 +177,10 @@ class StickerFaceEditorSectionController: ListSectionController {
         
         cell.titleLabel.text = "Honeysuckle"
         cell.noneImageView.isHidden = layer != "0"
+        
+        if layer == "0" {
+            cell.layerImageView.image = nil
+        }
         
         return cell
     }

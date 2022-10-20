@@ -29,7 +29,10 @@ class StickerFaceEditorProvider {
     func loadWardrobe(onSale: Bool, offset: Int, completion: @escaping(Result<WalletNft, Error>) -> Void) {
         guard let owner = SFDefaults.tonClient?.address,
               let collection = SFDefaults.wearablesCollection
-        else { return }
+        else {
+            completion(.failure(NSError(domain: "no address or collection", code: -1)))
+            return 
+        }
         
         let path = "/nft/searchItems"
         let url = Constants.tonApiPath + path

@@ -43,18 +43,20 @@ class EditorHelper {
         let allObjectSubsections = editor.sections.woman.flatMap { $0.subsections }
         var deleteIndex: Int?
         
-        if let subsectionLayers = allManSubsecitons.first(where: { $0.name == subsection })?.layers {
-            allLayers.enumerated().forEach { index, layer in
-                if subsectionLayers.contains(layer) {
-                    deleteIndex = index
+        if allLayers.contains("0") && allLayers.contains("25") {
+            if let subsectionLayers = allObjectSubsections.first(where: { $0.name == subsection })?.layers {
+                allLayers.enumerated().forEach { index, layer in
+                    if subsectionLayers.contains(layer) {
+                        deleteIndex = index
+                    }
                 }
             }
-        }
-        
-        if let subsectionLayers = allObjectSubsections.first(where: { $0.name == subsection })?.layers {
-            allLayers.enumerated().forEach { index, layer in
-                if subsectionLayers.contains(layer) {
-                    deleteIndex = index
+        } else {
+            if let subsectionLayers = allManSubsecitons.first(where: { $0.name == subsection })?.layers {
+                allLayers.enumerated().forEach { index, layer in
+                    if subsectionLayers.contains(layer) {
+                        deleteIndex = index
+                    }
                 }
             }
         }
@@ -78,9 +80,10 @@ class EditorHelper {
                 
                 let metadata = wardrobe.nftItems?.compactMap({ $0.metadata })
                 metadata?.forEach { data in
-                    guard let section = data.attributes?.first(where: { $0.traitType == .section })?.value,
-                          let subsection = data.attributes?.first(where: { $0.traitType == .subsection })?.value,
-                          let layer = data.attributes?.first(where: { $0.traitType == .layer })?.value
+                    guard
+                        let section = data.attributes?.first(where: { $0.traitType == .section })?.value,
+                        let subsection = data.attributes?.first(where: { $0.traitType == .subsection })?.value,
+                        let layer = data.attributes?.first(where: { $0.traitType == .layer })?.value
                     else { return }
                     
                     let manSections = editor.sections.man
