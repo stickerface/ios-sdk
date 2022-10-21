@@ -34,6 +34,7 @@ public struct NFTMetadata: Codable {
 
 public enum TraitType: String, Codable {
     case layer, layers, section, subsection, special
+    case diamondSize = "Diamond Size"
 }
 
 public struct NFTAttribute: Codable {

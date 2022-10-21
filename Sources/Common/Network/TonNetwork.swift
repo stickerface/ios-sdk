@@ -18,6 +18,7 @@ public class TonNetwork {
                     let address = login.payload?.first?.address ?? ""
                     let client = TonClient(clientId: id, address: address)
                     
+                    EditorHelper.shared.loadWardrobe(owner: client.address)
                     TonNetwork.updateBalance(client: client)
                 } catch {
                     print(error)
@@ -28,7 +29,7 @@ public class TonNetwork {
         }
     }
     
-    static func updateBalance(client: TonClient) {
+    public static func updateBalance(client: TonClient) {
         var client = client
         let path = "\(Constants.apiPath)/tonkeeper/balance?wallet=\(client.address)&testnet=\(SFDefaults.isDev ? 1 : 0)"
         

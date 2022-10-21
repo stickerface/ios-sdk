@@ -95,6 +95,9 @@ class StickerFaceEditorView: RootView {
     }()
 
     override func setup() {
+        layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        layer.cornerRadius = 23
+        layer.cornerCurve = .circular
         backgroundColor = .white
         
         addSubview(headerCollectionView)
