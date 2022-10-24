@@ -174,11 +174,10 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                 metadata?.forEach { data in
                     guard
                         let section = data.attributes?.first(where: { $0.traitType == .section })?.value,
-                        let layer = data.attributes?.first(where: { $0.traitType == .layer })?.value
+                        let nftLayer = data.attributes?.first(where: { $0.traitType == .layer })?.value
                     else { return }
                     
-                    let subsectionValue = data.attributes?.first(where: { $0.traitType == .subsection })?.value
-//                    let subsection = subsectionValue == nil ? section : subsectionValue!
+                    let layer = nftLayer.components(separatedBy: ";").joined(separator: ",")
                     let subsection = section
 
                     let manSections = editor.sections.man

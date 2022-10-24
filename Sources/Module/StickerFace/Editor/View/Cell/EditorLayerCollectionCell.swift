@@ -150,7 +150,6 @@ class EditorLayerCollectionCell: UICollectionViewCell {
         contentView.layer.borderColor = UIColor.sfSeparatorLight.cgColor
         buyButton.isHidden = true
         layerImageView.image = nil
-        noneImageView.isHidden = true
         checkmarkImageView.isHidden = true
         priceStackView.removeArrangedSubview(priceSubtitleLabel)
     }

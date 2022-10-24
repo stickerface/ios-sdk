@@ -119,6 +119,7 @@ public class StickerLoader: NSObject {
         isRendering = true
                 
         reRenderTimer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
+            print("=== rerender")
             self.isRendering = false
             self.renderIfNeeded()
         }
@@ -134,10 +135,6 @@ public class StickerLoader: NSObject {
                 self.reRenderTimer.invalidate()
                 self.layersForRender.remove(at: index)
                 self.renderIfNeeded()
-            }
-            
-            if anyO == nil {
-                print("=== any is nil")
             }
         }
     }
