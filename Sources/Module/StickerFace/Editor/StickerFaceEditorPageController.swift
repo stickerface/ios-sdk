@@ -90,9 +90,9 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
         if layers == "0" || layers == "" {
             neededLayers = layers
         } else if section == "background" {
-            neededLayers = layersWitoutBack?.sectionLayer ?? ""
+            return layersWitoutBack?.sectionLayer ?? ""
         } else if section == "clothing" {
-            neededLayers = layersWithoutClothing?.sectionLayer ?? ""
+            return layersWitoutBack?.layers ?? ""
         } else {
             neededLayers = layersWithoutClothing?.layers ?? ""
         }
@@ -147,6 +147,7 @@ extension StickerFaceEditorPageController: StickerFaceEditorSectionDelegate {
     func stickerFaceEditor(_ controller: StickerFaceEditorSectionController, willDisplay header: String, in section: Int, at index: Int) {
         guard
             let layer = sectionModel.sections[section].editorSubsection.layers?[index],
+            layer != "0",
             sectionModel.sections[section].newLayersImages?[layer] == nil
         else { return }
         

@@ -149,13 +149,13 @@ class StickerFaceEditorSectionController: ListSectionController {
         // TODO: need 'if' closure for NFT
         if sectionModel.editorSubsection.name == "background" {
             cell.layerType = .background
-        } else if sectionModel.editorSubsection.name == "clothing" {
-            cell.layerType = .NFT
         } else {
             cell.layerType = .layers
         }
         
         cell.layerImageView.image = nil
+        cell.skeletonView.isHidden = true
+        
         if let image = sectionModel.newLayersImages?[layer] {
             cell.skeletonView.isHidden = true
             cell.layerImageView.image = image
@@ -163,11 +163,9 @@ class StickerFaceEditorSectionController: ListSectionController {
         } else if let image = sectionModel.oldLayersImages?[layer] {
             cell.skeletonView.isHidden = true
             cell.layerImageView.image = image
-            delegate?.stickerFaceEditor(self, needRedner: layer, section: sectionModel.editorSubsection.name)
-            
+
         } else if layer != "0" {
             cell.skeletonView.isHidden = false
-            delegate?.stickerFaceEditor(self, needRedner: layer, section: sectionModel.editorSubsection.name)
         }
         
         let isPaid = SFDefaults.wardrobe.contains(layer) || SFDefaults.paidBackgrounds.contains(layer)
