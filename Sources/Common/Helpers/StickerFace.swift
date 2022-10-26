@@ -37,7 +37,7 @@ public class StickerFace {
         viewController?.present(createAvatarController(), animated: animated)
     }
     
-    public func removeLayer(in subsection: String, from layers: String) -> String {
+    public func removeLayer(in subsection: String, from layers: String) -> EditorHelper.ResultLayers {
         return EditorHelper.shared.removeLayer(in: subsection, from: layers)
     }
         

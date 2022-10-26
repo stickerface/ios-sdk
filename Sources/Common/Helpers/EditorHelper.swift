@@ -1,12 +1,13 @@
 import Alamofire
 import Foundation
 
-class EditorHelper {
+public class EditorHelper {
+    public typealias ResultLayers = (removedLayer: String, layers: String)
     
     static let shared = EditorHelper()
     
     private let provider = StickerFaceEditorProvider()
-    private var editor: Editor?
+    private(set) var editor: Editor?
     
     // MARK: - Public mehtods
     
@@ -26,7 +27,7 @@ class EditorHelper {
         }
     }
     
-    func removeLayer(in subsection: String, from layers: String) -> String {
+    public func removeLayer(in subsection: String, from layers: String) -> ResultLayers {
         guard let editor = editor else { fatalError("need load editor first") }
         
         var layers = layers
@@ -44,7 +45,7 @@ class EditorHelper {
         var deleteIndex: Int?
         
         if allLayers.contains("0") && allLayers.contains("25") {
-            if let subsectionLayers = allObjectSubsections.first(where: { $0.name == subsection })?.layers {
+            if let subsectionLayers = allObjectSubsections.first(where: { $0.name.lowercased() == subsection.lowercased() })?.layers {
                 allLayers.enumerated().forEach { index, layer in
                     if subsectionLayers.contains(layer) {
                         deleteIndex = index
@@ -52,7 +53,7 @@ class EditorHelper {
                 }
             }
         } else {
-            if let subsectionLayers = allManSubsecitons.first(where: { $0.name == subsection })?.layers {
+            if let subsectionLayers = allManSubsecitons.first(where: { $0.name.lowercased() == subsection.lowercased() })?.layers {
                 allLayers.enumerated().forEach { index, layer in
                     if subsectionLayers.contains(layer) {
                         deleteIndex = index
@@ -61,11 +62,16 @@ class EditorHelper {
             }
         }
         
+        var removedLayer = ""
+        var resultLayers = ""
+        
         if let index = deleteIndex {
-            allLayers.remove(at: index)
+            removedLayer = allLayers.remove(at: index)
         }
         
-        return allLayers.joined(separator: ";")
+        resultLayers = allLayers.joined(separator: ";")
+        
+        return ResultLayers(removedLayer, resultLayers)
     }
     
     func loadWardrobe(owner: String? = SFDefaults.tonClient?.address) {
