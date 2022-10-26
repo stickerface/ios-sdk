@@ -28,7 +28,7 @@ public class EditorHelper {
     }
     
     public func removeLayer(in subsection: String, from layers: String) -> ResultLayers {
-        guard let editor = editor else { ResultLayers("", "") }
+        guard let editor = editor else { return ResultLayers("", "") }
         
         var layers = layers
         
