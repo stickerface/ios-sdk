@@ -75,9 +75,15 @@ public class StickerLoader: NSObject {
         return nil
     }
     
-    public func renderLayer(_ layer: String, size: CGFloat = 207.0, completionHandler: @escaping ImageAction) {
+    public func renderLayer(_ layer: String, size: CGFloat = 207.0, isOutlined: Bool = false, completionHandler: @escaping ImageAction) {
         let id = getNextRequestId()
-        let renderLayer = RenderLayer(id: id, size: size, layer: layer, completion: completionHandler)
+        let renderLayer = RenderLayer(
+            id: id,
+            size: size,
+            layer: layer,
+            isOutlined: isOutlined,
+            completion: completionHandler
+        )
         
         if let image = DataCache.instance.readImage(forKey: layer) {
             completionHandler(image)
@@ -88,7 +94,7 @@ public class StickerLoader: NSObject {
     }
     
     public func preloadLayers(_ layers: [String]) {
-        let renderLayer = RenderLayer(layers: layers)
+        let renderLayer = RenderLayer(preload: layers)
         layersForRender.insert(renderLayer, at: 0)
         renderIfNeeded()
     }
@@ -119,7 +125,7 @@ public class StickerLoader: NSObject {
         isRendering = true
                 
         reRenderTimer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
-            print("=== rerender")
+            print("=== INFO rerender")
             self.isRendering = false
             self.renderIfNeeded()
         }
@@ -205,22 +211,25 @@ extension StickerLoader {
         let id: Int
         let size: CGFloat
         let layer: String
+        let isOutlined: Bool
         let completion: ImageAction
         let renderString: String
         
-        init(id: Int, size: CGFloat, layer: String, completion: @escaping ImageAction) {
+        init(id: Int, size: CGFloat, layer: String, isOutlined: Bool, completion: @escaping ImageAction) {
             self.id = id
             self.size = size
             self.layer = layer
+            self.isOutlined = isOutlined
             self.completion = completion
             
-            renderString = "renderPNG(\"\(layer)\", \(id), \(size * UIScreen.main.scale), {partial: true})"
+            renderString = "renderPNG(\"\(layer)\", \(id), \(size * UIScreen.main.scale), {partial: true, outline:\(isOutlined)})"
         }
         
-        init(layers: [String]) {
+        init(preload layers: [String]) {
             id = -1
             size = -1
             layer = ""
+            isOutlined = false
             completion = { _ in }
             
             let preloadLayers = layers.joined(separator: ";")
