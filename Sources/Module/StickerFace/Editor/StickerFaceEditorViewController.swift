@@ -130,34 +130,45 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     // MARK: Private methods
     
     private func loadEditor() {
-        provider.loadEditor { [weak self] result in
-            guard let self = self else { return }
+        if let editor = EditorHelper.shared.editor {
+            mainView.separator.isHidden = false
+            mainView.saveButton.isHidden = false
+            mainView.notConnectButton.isHidden = true
+            mainView.notConnectLabel.isHidden = true
             
-            switch result {
-            case .success(let editor):
-                self.mainView.separator.isHidden = false
-                self.mainView.saveButton.isHidden = false
-                self.mainView.notConnectButton.isHidden = true
-                self.mainView.notConnectLabel.isHidden = true
-                
-                self.editor = editor
-                self.loadWardrobe()
-                SFDefaults.avatarCollection = editor.nft.avatarCollection
-                SFDefaults.wearablesCollection = editor.nft.wearablesCollection
-                SFDefaults.avatarMintPrice = Double(editor.nft.avatarMintPrice) / 1000000000.0
-                
-                self.delegate?.stickerFaceEditor(didLoadLayers: self)
+            self.editor = editor
             
-            case .failure:
-                if self.loadingState == .failed {
-                    self.mainView.loaderView.showError("Error load editor")
+            setupSections(needSetDefault: false, for: SFDefaults.gender)
+        } else {
+            provider.loadEditor { [weak self] result in
+                guard let self = self else { return }
+                
+                switch result {
+                case .success(let editor):
+                    self.mainView.separator.isHidden = false
+                    self.mainView.saveButton.isHidden = false
+                    self.mainView.notConnectButton.isHidden = true
+                    self.mainView.notConnectLabel.isHidden = true
+                    
+                    self.editor = editor
+                    self.loadWardrobe()
+                    SFDefaults.avatarCollection = editor.nft.avatarCollection
+                    SFDefaults.wearablesCollection = editor.nft.wearablesCollection
+                    SFDefaults.avatarMintPrice = Double(editor.nft.avatarMintPrice) / 1000000000.0
+                    
+                    self.delegate?.stickerFaceEditor(didLoadLayers: self)
+                    
+                case .failure:
+                    if self.loadingState == .failed {
+                        self.mainView.loaderView.showError("Error load editor")
+                    }
+                    
+                    self.loadingState = .failed
+                    self.mainView.separator.isHidden = true
+                    self.mainView.saveButton.isHidden = true
+                    self.mainView.notConnectButton.isHidden = false
+                    self.mainView.notConnectLabel.isHidden = false
                 }
-                
-                self.loadingState = .failed
-                self.mainView.separator.isHidden = true
-                self.mainView.saveButton.isHidden = true
-                self.mainView.notConnectButton.isHidden = false
-                self.mainView.notConnectLabel.isHidden = false
             }
         }
     }
@@ -358,11 +369,11 @@ extension StickerFaceEditorViewController: EditorHeaderSectionControllerDelegate
         mainView.headerCollectionView.scrollToItem(at: IndexPath(item: 0, section: section), at: .centeredHorizontally, animated: true)
         
         if let viewController = mainView.pageViewController.viewControllers?.first as? StickerFaceEditorPageController {
+            guard let vc = viewControllers?[section] else { return }
+            
             if section > viewController.index {
-                guard let vc = viewControllers?[section] else { return }
                 mainView.pageViewController.setViewControllers([vc], direction: .forward, animated: true)
             } else if section < viewController.index {
-                guard let vc = viewControllers?[section] else { return }
                 mainView.pageViewController.setViewControllers([vc], direction: .reverse, animated: true)
             }
         }
@@ -430,28 +441,39 @@ extension StickerFaceEditorViewController: StickerFaceEditorPageDelegate {
 // MARK: - UIPageViewControllerDataSource
 extension StickerFaceEditorViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        guard let pageController = viewController as? StickerFaceEditorPageController else { return nil }
-        if pageController.index == 0 {
-            return nil
-        }
+        guard
+            let pageController = viewController as? StickerFaceEditorPageController,
+            pageController.index != 0
+        else { return nil }
+        
         return viewControllers?[pageController.index - 1]
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        guard let pageController = viewController as? StickerFaceEditorPageController else { return nil }
-        if pageController.index == (viewControllers?.count ?? 0) - 1 {
-            return nil
-        }
+        guard
+            let pageController = viewController as? StickerFaceEditorPageController,
+            pageController.index != (viewControllers?.count ?? 0) - 1
+        else { return nil }
+                        
         return viewControllers?[pageController.index + 1]
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
-        if !completed || !finished {
-            return
-        }
+        guard finished else { return }
         
         if let viewController = mainView.pageViewController.viewControllers?.first as? StickerFaceEditorPageController {
-            headers.enumerated().forEach { $0.element.isSelected = $0.element.title == viewController.sectionModel.name }
+            headers.forEach { $0.isSelected = false }
+            headers[viewController.index].isSelected = true
+            headerAdapter.reloadData(completion: nil)
+            
+            mainView.headerCollectionView.scrollToItem(at: IndexPath(item: 0, section: viewController.index), at: .centeredHorizontally, animated: true)
+        }
+    }
+    
+    func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
+        if let viewController = pendingViewControllers.first as? StickerFaceEditorPageController {
+            headers.forEach { $0.isSelected = false }
+            headers[viewController.index].isSelected = true
             headerAdapter.reloadData(completion: nil)
             
             mainView.headerCollectionView.scrollToItem(at: IndexPath(item: 0, section: viewController.index), at: .centeredHorizontally, animated: true)

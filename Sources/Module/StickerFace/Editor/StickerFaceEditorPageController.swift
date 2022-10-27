@@ -53,7 +53,7 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
         }
         
         isRendering = true
-
+        
         let renderLayers = createRenderLayers(layers: layer.layer, section: layer.section)
         
         StickerLoader.shared.renderLayer(renderLayers) { [weak self] image in
@@ -82,22 +82,26 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
     
     private func createRenderLayers(layers: String, section: String) -> String {
         var neededLayers = ""
+        let helper = EditorHelper.shared
+        
         let allLayers = editorDelegate?.replaceCurrentLayers(with: layers, with: nil, isCurrent: true)
-        let layersWitoutBack = editorDelegate?.layersWithout(section: "background", layers: allLayers ?? "")
-        let layersWithoutClothing = editorDelegate?.layersWithout(section: "clothing", layers: layersWitoutBack?.layers ?? "")
-        let fireLayers = ["1", "0", "25", "273", layersWithoutClothing?.sectionLayer ?? ""]
+        
+        let layersNoBack = helper.removeLayer(in: "background", from: allLayers ?? "")
+        let layersNoClothing = helper.removeLayer(in: "clothing", from: layersNoBack.layers)
         
         if layers == "0" || layers == "" {
             neededLayers = layers
         } else if section == "background" {
-            return layersWitoutBack?.sectionLayer ?? ""
+            return layersNoBack.removedLayer
         } else if section == "clothing" {
-            return layersWitoutBack?.layers ?? ""
+            return layersNoBack.layers
         } else {
-            neededLayers = layersWithoutClothing?.layers ?? ""
+            neededLayers = layersNoClothing.layers
         }
 
         let layersArray = neededLayers.split(separator: ";")
+        let fireLayers = ["1", "0", "25", "273", layersNoClothing.removedLayer]
+        
         let neededArray = layersArray.compactMap { layer -> String? in
             guard !fireLayers.contains(String(layer)) else { return nil }
             return String(layer)
