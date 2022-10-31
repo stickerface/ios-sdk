@@ -43,7 +43,13 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
         StickerLoader.shared.preloadLayers(layers)
         
         adapter.collectionView = mainView.collectionView
-        adapter.dataSource = self
+        adapter.dataSource = self 
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        adapter.reloadData()
     }
         
     private func renderLayer() {
