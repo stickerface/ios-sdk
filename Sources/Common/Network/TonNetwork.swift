@@ -18,7 +18,7 @@ public class TonNetwork {
                     let address = login.payload?.first?.address ?? ""
                     let client = TonClient(clientId: id, address: address)
                     
-                    EditorHelper.shared.loadWardrobe(owner: client.address)
+                    EditorHelper.shared.reloadEditor(for: client.address)
                     TonNetwork.updateBalance(client: client)
                 } catch {
                     print(error)
