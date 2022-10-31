@@ -11,7 +11,7 @@ public class EditorHelper {
     
     // MARK: - Public mehtods
     
-    func loadEditor() {
+    func loadEditor(for owner: String? = SFDefaults.tonClient?.address) {
         provider.loadEditor { result in
             switch result {
             case .success(let editor):
@@ -19,12 +19,17 @@ public class EditorHelper {
                 SFDefaults.wearablesCollection = editor.nft.wearablesCollection
                 SFDefaults.avatarMintPrice = Double(editor.nft.avatarMintPrice) / 1000000000.0
                 self.editor = editor
-                self.loadWardrobe()
+                self.loadWardrobe(for: owner)
                 
             case .failure(let error):
                 print(error)
             }
         }
+    }
+    
+    func reloadEditor(for owner: String? = SFDefaults.tonClient?.address) {
+        editor = nil
+        loadEditor(for: owner)
     }
     
     public func removeLayer(in subsection: String, from layers: String) -> ResultLayers {
@@ -74,7 +79,7 @@ public class EditorHelper {
         return ResultLayers(removedLayer, resultLayers)
     }
     
-    func loadWardrobe(owner: String? = SFDefaults.tonClient?.address) {
+    func loadWardrobe(for owner: String?) {
         provider.loadWardrobe(owner: owner, onSale: true, offset: 0) { [weak self] result in
             guard let self = self else { return }
             
