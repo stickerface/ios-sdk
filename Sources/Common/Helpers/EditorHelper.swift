@@ -7,30 +7,10 @@ public class EditorHelper {
     static let shared = EditorHelper()
     
     private let provider = StickerFaceEditorProvider()
+    private var isLoading = false
     private(set) var editor: Editor?
     
-    // MARK: - Public mehtods
-    
-    func loadEditor(for owner: String? = SFDefaults.tonClient?.address) {
-        provider.loadEditor { result in
-            switch result {
-            case .success(let editor):
-                SFDefaults.avatarCollection = editor.nft.avatarCollection
-                SFDefaults.wearablesCollection = editor.nft.wearablesCollection
-                SFDefaults.avatarMintPrice = Double(editor.nft.avatarMintPrice) / 1000000000.0
-                self.editor = editor
-                self.loadWardrobe(for: owner)
-                
-            case .failure(let error):
-                print(error)
-            }
-        }
-    }
-    
-    func reloadEditor(for owner: String? = SFDefaults.tonClient?.address) {
-        editor = nil
-        loadEditor(for: owner)
-    }
+    // MARK: - SDK Methods
     
     public func removeLayer(in subsection: String, from layers: String) -> ResultLayers {
         guard let editor = editor else { return ResultLayers("", "") }
@@ -77,6 +57,39 @@ public class EditorHelper {
         resultLayers = allLayers.joined(separator: ";")
         
         return ResultLayers(removedLayer, resultLayers)
+    }
+    
+    // MARK: - Public mehtods
+    
+    func loadEditor(for owner: String? = SFDefaults.tonClient?.address) {
+        guard !isLoading else { return }
+        
+        provider.loadEditor { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let editor):
+                SFDefaults.avatarCollection = editor.nft.avatarCollection
+                SFDefaults.wearablesCollection = editor.nft.wearablesCollection
+                SFDefaults.avatarMintPrice = Double(editor.nft.avatarMintPrice) / 1000000000.0
+                self.editor = editor
+                self.loadWardrobe(for: owner)
+                
+            case .failure(let error):
+                print("EditorHelper: 😡 Error: loadEditor() - \(error)")
+                
+                self.isLoading = false
+                
+                let userInfo = ["error": error]
+                let name = Notification.Name("editorDidLoaded")
+                NotificationCenter.default.post(name: name, object: nil, userInfo: userInfo)
+            }
+        }
+    }
+    
+    func reloadEditor(for owner: String? = SFDefaults.tonClient?.address) {
+        editor = nil
+        loadEditor(for: owner)
     }
     
     func loadWardrobe(for owner: String?) {
@@ -144,10 +157,20 @@ public class EditorHelper {
                     }
                 }
                 
+                self.isLoading = false
                 self.editor = editor
+                
+                let name = Notification.Name("editorDidLoaded")
+                NotificationCenter.default.post(name: name, object: nil, userInfo: nil)
             
             case .failure(let error):
-                print(error)
+                print("EditorHelper: 😡 Error: loadWardrobe() - \(error)")
+                
+                self.isLoading = false
+                
+                let userInfo = ["error": error]
+                let name = Notification.Name("editorDidLoaded")
+                NotificationCenter.default.post(name: name, object: nil, userInfo: userInfo)
             }
         }
     }

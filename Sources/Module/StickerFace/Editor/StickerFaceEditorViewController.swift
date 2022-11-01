@@ -12,7 +12,6 @@ protocol StickerFaceEditorControllerDelegate: AnyObject {
     func stickerFaceEditor(_ controller: StickerFaceEditorViewController, didUpdateBackground layers: String)
     func stickerFaceEditor(_ controller: StickerFaceEditorViewController, didSave layers: String)
     func stickerFaceEditor(_ controller: StickerFaceEditorViewController, didSelectPaid layer: String, layers withLayer: String, with price: Int, layerType: LayerType)
-    func stickerFaceEditor(didLoadLayers controller: StickerFaceEditorViewController)
 }
 
 protocol StickerFaceEditorDelegate: AnyObject {
@@ -65,7 +64,10 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         mainView.pageViewController.dataSource = self
         mainView.pageViewController.delegate = self
         
-        loadEditor()
+        setupEditor()
+        
+        let name = Notification.Name("editorDidLoaded")
+        NotificationCenter.default.addObserver(self, selector: #selector(editorDidLoaded), name: name, object: nil)
     }
     
     // MARK: Private actions
@@ -78,8 +80,27 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     
     @objc private func notConnectButtonTapped() {
         mainView.loaderView.isHidden = false
-        loadEditor()
+        EditorHelper.shared.loadEditor()
     }
+    
+    @objc private func editorDidLoaded(_ notification: Notification) {
+        let error = notification.userInfo?["error"]
+        
+        if error != nil {
+            if loadingState == .failed {
+                mainView.loaderView.showError("Error load editor")
+            }
+            
+            loadingState = .failed
+            mainView.separator.isHidden = true
+            mainView.saveButton.isHidden = true
+            mainView.notConnectButton.isHidden = false
+            mainView.notConnectLabel.isHidden = false
+        } else {
+            setupEditor()
+        }
+    }
+
     
     // MARK: Public methods
     
@@ -129,7 +150,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     
     // MARK: Private methods
     
-    private func loadEditor() {
+    private func setupEditor() {
         if let editor = EditorHelper.shared.editor {
             mainView.separator.isHidden = false
             mainView.saveButton.isHidden = false
@@ -140,110 +161,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
             
             setupSections(needSetDefault: false, for: SFDefaults.gender)
         } else {
-            provider.loadEditor { [weak self] result in
-                guard let self = self else { return }
-                
-                switch result {
-                case .success(let editor):
-                    self.mainView.separator.isHidden = false
-                    self.mainView.saveButton.isHidden = false
-                    self.mainView.notConnectButton.isHidden = true
-                    self.mainView.notConnectLabel.isHidden = true
-                    
-                    self.editor = editor
-                    self.loadWardrobe()
-                    SFDefaults.avatarCollection = editor.nft.avatarCollection
-                    SFDefaults.wearablesCollection = editor.nft.wearablesCollection
-                    SFDefaults.avatarMintPrice = Double(editor.nft.avatarMintPrice) / 1000000000.0
-                    
-                    self.delegate?.stickerFaceEditor(didLoadLayers: self)
-                    
-                case .failure:
-                    if self.loadingState == .failed {
-                        self.mainView.loaderView.showError("Error load editor")
-                    }
-                    
-                    self.loadingState = .failed
-                    self.mainView.separator.isHidden = true
-                    self.mainView.saveButton.isHidden = true
-                    self.mainView.notConnectButton.isHidden = false
-                    self.mainView.notConnectLabel.isHidden = false
-                }
-            }
-        }
-    }
-    
-    private func loadWardrobe() {
-        provider.loadWardrobe(onSale: true, offset: 0) { [weak self] result in
-            guard let self = self else { return }
-            
-            switch result {
-            case .success(let wardrobe):
-                guard var editor = self.editor else { return }
-                
-                let metadata = wardrobe.nftItems?.compactMap({ $0.metadata })
-                metadata?.forEach { data in
-                    guard
-                        let section = data.attributes?.first(where: { $0.traitType == .section })?.value,
-                        let nftLayer = data.attributes?.first(where: { $0.traitType == .layer })?.value
-                    else { return }
-                    
-                    let layer = nftLayer.components(separatedBy: ";").joined(separator: ",")
-                    let subsection = section
-
-                    let manSections = editor.sections.man
-                    let sectionIndex = manSections.firstIndex(where: { $0.name.lowercased() == section.lowercased() })
-                    
-                    let womenSections = editor.sections.woman
-                    let wSectionIndex = womenSections.firstIndex(where: { $0.name.lowercased() == section.lowercased() })
-                    
-                    if let sectionIndex = sectionIndex {
-                        var subsections = manSections[sectionIndex].subsections
-                        let subsectionIndex = subsections.firstIndex(where: { $0.name.lowercased() == subsection.lowercased() })
-                        
-                        if let subsectionIndex = subsectionIndex {
-                            subsections[subsectionIndex].layers?.insert(layer, at: 0)
-                        } else {
-                            let subsection = EditorSubsection(name: subsection, layers: [layer, "0"], colors: nil)
-                            subsections.append(subsection)
-                        }
-                        
-                        editor.sections.man[sectionIndex].subsections = subsections
-                    } else {
-                        let subsections = EditorSubsection(name: subsection, layers: [layer, "0"], colors: nil)
-                        let section = EditorSection(name: section, subsections: [subsections])
-                        editor.sections.man.append(section)
-                    }
-                    
-                    if let sectionIndex = wSectionIndex {
-                        var subsections = womenSections[sectionIndex].subsections
-                        let subsectionIndex = subsections.firstIndex(where: { $0.name.lowercased() == subsection.lowercased() })
-                        
-                        if let subsectionIndex = subsectionIndex {
-                            subsections[subsectionIndex].layers?.insert(layer, at: 0)
-                        } else {
-                            let subsection = EditorSubsection(name: subsection, layers: [layer, "0"], colors: nil)
-                            subsections.append(subsection)
-                        }
-                        
-                        editor.sections.woman[sectionIndex].subsections = subsections
-                    } else {
-                        let subsections = EditorSubsection(name: subsection, layers: [layer, "0"], colors: nil)
-                        let section = EditorSection(name: section, subsections: [subsections])
-                        editor.sections.woman.append(section)
-                    }
-                }
-                
-                self.editor = editor
-            
-            case .failure(let error):
-                //TODO: нужно ли отображать ошибку загрузки гардероба?
-//                self.mainView.loaderView.showError("Error load wardrobe: \(error.localizedDescription)")
-                print(error)
-                
-            }
-            
-            self.setupSections(needSetDefault: false, for: SFDefaults.gender)
+            EditorHelper.shared.loadEditor()
         }
     }
     
@@ -271,6 +189,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                     layers = layers?
                         .filter { prices[$0] == nil || prices[$0] == 0 }
                         .filter { $0 != "0" }
+                        .filter { $0 != "320" } /// remove clear background
                 }
 
                 let editorSubsection = EditorSubsection(
@@ -402,12 +321,8 @@ extension StickerFaceEditorViewController: StickerFaceEditorPageDelegate {
             errorView.caption = "commonLoadingError".libraryLocalized
             errorView.buttonText = "commonRetry".libraryLocalized
             
-            errorView.buttonOnClick = { [weak self] in
-                guard let self = self else {
-                    return
-                }
-                
-                self.loadEditor()
+            errorView.buttonOnClick = {
+                EditorHelper.shared.loadEditor()
             }
                 
             return HolderView(view: errorView)
