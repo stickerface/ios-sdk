@@ -56,8 +56,6 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     
     @objc private func avatarButtonTapped(_ sender: AvatarButton) {
         switch sender.imageType {
-        case .settings: #warning("deplicated")
-            
         case .male:
             sender.setImageType(.female)
             editorDelegate?.setGender(.female)
@@ -70,35 +68,12 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
             mainView.tonBalanceView.isHidden = true
             mainView.backButton.isHidden = false
             mainView.genderButton.setImageType(.male)
-            
-        case .hanger: #warning("deplicated")
-            
-        case .close:
-            mainView.genderButton.setImageType(.settings)
-            
+        
         case .back:
-            if layers == mainView.editorViewController.layers {
-                cancelChanges()
-                break
-            }
-            layers = mainView.editorViewController.layers
-            mainView.editorViewController.currentLayers = layers
-//            renderAvatar()
-//            needToRedieve = true
             cancelChanges()
-            
-        case .logout:
-            let alert = UIAlertController(title: "Are sure you want to log out?", message: "After logging out you will not be able to buy NFTs for your avatar", preferredStyle: .alert)
-
-            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-            let logoutAction = UIAlertAction(title: "Log out", style: .default) { _ in
-                StickerFace.shared.logoutUser()
-            }
-
-            alert.addAction(cancelAction)
-            alert.addAction(logoutAction)
-
-            present(alert, animated: true)
+          
+        default:
+            break
         }
     }
     
@@ -208,17 +183,33 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
     }
     
     private func cancelChanges() {
-        let alert = UIAlertController(title: "Are you sure you want to leave?", message: "The changes you made won't be saved.", preferredStyle: .alert)
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-        let logoutAction = UIAlertAction(title: "Leave", style: .destructive) { _ in
+        if Utils.compareLayers(layers, mainView.editorViewController.layers) {
+            layers = mainView.editorViewController.layers
+            mainView.editorViewController.currentLayers = layers
+            
             StickerFace.shared.cancelChange()
+        } else {
+            let alert = UIAlertController(
+                title: "editorLeaveTitle".libraryLocalized,
+                message: "editorLeaveMessage".libraryLocalized,
+                preferredStyle: .alert
+            )
+            
+            let cancelAction = UIAlertAction(
+                title: "editorLeaveCancel".libraryLocalized,
+                style: .cancel
+            )
+            let logoutAction = UIAlertAction(
+                title: "editorLeaveAgree".libraryLocalized,
+                style: .destructive,
+                handler: { _ in StickerFace.shared.cancelChange() }
+            )
+            
+            alert.addAction(cancelAction)
+            alert.addAction(logoutAction)
+            
+            present(alert, animated: true)
         }
-        
-        alert.addAction(cancelAction)
-        alert.addAction(logoutAction)
-        
-        present(alert, animated: true)
     }
     
     private func recognizeGender() {
