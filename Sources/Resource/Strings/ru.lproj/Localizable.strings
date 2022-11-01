@@ -28,3 +28,7 @@
 
 // Editor
 "editorSave" = "Сохранить и продолжить";
+"editorLeaveTitle" = "Are you sure you want to leave?";
+"editorLeaveMessage" = "The changes you made won't be saved.";
+"editorLeaveCancel" = "Cancel";
+"editorLeaveAgree" = "Leave";

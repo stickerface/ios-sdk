@@ -115,6 +115,22 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
         
         return neededArray.joined(separator: ";")
     }
+    
+    private func appendRenderLayer(section: Int, index: Int) {
+        guard
+            let layer = sectionModel.sections[section].editorSubsection.layers?[index],
+            layer != "0",
+            sectionModel.sections[section].newLayersImages?[layer] == nil
+        else { return }
+        
+        let sectionName = sectionModel.sections[section].editorSubsection.name
+        let layerForRender = LayerForRender(section: sectionName, layer: layer)
+        
+        if !layersForRender.contains(layerForRender) {
+            layersForRender.append(layerForRender)
+            renderLayer()
+        }
+    }
 }
 
 // MARK: - ListAdapterDataSource
@@ -155,18 +171,11 @@ extension StickerFaceEditorPageController: StickerFaceEditorSectionDelegate {
     }
     
     func stickerFaceEditor(_ controller: StickerFaceEditorSectionController, willDisplay header: String, in section: Int, at index: Int) {
-        guard
-            let layer = sectionModel.sections[section].editorSubsection.layers?[index],
-            layer != "0",
-            sectionModel.sections[section].newLayersImages?[layer] == nil
-        else { return }
+        appendRenderLayer(section: section, index: index)
         
-        let sectionName = sectionModel.sections[section].editorSubsection.name
-        let layerForRender = LayerForRender(section: sectionName, layer: layer)
-        
-        if !layersForRender.contains(layerForRender) {
-            layersForRender.append(layerForRender)
-            renderLayer()
+        let count = sectionModel.sections[section].editorSubsection.layers?.count ?? 0
+        if count > index + 2 {
+            appendRenderLayer(section: section, index: index + 2)
         }
     }
 }
