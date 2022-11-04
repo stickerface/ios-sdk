@@ -40,6 +40,10 @@ public class StickerFace {
     public func removeLayer(in subsection: String, from layers: String) -> EditorHelper.ResultLayers {
         return EditorHelper.shared.removeLayer(in: subsection, from: layers)
     }
+    
+    public func reloadEditor() {
+        EditorHelper.shared.reloadEditor()
+    }
         
     public func handle(userActivity: NSUserActivity) {
         guard
