@@ -64,10 +64,10 @@ class StickerFaceView: RootView {
         
         addSubview(backgroundImageView)
         addSubview(tonBalanceView)
-        addSubview(genderButton)
         addSubview(hangerButton)
-        addSubview(backButton)
         addSubview(avatarView)
+        addSubview(backButton)
+        addSubview(genderButton)
         addSubview(editorViewController.view)
         
         backgroundImageView.addSubview(blurView)
