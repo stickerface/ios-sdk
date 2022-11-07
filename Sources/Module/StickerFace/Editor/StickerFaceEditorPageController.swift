@@ -10,7 +10,7 @@ protocol StickerFaceEditorPageDelegate: AnyObject {
 class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView> {
 
     struct LayerForRender: Equatable {
-        let section: String
+        let subsection: String
         let layer: String
     }
     
@@ -51,7 +51,7 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
         
         adapter.reloadData()
     }
-        
+    
     private func renderLayer() {
         guard let layer = layersForRender.first, !isRendering else {
             adapter.reloadData()
@@ -60,14 +60,14 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
         
         isRendering = true
         
-        let renderLayers = createRenderLayers(layers: layer.layer, section: layer.section)
+        let renderLayers = createRenderLayers(layers: layer.layer, subsection: layer.subsection)
         
         StickerLoader.shared.renderLayer(renderLayers) { [weak self] image in
             guard let self = self else { return }
             
             self.layersForRender.remove(at: 0)
             
-            if let sectionModel = self.sectionModel.sections.first(where: { $0.editorSubsection.name == layer.section }) {
+            if let sectionModel = self.sectionModel.sections.first(where: { $0.editorSubsection.name == layer.subsection }) {
                 if sectionModel.newLayersImages != nil {
                     sectionModel.newLayersImages?[layer.layer] = image
                 } else {
@@ -86,20 +86,20 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
         }
     }
     
-    private func createRenderLayers(layers: String, section: String) -> String {
+    private func createRenderLayers(layers: String, subsection: String) -> String {
         var neededLayers = ""
         let helper = EditorHelper.shared
         
-        let allLayers = editorDelegate?.replaceCurrentLayers(with: layers, with: nil, isCurrent: true)
-        
-        let layersNoBack = helper.removeLayer(in: "background", from: allLayers ?? "")
+        let layersNoSubsection = helper.removeLayer(in: subsection, from: editorDelegate?.currentLayers ?? "")
+        let allLayers = layersNoSubsection.layers + ";\(layers);"
+        let layersNoBack = helper.removeLayer(in: "background", from: allLayers)
         let layersNoClothing = helper.removeLayer(in: "clothing", from: layersNoBack.layers)
         
         if layers == "0" || layers == "" {
             neededLayers = layers
-        } else if section == "background" {
+        } else if subsection == "background" {
             return layersNoBack.removedLayer
-        } else if section == "clothing" {
+        } else if subsection == "clothing" {
             return layersNoBack.layers
         } else {
             neededLayers = layersNoClothing.layers
@@ -123,8 +123,8 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
             sectionModel.sections[section].newLayersImages?[layer] == nil
         else { return }
         
-        let sectionName = sectionModel.sections[section].editorSubsection.name
-        let layerForRender = LayerForRender(section: sectionName, layer: layer)
+        let subsectionName = sectionModel.sections[section].editorSubsection.name
+        let layerForRender = LayerForRender(subsection: subsectionName, layer: layer)
         
         if !layersForRender.contains(layerForRender) {
             layersForRender.append(layerForRender)
@@ -156,16 +156,7 @@ extension StickerFaceEditorPageController: StickerFaceEditorSectionDelegate {
     func needUpdate() {
         adapter.reloadData()
     }
-    
-    func stickerFaceEditor(_ controller: StickerFaceEditorSectionController, needRedner forLayer: String, section: String) {
-        let layerForRender = LayerForRender(section: section, layer: forLayer)
         
-        if !layersForRender.contains(layerForRender) {
-            layersForRender.append(layerForRender)
-            renderLayer()
-        }
-    }
-    
     func stickerFaceEditor(_ controller: StickerFaceEditorSectionController, didSelect layer: String, section: Int) {
         delegate?.stickerFaceEditorPageController(self, didSelect: layer, section: section)
     }

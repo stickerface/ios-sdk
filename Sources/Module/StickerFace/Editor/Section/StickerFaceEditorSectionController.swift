@@ -5,7 +5,6 @@ import SkeletonView
 protocol StickerFaceEditorSectionDelegate: AnyObject {
     func stickerFaceEditor(_ controller: StickerFaceEditorSectionController, didSelect layer: String, section: Int)
     func stickerFaceEditor(_ controller: StickerFaceEditorSectionController, willDisplay header: String, in section: Int, at index: Int)
-    func stickerFaceEditor(_ controller: StickerFaceEditorSectionController, needRedner forLayer: String, section: String)
 }
 
 class StickerFaceEditorSectionController: ListSectionController {

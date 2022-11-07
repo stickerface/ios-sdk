@@ -15,10 +15,11 @@ protocol StickerFaceEditorControllerDelegate: AnyObject {
 }
 
 protocol StickerFaceEditorDelegate: AnyObject {
+    var currentLayers: String { get set }
+    
     func setGender(_ gender: SFDefaults.Gender)
     func updateLayers(_ layers: String)
     func layersWithout(section: String, layers: String) -> (sectionLayer: String, layers: String)
-    func replaceCurrentLayers(with layer: String, with color: String?, isCurrent: Bool) -> String
 }
 
 class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
@@ -35,6 +36,10 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
             let isEnabled = !SFDefaults.wasEdited || !Utils.compareLayers(currentLayers, layers)
             mainView.saveButton.isUserInteractionEnabled = isEnabled
             mainView.saveButton.backgroundColor = isEnabled ? .sfAccentBrand : .sfDisabled
+            
+            if oldValue.isEmpty {
+                setupSections(needSetDefault: false, for: SFDefaults.gender)
+            }
         }
     }
     
@@ -166,7 +171,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
     }
     
     private func setupSections(needSetDefault: Bool, for gender: SFDefaults.Gender) {
-        guard let editor = editor else { return }
+        guard let editor = editor, !currentLayers.isEmpty else { return }
                 
         let sections = gender == .male ? editor.sections.man : editor.sections.woman
                 
@@ -180,7 +185,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         
         prices = editor.prices
                 
-        objects = sections.compactMap({ section in
+        objects = sections.compactMap { section in
             guard section.name != "Clothing", section.name != "Accessories" else { return nil }
             
             let models = section.subsections.map { subsection -> EditorSubsectionSectionModel in
@@ -205,7 +210,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
             }
             
             return EditorSectionModel(name: section.name, sections: models)
-        })
+        }
                 
         if needSetDefault {
             mainView.headerCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: true)
@@ -397,31 +402,7 @@ extension StickerFaceEditorViewController: UIPageViewControllerDataSource, UIPag
 }
 
 // MARK: - StickerFaceEditorDelegate
-extension StickerFaceEditorViewController: StickerFaceEditorDelegate {
-    func replaceCurrentLayers(with layer: String, with color: String?, isCurrent: Bool) -> String {
-        guard
-            let section = headers.firstIndex(where: { $0.isSelected }),
-            let subsection = objects[section].sections.firstIndex(where: { $0.editorSubsection.layers?.contains(layer) ?? false })
-        else { return "" }
-        
-        var layers = replaceCurrentLayer(with: layer, subsection: subsection, isCurrent: isCurrent)
-        
-        if let color = color {
-            let tmpLayers = currentLayers
-            if isCurrent {
-                currentLayers = layers
-                layers = replaceCurrentLayer(with: color, subsection: subsection, isCurrent: isCurrent)
-                currentLayers = tmpLayers
-            } else {
-                self.layers = layers
-                layers = replaceCurrentLayer(with: color, subsection: subsection, isCurrent: isCurrent)
-                self.layers = tmpLayers
-            }
-        }
-        
-        return layers
-    }
-    
+extension StickerFaceEditorViewController: StickerFaceEditorDelegate {    
     func updateLayers(_ layers: String) {
         self.currentLayers = layers
         updateSelectedLayers()
