@@ -69,8 +69,13 @@ public struct NFTAttribute: Codable {
             self.layers = nil
         } else {
             traitType = try? values.decodeIfPresent(TraitType.self, forKey: .traitType)
-            value = try? values.decodeIfPresent(String.self, forKey: .value)
             layers = nil
+            
+            if let intValue = try? values.decodeIfPresent(Int.self, forKey: .value) {
+                value = String(intValue)
+            } else {
+                value = try? values.decodeIfPresent(String.self, forKey: .value)
+            }
         }
     }
 }
