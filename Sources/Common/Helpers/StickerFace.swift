@@ -60,5 +60,6 @@ public class StickerFace {
     public func logoutUser() {
         SFDefaults.tonClient = nil
         SFDefaults.wasEdited = false
+        EditorHelper.shared.reloadEditor()
     }
 }
