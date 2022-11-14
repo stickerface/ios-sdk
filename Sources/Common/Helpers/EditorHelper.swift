@@ -10,6 +10,12 @@ public class EditorHelper {
     private var isLoading = false
     private(set) var editor: Editor?
     
+    private var lastEditorVersion = SFDefaults.lastEditorVersion {
+        didSet {
+            SFDefaults.lastEditorVersion = lastEditorVersion
+        }
+    }
+    
     // MARK: - SDK Methods
     
     public func removeLayer(in subsection: String, from layers: String) -> ResultLayers {
@@ -72,6 +78,13 @@ public class EditorHelper {
                 SFDefaults.avatarCollection = editor.nft.avatarCollection
                 SFDefaults.wearablesCollection = editor.nft.wearablesCollection
                 SFDefaults.avatarMintPrice = Double(editor.nft.avatarMintPrice) / 1000000000.0
+                
+                if self.lastEditorVersion != editor.v {
+                    self.lastEditorVersion = editor.v
+                    
+                    DataCache.instance.cleanAll()
+                }
+                
                 self.editor = editor
                 self.loadWardrobe(for: owner)
                 

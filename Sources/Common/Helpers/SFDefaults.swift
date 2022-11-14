@@ -112,4 +112,13 @@ public class SFDefaults {
             defaults.set(newValue, forKey: SFDefaults.prefixName + #function)
         }
     }
+    
+    public static var lastEditorVersion: Float {
+        get {
+            return defaults.float(forKey: SFDefaults.prefixName + #function)
+        }
+        set {
+            defaults.set(newValue, forKey: SFDefaults.prefixName + #function)
+        }
+    }
 }

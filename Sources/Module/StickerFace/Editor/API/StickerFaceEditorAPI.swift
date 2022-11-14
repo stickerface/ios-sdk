@@ -10,6 +10,7 @@ struct Editor: Codable {
     let nft: EditorNFT
     let prices: [String: Int]
     var sections: GenderSections
+    let v: Float
 }
 
 struct EditorNFT: Codable {
