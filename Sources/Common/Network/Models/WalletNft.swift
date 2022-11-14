@@ -34,7 +34,7 @@ public struct NFTMetadata: Codable {
 
 public enum TraitType: String, Codable {
     case layer, layers, section, subsection, special
-    case diamondSize = "Diamond Size"
+    case diamondSize = "diamond size"
     case unknown
     
     public init(from decoder: Decoder) throws {

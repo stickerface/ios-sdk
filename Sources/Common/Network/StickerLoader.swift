@@ -167,7 +167,6 @@ extension StickerLoader: AvatarRenderResponseHandlerDelegate {
         
         decodingQueue.async {
             guard
-                let index = self.layersForRender.firstIndex(where: { $0.id == id }),
                 let data = Data(base64Encoded: base64),
                 let image = UIImage(data: data)
             else {
@@ -180,6 +179,7 @@ extension StickerLoader: AvatarRenderResponseHandlerDelegate {
             }
             
             DispatchQueue.main.async {
+                let index = self.layersForRender.firstIndex(where: { $0.id == id }) ?? 0
                 DataCache.instance.write(image: image, forKey: self.layersForRender[index].layer)
                 self.layersForRender.remove(at: index).completion(image)
                 self.isRendering = false
