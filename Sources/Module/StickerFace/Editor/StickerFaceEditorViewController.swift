@@ -11,6 +11,8 @@ protocol StickerFaceEditorControllerDelegate: AnyObject {
     func stickerFaceEditor(_ controller: StickerFaceEditorViewController, didUpdate layers: String)
     func stickerFaceEditor(_ controller: StickerFaceEditorViewController, didUpdateBackground layers: String)
     func stickerFaceEditor(_ controller: StickerFaceEditorViewController, didSave layers: String)
+    
+    @available(*, deprecated, message: "should not use this method")
     func stickerFaceEditor(_ controller: StickerFaceEditorViewController, didSelectPaid layer: String, layers withLayer: String, with price: Int, layerType: LayerType)
 }
 
@@ -19,6 +21,9 @@ protocol StickerFaceEditorDelegate: AnyObject {
     
     func setGender(_ gender: SFDefaults.Gender)
     func updateLayers(_ layers: String)
+    func updateEditor(for gender: SFDefaults.Gender)
+    
+    @available(*, deprecated, message: "Please use `EditorHelper.share.removeLayer(in _:)` instead. This will be removed in the future.")
     func layersWithout(section: String, layers: String) -> (sectionLayer: String, layers: String)
 }
 
@@ -266,6 +271,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
 }
 
 // MARK: - ListAdapterDataSource
+
 extension StickerFaceEditorViewController: ListAdapterDataSource {
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] { headers }
     
@@ -280,6 +286,7 @@ extension StickerFaceEditorViewController: ListAdapterDataSource {
 }
 
 // MARK: - EditorHeaderSectionControllerDelegate
+
 extension StickerFaceEditorViewController: EditorHeaderSectionControllerDelegate {
     func editorHeaderSectionController(_ controller: EditorHeaderSectionController, didSelect header: String, in section: Int) {
         headers.enumerated().forEach { $0.element.isSelected = $0.element.title == header }
@@ -300,6 +307,7 @@ extension StickerFaceEditorViewController: EditorHeaderSectionControllerDelegate
 }
 
 // MARK: - StickerFaceEditorPageDelegate
+
 extension StickerFaceEditorViewController: StickerFaceEditorPageDelegate {
     func stickerFaceEditorPageController(_ controller: StickerFaceEditorPageController, emptyView forListAdapter: ListAdapter) -> UIView? {
         switch loadingState {
@@ -334,26 +342,20 @@ extension StickerFaceEditorViewController: StickerFaceEditorPageDelegate {
         let subsection = section
         let section = headers.firstIndex(where: { $0.isSelected }) ?? 0
         
-        if let price = prices["\(layer)"], !isPaid {
-            let newPaidLayers = replaceCurrentLayer(with: layer, subsection: subsection, isCurrent: true)
-            let type: LayerType = objects[section].name == "Background" ? .background : .NFT
-
-            delegate?.stickerFaceEditor(self, didSelectPaid: layer, layers: newPaidLayers, with: price, layerType: type)
+        currentLayers = replaceCurrentLayer(with: layer, subsection: subsection, isCurrent: true)
+        
+        if objects[section].name == "Background" {
+            delegate?.stickerFaceEditor(self, didUpdateBackground: currentLayers)
         } else {
-            currentLayers = replaceCurrentLayer(with: layer, subsection: subsection, isCurrent: true)
-            
-            if objects[section].name == "Background" {
-                delegate?.stickerFaceEditor(self, didUpdateBackground: currentLayers)
-            } else {
-                delegate?.stickerFaceEditor(self, didUpdate: currentLayers)
-            }
-            
-            updateSelectedLayers(layer)
+            delegate?.stickerFaceEditor(self, didUpdate: currentLayers)
         }
+        
+        updateSelectedLayers(layer)
     }
 }
 
 // MARK: - UIPageViewControllerDataSource
+
 extension StickerFaceEditorViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         guard
@@ -397,10 +399,16 @@ extension StickerFaceEditorViewController: UIPageViewControllerDataSource, UIPag
 }
 
 // MARK: - StickerFaceEditorDelegate
+
 extension StickerFaceEditorViewController: StickerFaceEditorDelegate {    
     func updateLayers(_ layers: String) {
         self.currentLayers = layers
         updateSelectedLayers()
+    }
+    
+    func updateEditor(for gender: SFDefaults.Gender) {
+        StickerLoader.shared.clearRenderQueue()
+        setupSections(needSetDefault: true, for: gender)
     }
     
     func layersWithout(section: String, layers: String) -> (sectionLayer: String, layers: String) {
@@ -438,6 +446,7 @@ extension StickerFaceEditorViewController: StickerFaceEditorDelegate {
 }
 
 // MARK: - UIScrollViewDelegate
+
 extension StickerFaceEditorViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         UIView.animate(withDuration: 0.15, delay: 0.0, options: .curveEaseInOut) {

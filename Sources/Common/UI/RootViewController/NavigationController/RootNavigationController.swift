@@ -26,7 +26,7 @@ class RootNavigationController: UINavigationController {
     }
     
     func openGenerateAvatar() {
-        let generateAvatar = GenerateAvatarViewController()
+        let generateAvatar = GenerateAvatarViewController(type: .withEditor)
         setViewControllers([generateAvatar], animated: false)
     }
     

@@ -99,8 +99,14 @@ class GenerateAvatarView: RootView {
         return button
     }()
     
-    override func setup() {
+    let backButton: UIButton = {
+        let button = AvatarButton(imageType: .back)
+        button.isHidden = true
         
+        return button
+    }()
+    
+    override func setup() {
         backgroundColor = .white
         
         addSubview(titleLabel)
@@ -114,6 +120,7 @@ class GenerateAvatarView: RootView {
         addSubview(descriptionLabel)
         addSubview(backgroundImageView)
         addSubview(avatarImageView)
+        addSubview(backButton)
         
         setupConstraints()
     }
@@ -184,6 +191,12 @@ class GenerateAvatarView: RootView {
             make.left.equalToSuperview().offset(48.0)
             make.right.equalToSuperview().offset(-48.0)
             make.bottom.equalTo(secondaryButton.snp.top).offset(-16.0)
+        }
+        
+        backButton.snp.makeConstraints { make in
+            make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(8.0)
+            make.left.equalToSuperview().offset(16.0)
+            make.size.equalTo(48.0)
         }
         
     }

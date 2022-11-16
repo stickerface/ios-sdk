@@ -1,7 +1,16 @@
 import UIKit
 import AVFoundation
 
+protocol GenerateAvatarDelegate: AnyObject {
+    func generateAvatar(controller: GenerateAvatarViewController, didGenerate avatar: SFAvatar)
+}
+
 class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
+    
+    enum GenerateType {
+        case withEditor
+        case justGenerate(delegate: GenerateAvatarDelegate)
+    }
     
     enum InfoLabels {
         case waitingCameraAccess
@@ -10,6 +19,8 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
         case takingPhoto
         case nothing
     }
+    
+    let type: GenerateType
     
     private var layers: String?
     private var shouldAutoOpenCamera: Bool = true
@@ -41,12 +52,22 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
         return .darkContent
     }
     
+    init(type: GenerateType) {
+        self.type = type
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+                
         mainView.linesRoundRotateAnimationView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(openCamera)))
         mainView.mainButton.addTarget(self, action: #selector(mainButtonTapped), for: .touchUpInside)
         mainView.secondaryButton.addTarget(self, action: #selector(secondaryButtonTapped), for: .touchUpInside)
+        mainView.backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         
         mainView.camera.delegate = self
         
@@ -60,7 +81,7 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
         StickerLoader.loadSticker(into: mainView.avatarImageView, placeholderImage: UIImage(libraryNamed: "defaultAvatar"))
         mainView.avatarImageView.alpha = 0
     }
-    
+        
     // MARK: - Private Actions
     
     @objc private func bindEvents() {
@@ -141,6 +162,14 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
                     UIApplication.shared.open(settingsUrl, completionHandler: nil)
                 }
             }
+        }
+    }
+    
+    @objc private func backButtonTapped() {
+        if let navigationController = navigationController {
+            navigationController.popViewController(animated: true)
+        } else {
+            dismiss(animated: true)
         }
     }
     
@@ -240,7 +269,7 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
         let background = (mainView.backgroundImageView.image ?? UIImage()).pngData()
         let person = (mainView.avatarImageView.image ?? UIImage()).pngData()
         
-        StickerLoader.shared.renderLayer("428;\(layers)") { [weak self] image in
+        StickerLoader.shared.renderLayer("428;\(layers)", size: 300) { [weak self] image in
             guard let self = self else { return }
             
             let sfAvatar = SFAvatar(
@@ -252,10 +281,16 @@ class GenerateAvatarViewController: ViewController<GenerateAvatarView> {
                 backgroundLayer: "428"
             )
             
-            let vc = StickerFaceViewController(avatar: sfAvatar)
-            vc.modalPresentationStyle = .fullScreen
-            
-            self.navigationController?.setViewControllers([vc], animated: true)
+            switch self.type {
+            case .withEditor:
+                let vc = StickerFaceViewController(avatar: sfAvatar)
+                vc.modalPresentationStyle = .fullScreen
+                
+                self.navigationController?.setViewControllers([vc], animated: true)
+                
+            case .justGenerate(let delegate):
+                delegate.generateAvatar(controller: self, didGenerate: sfAvatar)
+            }
         }
     }
     

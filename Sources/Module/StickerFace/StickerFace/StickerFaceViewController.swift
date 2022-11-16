@@ -63,14 +63,15 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         case .female:
             sender.setImageType(.male)
             editorDelegate?.setGender(.male)
-            
-        case .edit:
-            mainView.tonBalanceView.isHidden = true
-            mainView.backButton.isHidden = false
-            mainView.genderButton.setImageType(.male)
-        
+                    
         case .back:
             cancelChanges()
+            
+        case .genetateAvatar:
+            let vc = GenerateAvatarViewController(type: .justGenerate(delegate: self))
+            vc.mainView.backButton.isHidden = false
+            
+            navigationController?.pushViewController(vc, animated: true)
           
         default:
             break
@@ -94,8 +95,8 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         mainView.tonBalanceView.addGestureRecognizer(balanceGesture)
         
         mainView.genderButton.addTarget(self, action: #selector(avatarButtonTapped), for: .touchUpInside)
-        mainView.hangerButton.addTarget(self, action: #selector(avatarButtonTapped), for: .touchUpInside)
         mainView.backButton.addTarget(self, action: #selector(avatarButtonTapped), for: .touchUpInside)
+        mainView.genetateAvatarButton.addTarget(self, action: #selector(avatarButtonTapped), for: .touchUpInside)
     }
     
     private func setupEditor() {
@@ -119,7 +120,6 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
         
         mainView.backButton.isHidden = true
         mainView.genderButton.setImageType(genderType)
-        mainView.hangerButton.setCount(SFDefaults.wardrobe.count)
         mainView.tonBalanceView.isHidden = true
         mainView.backButton.isHidden = !SFDefaults.wasEdited
     }
@@ -219,6 +219,7 @@ class StickerFaceViewController: ViewController<StickerFaceView> {
 }
 
 // MARK: - StickerFaceEditorViewControllerDelegate
+
 extension StickerFaceViewController: StickerFaceEditorControllerDelegate {
     func stickerFaceEditor(didLoadLayers controller: StickerFaceEditorViewController) { }
     
@@ -238,8 +239,27 @@ extension StickerFaceViewController: StickerFaceEditorControllerDelegate {
         receiveAvatar()
     }
     
-    #warning("deplicated")
     func stickerFaceEditor(_ controller: StickerFaceEditorViewController, didSelectPaid layer: String, layers withLayer: String, with price: Int, layerType: LayerType) {
+    }
+}
+
+// MARK: - GenerateAvatarDelegate
+
+extension StickerFaceViewController: GenerateAvatarDelegate {
+    func generateAvatar(controller: GenerateAvatarViewController, didGenerate avatar: SFAvatar) {
+        let layersArray = avatar.layers.components(separatedBy: ";")
+        let gender: SFDefaults.Gender = layersArray.contains("1") ? .male : .female
+        let buttonGender: AvatarButton.ImageType = layersArray.contains("1") ? .male : .female
         
+        mainView.genderButton.setImageType(buttonGender)
+        SFDefaults.gender =  gender
+        self.layers = avatar.layers
+        
+        editorDelegate?.updateLayers(avatar.layers)
+        editorDelegate?.updateEditor(for: gender)
+        
+        mainView.avatarView.avatar = avatar
+        
+        navigationController?.popViewController(animated: true)
     }
 }

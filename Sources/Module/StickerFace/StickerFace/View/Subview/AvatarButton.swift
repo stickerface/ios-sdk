@@ -11,6 +11,7 @@ class AvatarButton: UIButton {
         case close
         case back
         case logout
+        case genetateAvatar
     }
     
     private(set) var imageType: ImageType = .settings

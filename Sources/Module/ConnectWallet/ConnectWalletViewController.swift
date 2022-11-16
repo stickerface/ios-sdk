@@ -20,11 +20,11 @@ class ConnectWalletViewController: ViewController<ConnectWalletView> {
     }
     
     @objc private func continueButtonTapped() {
-        navigationController?.pushViewController(GenerateAvatarViewController(), animated: false)
+        navigationController?.pushViewController(GenerateAvatarViewController(type: .withEditor), animated: false)
     }
     
     @objc private func tonClientDidUpdate() {
-        navigationController?.pushViewController(GenerateAvatarViewController(), animated: false)
+        navigationController?.pushViewController(GenerateAvatarViewController(type: .withEditor), animated: false)
     }
     
 }

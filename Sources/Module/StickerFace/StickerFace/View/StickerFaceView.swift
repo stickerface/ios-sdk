@@ -43,10 +43,9 @@ class StickerFaceView: RootView {
         return button
     }()
         
-    let hangerButton: AvatarButton = {
-        let button = AvatarButton(imageType: .hanger)
+    let genetateAvatarButton: AvatarButton = {
+        let button = AvatarButton(imageType: .genetateAvatar)
         button.layer.cornerRadius = 24.0
-        button.isHidden = true
         
         return button
     }()
@@ -64,10 +63,10 @@ class StickerFaceView: RootView {
         
         addSubview(backgroundImageView)
         addSubview(tonBalanceView)
-        addSubview(hangerButton)
         addSubview(avatarView)
         addSubview(backButton)
         addSubview(genderButton)
+        addSubview(genetateAvatarButton)
         addSubview(editorViewController.view)
         
         backgroundImageView.addSubview(blurView)
@@ -86,14 +85,14 @@ class StickerFaceView: RootView {
             make.left.equalToSuperview().offset(16.0)
             make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(8.0)
         }
-        
-        genderButton.snp.makeConstraints { make in
+                
+        genetateAvatarButton.snp.makeConstraints { make in
             make.right.equalToSuperview().offset(-16.0)
             make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(8.0)
             make.size.equalTo(48.0)
         }
                 
-        hangerButton.snp.makeConstraints { make in
+        genderButton.snp.makeConstraints { make in
             make.right.equalToSuperview().offset(-16.0)
             make.bottom.equalTo(avatarView.snp.bottom).offset(-16.0)
             make.size.equalTo(48.0)
