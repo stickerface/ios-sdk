@@ -179,9 +179,10 @@ extension StickerLoader: AvatarRenderResponseHandlerDelegate {
             }
             
             DispatchQueue.main.async {
-                let index = self.layersForRender.firstIndex(where: { $0.id == id }) ?? 0
-                DataCache.instance.write(image: image, forKey: self.layersForRender[index].layer)
-                self.layersForRender.remove(at: index).completion(image)
+                if let index = self.layersForRender.firstIndex(where: { $0.id == id }) {
+                    DataCache.instance.write(image: image, forKey: self.layersForRender[index].layer)
+                    self.layersForRender.remove(at: index).completion(image)
+                }
                 self.isRendering = false
                 self.renderIfNeeded()
             }
