@@ -1,5 +1,6 @@
 import Alamofire
 import Foundation
+import Kingfisher
 
 public class EditorHelper {
     public typealias ResultLayers = (removedLayer: String, layers: String)
@@ -83,6 +84,7 @@ public class EditorHelper {
                     self.lastEditorVersion = editor.v
                     
                     DataCache.instance.cleanAll()
+                    ImageCache.default.clearCache()
                 }
                 
                 self.editor = editor

@@ -175,10 +175,7 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
                 
         let sections = gender == .male ? editor.sections.man : editor.sections.woman
                 
-        headers = sections.compactMap { section in
-            guard section.name != "Clothing", section.name != "Accessories" else { return nil }
-            return EditorHeaderSectionModel(title: section.name)
-        }
+        headers = sections.compactMap { EditorHeaderSectionModel(title: $0.name) }
         
         headers.first?.isSelected = true
         headerAdapter.reloadData(completion: nil)
@@ -186,15 +183,13 @@ class StickerFaceEditorViewController: ViewController<StickerFaceEditorView> {
         prices = editor.prices
                 
         objects = sections.compactMap { section in
-            guard section.name != "Clothing", section.name != "Accessories" else { return nil }
-            
             let models = section.subsections.map { subsection -> EditorSubsectionSectionModel in
                 var layers = subsection.layers
                 if subsection.name == "background" {
                     layers = layers?
-                        .filter { prices[$0] == nil || prices[$0] == 0 }
-                        .filter { $0 != "0" }
+                        .filter { prices[$0] == nil || prices[$0] == 0 } /// remove paid background
                         .filter { $0 != "320" } /// remove clear background
+                        .filter { $0 != "0" }
                 }
 
                 let editorSubsection = EditorSubsection(
