@@ -60,14 +60,27 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
         
         isRendering = true
         
-        let renderLayers = createRenderLayers(layers: layer.layer, subsection: layer.subsection)
+        var size = CGSize(side: (UIScreen.main.bounds.width - 16 - 12 - 16)/2).maxSide
+        let renderLayers = createRenderLayers(layer: layer.layer, subsection: layer.subsection)
         
-        StickerLoader.shared.renderLayer(renderLayers) { [weak self] image in
+        switch layer.subsection.lowercased() {
+        case "eyes": size *= 1.6
+        case "eyebrows": size *= 2
+        case "mouth": size *= 4
+        case "nose": size *= 3
+            
+        default: break
+        }
+        
+        StickerLoader.shared.renderLayer(renderLayers, size: size) { [weak self] image in
             guard let self = self else { return }
             
             self.layersForRender.remove(at: 0)
             
             if let sectionModel = self.sectionModel.sections.first(where: { $0.editorSubsection.name == layer.subsection }) {
+                
+                let image = self.createScaledImage(for: sectionModel.editorSubsection.name, image: image)
+                
                 if sectionModel.newLayersImages != nil {
                     sectionModel.newLayersImages?[layer.layer] = image
                 } else {
@@ -86,27 +99,63 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
         }
     }
     
-    private func createRenderLayers(layers: String, subsection: String) -> String {
+    private func createRenderLayers(layer: String, subsection: String) -> String {
+        guard layer != "0", layer != "" else { return layer }
         var neededLayers = ""
         let helper = EditorHelper.shared
         
         let layersNoSubsection = helper.removeLayer(in: subsection, from: editorDelegate?.currentLayers ?? "")
-        let allLayers = layersNoSubsection.layers + ";\(layers);"
+        let allLayers = layersNoSubsection.layers + ";\(layer);"
         let layersNoBack = helper.removeLayer(in: "background", from: allLayers)
-        let layersNoClothing = helper.removeLayer(in: "clothing", from: layersNoBack.layers)
         
-        if layers == "0" || layers == "" {
-            neededLayers = layers
-        } else if subsection == "background" {
+        switch subsection.lowercased() {
+        case "background":
             return layersNoBack.removedLayer
-        } else if subsection == "clothing" {
+                        
+        case "eyebrows", "eyes", "nose":
+            var layers = helper.removeLayer(in: "necklace", from: layersNoBack.layers).layers
+            layers = helper.removeLayer(in: "beard", from: layers).layers
+            layers = helper.removeLayer(in: "glasses", from: layers).layers
+            layers = helper.removeLayer(in: "bristle", from: layers).layers
+            layers = helper.removeLayer(in: "moustache", from: layers).layers
+            layers = helper.removeLayer(in: "cap", from: layers).layers
+            layers = helper.removeLayer(in: "clothing", from: layers).layers
+            layers = helper.removeLayer(in: "t-shirt", from: layers).layers
+            
+            neededLayers = layers
+            
+        case "head", "facelines", "freckles", "mouth":
+            var layers = helper.removeLayer(in: "bristle", from: layersNoBack.layers).layers
+            layers = helper.removeLayer(in: "moustache", from: layers).layers
+            layers = helper.removeLayer(in: "beard", from: layers).layers
+            layers = helper.removeLayer(in: "t-shirt", from: layers).layers
+            layers = helper.removeLayer(in: "clothing", from: layers).layers
+            layers = helper.removeLayer(in: "necklace", from: layers).layers
+            
+            neededLayers = layers
+            
+        case "hair", "moustache", "beard", "bristle":
+            var layers = helper.removeLayer(in: "cap", from: layersNoBack.layers).layers
+            layers = helper.removeLayer(in: "t-shirt", from: layers).layers
+            layers = helper.removeLayer(in: "necklace", from: layers).layers
+            layers = helper.removeLayer(in: "clothing", from: layers).layers
+            
+            neededLayers = layers
+            
+        case "t-shirt", "clothing", "necklace":
             return layersNoBack.layers
-        } else {
-            neededLayers = layersNoClothing.layers
+            
+        default:
+            var layers = helper.removeLayer(in: "clothing", from: layersNoBack.layers).layers
+            layers = helper.removeLayer(in: "t-shirt", from: layers).layers
+            layers = helper.removeLayer(in: "necklace", from: layers).layers
+            
+            neededLayers = layers
         }
+        
 
         let layersArray = neededLayers.split(separator: ";")
-        let fireLayers = ["1", "0", "25", "273", layersNoClothing.removedLayer]
+        let fireLayers = ["1", "0", "25", "273"]
         
         let neededArray = layersArray.compactMap { layer -> String? in
             guard !fireLayers.contains(String(layer)) else { return nil }
@@ -114,6 +163,69 @@ class StickerFaceEditorPageController: ViewController<StickerFaceEditorPageView>
         }
         
         return neededArray.joined(separator: ";")
+    }
+    
+    private func createScaledImage(for section: String, image: UIImage) -> UIImage {
+        switch section.lowercased() {
+        case "eyes":
+            let sideLength = min(image.size.width / 1.6, image.size.height / 1.6)
+            
+            let sourceSize = image.size
+            let xOffset = (sourceSize.width - sideLength) / 2.0
+            let yOffset = (sourceSize.height - sideLength) / 1.5
+            
+            let cropRect = CGRect(x: xOffset, y: yOffset, width: sideLength, height: sideLength)
+            
+            let sourceCGImage = image.cgImage!
+            let croppedCGImage = sourceCGImage.cropping(to: cropRect)!
+            
+            return UIImage(cgImage: croppedCGImage)
+            
+        case "eyebrows":
+            let sideLength = min(image.size.width / 2.0, image.size.height / 2.0)
+            
+            let sourceSize = image.size
+            let xOffset = (sourceSize.width - sideLength) / 2.0
+            let yOffset = (sourceSize.height - sideLength) / 1.7
+            
+            let cropRect = CGRect(x: xOffset, y: yOffset, width: sideLength, height: sideLength)
+            
+            let sourceCGImage = image.cgImage!
+            let croppedCGImage = sourceCGImage.cropping(to: cropRect)!
+            
+            return UIImage(cgImage: croppedCGImage)
+            
+        case "mouth":
+            let sideLength = min(image.size.width / 4, image.size.height / 4)
+            
+            let sourceSize = image.size
+            let xOffset = (sourceSize.width - sideLength) / 2.0
+            let yOffset = (sourceSize.height - sideLength) / 1.12
+            
+            let cropRect = CGRect(x: xOffset, y: yOffset, width: sideLength, height: sideLength)
+            
+            let sourceCGImage = image.cgImage!
+            let croppedCGImage = sourceCGImage.cropping(to: cropRect)!
+            
+            return UIImage(cgImage: croppedCGImage)
+            
+        case "nose":
+            let sideLength = min(image.size.width / 3, image.size.height / 3)
+            
+            let sourceSize = image.size
+            let xOffset = (sourceSize.width - sideLength) / 2
+            let yOffset = (sourceSize.height - sideLength) / 1.25
+            
+            let cropRect = CGRect(x: xOffset, y: yOffset, width: sideLength, height: sideLength)
+            
+            let sourceCGImage = image.cgImage!
+            let croppedCGImage = sourceCGImage.cropping(to: cropRect)!
+            
+            return UIImage(cgImage: croppedCGImage)
+            
+        default:
+            return image
+        }
     }
     
     private func appendRenderLayer(section: Int, index: Int) {

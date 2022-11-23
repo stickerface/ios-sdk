@@ -95,7 +95,7 @@ class StickerFaceEditorSectionController: ListSectionController {
         }
         
         // size for layers
-        return CGSize(width: (UIScreen.main.bounds.width - 16 - 12 - 16)/2, height: 188)
+        return CGSize(side: (UIScreen.main.bounds.width - 16 - 12 - 16)/2)
     }
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
@@ -157,6 +157,7 @@ class StickerFaceEditorSectionController: ListSectionController {
         
         if let image = sectionModel.newLayersImages?[layer] {
             cell.skeletonView.isHidden = true
+            
             cell.layerImageView.image = image
             
         } else if let image = sectionModel.oldLayersImages?[layer] {
