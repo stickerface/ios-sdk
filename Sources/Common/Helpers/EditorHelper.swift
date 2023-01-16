@@ -85,6 +85,8 @@ public class EditorHelper {
                     
                     DataCache.instance.cleanAll()
                     ImageCache.default.clearCache()
+                    StickerLoader.shared.clearRenderQueue()
+                    NotificationCenter.default.post(name: .editorVersionDidUpdate, object: nil)
                 }
                 
                 self.editor = editor

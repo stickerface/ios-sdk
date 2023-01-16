@@ -10,6 +10,7 @@ public class StickerFace {
     public weak var delegate: StickerFaceDelegate?
     
     public static let shared = StickerFace()
+    public static let stickersCount = 29
     
     public init() {
         StickerFaceFonts.setup()

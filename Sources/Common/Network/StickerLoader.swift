@@ -2,6 +2,10 @@ import UIKit
 import Kingfisher
 import WebKit
 
+public enum StickerLoadSource {
+    case network, render
+}
+
 public class StickerLoader: NSObject {
     
     public static var shared: StickerLoader = {
@@ -30,13 +34,21 @@ public class StickerLoader: NSObject {
         handler.delegate = self
         
         renderWebView.navigationDelegate = self
-        
         renderWebView.load(URLRequest(url: URL(string: Constants.renderUrl)!))
         renderWebView.configuration.userContentController.add(handler, name: handler.name)
     }
     
     @discardableResult
-    public static func loadSticker(into imgView: UIImageView, with layers: String = StickerLoader.defaultLayers, stickerType: StickerType = .avatar, outlined: Bool = false, size: CGFloat = UIScreen.main.bounds.width, placeholderStyle: PlaceholderStyle = .dark, placeholderImage: UIImage? = nil, completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) -> DownloadTask? {
+    public static func loadSticker(
+        into imgView: UIImageView,
+        with layers: String = StickerLoader.defaultLayers,
+        stickerType: StickerType = .avatar,
+        outlined: Bool = false,
+        size: CGFloat = UIScreen.main.bounds.width,
+        placeholderStyle: PlaceholderStyle = .dark,
+        placeholderImage: UIImage? = nil,
+        completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil
+    ) -> DownloadTask? {
         
         let options: KingfisherOptionsInfo = [
             .loadDiskFileSynchronously,
@@ -46,7 +58,7 @@ public class StickerLoader: NSObject {
         imgView.tintColor = placeholderStyle == .dark ? UIColor.black.withAlphaComponent(0.06) : UIColor.white.withAlphaComponent(0.24)
         
         let placeholder = placeholderImage ?? UIImage(libraryNamed: "placeholder_sticker_200")
-        let path = "\(Constants.renderUrl)/\(stickerType.rawValue)/" + layers + "?size=" + String(describing: size) + "&outline=\(outlined)"
+        let path = "\(Constants.apiPath)/\(stickerType.rawValue)/" + layers + "?size=" + String(describing: size) + "&outline=\(outlined)"
         let stickerURL = URL(string: path)
         
         return imgView.kf.setImage(with: stickerURL, placeholder: placeholder, options: options, completionHandler: completionHandler)
@@ -75,7 +87,13 @@ public class StickerLoader: NSObject {
         return nil
     }
     
-    public func renderLayer(_ layer: String, size: CGFloat = 207.0, isOutlined: Bool = false, completionHandler: @escaping ImageAction) {
+    public func renderLayer(
+        _ layer: String,
+        size: CGFloat = 207.0,
+        isOutlined: Bool = false,
+        loadSource: StickerLoadSource = .render,
+        completionHandler: @escaping ImageAction
+    ) {
         let id = getNextRequestId()
         let renderLayer = RenderLayer(
             id: id,
@@ -103,7 +121,7 @@ public class StickerLoader: NSObject {
         isRendering = false
         isRenderReady = false
         layersForRender.removeAll()
-        renderWebView.load(URLRequest(url: URL(string: Constants.renderUrl)!))
+        renderWebView.reload()
     }
     
     // MARK: - Private methods
@@ -118,9 +136,10 @@ public class StickerLoader: NSObject {
     var needToRerender = false
     
     private func renderIfNeeded() {
-        guard let layer = layersForRender.first, isRenderReady, !isRendering else {
-            return
-        }
+        guard let layer = layersForRender.first,
+              isRenderReady,
+              !isRendering
+        else { return }
         
         isRendering = true
                 
@@ -164,7 +183,7 @@ extension StickerLoader: WKNavigationDelegate {
 extension StickerLoader: AvatarRenderResponseHandlerDelegate {
     func onImageReady(id: Int, base64: String) {
         reRenderTimer.invalidate()
-        
+
         decodingQueue.async {
             guard
                 let data = Data(base64Encoded: base64),
